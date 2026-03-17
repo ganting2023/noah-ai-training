@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noah AI · Codex App 使用技巧</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --sidebar-w: 272px;
+  --bg-soft: rgba(255,250,243,0.84);
+  --panel: rgba(255,252,247,0.9);
+  --panel-strong: #fffaf4;
+  --sidebar-bg: #1f252d;
+  --sidebar-border: rgba(255,255,255,0.1);
+  --text: #1f1a17;
+  --muted: #6f655e;
+  --border: rgba(76,52,34,0.14);
+  --shadow: 0 18px 60px rgba(66,45,26,0.12);
+  --shadow-soft: 0 12px 28px rgba(54,39,27,0.08);
+  --accent: #c96d3b;
+  --accent-strong: #a34f24;
+  --accent-soft: rgba(201,109,59,0.12);
+  --accent-alt: #1f6a67;
+  --accent-alt-soft: rgba(31,106,103,0.12);
+  --sidebar-text: rgba(255,255,255,0.92);
+  --sidebar-muted: rgba(255,255,255,0.56);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(201,109,59,0.18), transparent 28%),
+    radial-gradient(circle at 85% 12%, rgba(31,106,103,0.12), transparent 24%),
+    linear-gradient(180deg, #f8f2e9 0%, #f4ede4 52%, #f8f4ee 100%);
+}
+body::before {
+  content:""; position:fixed; inset:0;
+  background-image: linear-gradient(rgba(255,255,255,0.16) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.16) 1px,transparent 1px);
+  background-size: 36px 36px; opacity:.25; pointer-events:none;
+}
+
+.sidebar {
+  position:fixed; left:0; top:0; bottom:0; width:var(--sidebar-w);
+  padding:22px 18px 18px;
+  background: linear-gradient(180deg,rgba(255,255,255,0.03),transparent 22%), var(--sidebar-bg);
+  border-right:1px solid var(--sidebar-border);
+  display:flex; flex-direction:column; z-index:10; overflow-y:auto;
+}
+.sidebar-logo { padding:18px 16px 16px; border:1px solid rgba(255,255,255,0.08); border-radius:20px; background:rgba(255,255,255,0.03); }
+.sidebar-logo .tag { font-size:11px; letter-spacing:0.16em; color:var(--sidebar-muted); text-transform:uppercase; }
+.sidebar-logo h2 { margin-top:10px; font-family:"Songti SC","STSong",serif; font-size:22px; font-weight:700; color:var(--sidebar-text); }
+.sidebar-logo .sub { margin-top:6px; font-size:12px; line-height:1.7; color:rgba(255,255,255,0.56); }
+.back-link {
+  display:flex; align-items:center; gap:8px; margin:14px 4px 0;
+  padding:10px 14px; border-radius:12px; color:rgba(255,255,255,0.6); font-size:13px;
+  text-decoration:none; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03);
+  transition:background .18s, color .18s;
+}
+.back-link:hover { background:rgba(255,255,255,0.07); color:var(--sidebar-text); }
+nav { display:flex; flex-direction:column; gap:4px; padding:14px 0; flex:1; }
+.nav-section { padding:12px 16px 4px; font-size:11px; letter-spacing:0.16em; color:var(--sidebar-muted); text-transform:uppercase; }
+nav a {
+  display:flex; align-items:center; gap:10px; padding:11px 14px; margin:0 2px;
+  border-radius:14px; color:var(--sidebar-text); text-decoration:none;
+  border:1px solid transparent; font-size:13.5px;
+  transition:transform .18s, background .18s, border-color .18s;
+}
+nav a:hover { transform:translateX(3px); background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); }
+nav a.active { color:#fff; background:linear-gradient(135deg,rgba(201,109,59,0.24),rgba(31,106,103,0.16)); border-color:rgba(255,255,255,0.08); }
+.sidebar-footer { padding:14px 16px; border-radius:18px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.04); font-size:11.5px; color:rgba(255,255,255,0.55); line-height:1.7; }
+
+.main { margin-left:var(--sidebar-w); min-height:100vh; }
+.content { max-width:1080px; padding:40px 40px 88px; }
+
+.page-hero {
+  padding:38px 42px 36px; border-radius:30px;
+  border:1px solid rgba(76,52,34,0.1); background:var(--bg-soft);
+  backdrop-filter:blur(16px); box-shadow:var(--shadow); margin-bottom:28px;
+  position:relative; overflow:hidden;
+}
+.page-hero::after {
+  content:""; position:absolute; right:-60px; bottom:-80px; width:220px; height:220px;
+  border-radius:50%; background:radial-gradient(circle,rgba(31,106,103,0.18),rgba(31,106,103,0)); pointer-events:none;
+}
+.eyebrow { display:inline-flex; padding:6px 12px; border-radius:999px; background:rgba(255,255,255,0.56); color:var(--accent-strong); font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; }
+.page-hero h1 { margin-top:16px; font-family:"Songti SC","STSong",serif; font-size:clamp(28px,3.5vw,44px); line-height:1.1; font-weight:700; }
+.page-hero .lead { margin-top:14px; font-size:15px; line-height:1.9; color:var(--muted); max-width:54em; }
+.hero-pills { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+.pill { padding:8px 14px; border-radius:999px; background:rgba(255,255,255,0.68); border:1px solid rgba(76,52,34,0.08); font-size:12.5px; color:#5b5048; }
+
+.section-block {
+  margin-bottom:36px; padding:34px 36px; border-radius:28px;
+  background:rgba(255,252,247,0.88); border:1px solid rgba(76,52,34,0.1);
+  box-shadow:var(--shadow-soft);
+}
+.section-label { display:flex; align-items:center; gap:14px; margin-bottom:22px; }
+.section-num { width:38px; height:38px; border-radius:12px; flex-shrink:0; background:linear-gradient(135deg,var(--accent-soft),var(--accent-alt-soft)); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; }
+.section-title { font-size:19px; font-weight:700; font-family:"Songti SC","STSong",serif; }
+
+.intro-grid, .tip-grid, .scenario-grid, .resource-grid { display:grid; gap:14px; }
+.intro-grid { grid-template-columns:1fr 1fr; }
+.tip-grid { grid-template-columns:1fr 1fr; }
+.scenario-grid { grid-template-columns:1fr 1fr; }
+.resource-grid { grid-template-columns:1fr 1fr; }
+
+.card {
+  padding:20px 22px; border-radius:20px;
+  background:rgba(255,252,247,0.88); border:1px solid rgba(76,52,34,0.1);
+  box-shadow:var(--shadow-soft);
+}
+.card h3, .card h4 { font-size:15px; font-weight:700; margin-bottom:8px; }
+.card p, .card li { font-size:13px; line-height:1.75; color:var(--muted); }
+.card ul { padding-left:18px; }
+.card-kicker { font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent-strong); margin-bottom:8px; }
+
+.method-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+.method-pill, .tag { display:inline-flex; padding:4px 10px; border-radius:999px; font-size:11.5px; font-weight:700; }
+.method-pill { background:rgba(255,255,255,0.7); border:1px solid rgba(76,52,34,0.1); color:#5a4c42; }
+.tag-green { background:rgba(16,185,129,0.12); color:#065F46; }
+.tag-blue { background:rgba(59,130,246,0.12); color:#1D4ED8; }
+.tag-orange { background:rgba(201,109,59,0.12); color:#a34f24; }
+.tag-purple { background:rgba(139,92,246,0.12); color:#6D28D9; }
+
+.alert { display:flex; gap:12px; align-items:flex-start; padding:14px 18px; border-radius:12px; margin:14px 0; font-size:13px; line-height:1.7; }
+.alert-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+.alert-blue { background:#EFF6FF; border:1px solid #BFDBFE; color:#1E40AF; }
+.alert-green { background:#F0FDF4; border:1px solid #BBF7D0; color:#065F46; }
+.alert-yellow { background:#FFFBEB; border:1px solid #FDE68A; color:#92400E; }
+.alert-purple { background:#FAF5FF; border:1px solid #E9D5FF; color:#5B21B6; }
+
+.table-wrap { overflow-x:auto; border-radius:12px; border:1px solid var(--border); margin:14px 0; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th { padding:10px 14px; background:rgba(255,255,255,0.56); font-weight:700; text-align:left; color:var(--muted); font-size:12px; }
+td { padding:10px 14px; border-top:1px solid rgba(76,52,34,0.07); vertical-align:top; line-height:1.65; }
+tr:hover td { background:rgba(255,255,255,0.3); }
+td code { font-family:"SF Mono","Consolas","Monaco",monospace; font-size:11.5px; background:rgba(76,52,34,0.07); padding:1px 5px; border-radius:4px; }
+
+.cta-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:18px; }
+.cta-button { display:inline-flex; align-items:center; gap:8px; padding:14px 20px; border-radius:16px; font-size:15px; font-weight:700; text-decoration:none; transition:transform .18s, box-shadow .18s; }
+.cta-button:hover { transform:translateY(-2px); }
+.cta-button.primary { color:#fffaf4; background:linear-gradient(135deg,#c96d3b,#a34f24); box-shadow:0 16px 30px rgba(163,79,36,0.22); }
+.cta-button.secondary { color:var(--accent-alt); background:rgba(255,255,255,0.68); border:1px solid rgba(31,106,103,0.15); }
+
+.doc-footer { margin-top:40px; padding:20px 0; text-align:center; font-size:12px; color:var(--muted); border-top:1px solid rgba(76,52,34,0.1); }
+
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+  .sidebar { display:none; }
+  .content { padding:24px 20px 60px; }
+  .intro-grid, .tip-grid, .scenario-grid, .resource-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="tag">Noah AI · Codex App</div>
+    <h2>Codex App 使用技巧</h2>
+    <div class="sub">面向非技术同事，重点讲清安装后怎么真正把 Codex 用起来。</div>
+  </div>
+
+  <a class="back-link" href="index.html">← 返回培训首页</a>
+
+  <nav>
+    <div class="nav-section">快速上手</div>
+    <a href="#intro">🧭 Codex App 是什么</a>
+    <a href="#tips">✨ 10 个高频技巧</a>
+
+    <div class="nav-section">深入理解</div>
+    <a href="#control">🖥️ 它如何操作电脑</a>
+    <a href="#agents">👥 多 Agent 协同</a>
+    <a href="#commands">⌨️ 常用斜杠命令</a>
+
+    <div class="nav-section">延伸阅读</div>
+    <a href="#resources">🔗 学习资源</a>
+    <a href="skills.html">📦 Skills 技能包</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    v1.0 · 2026-03-18 · Kora<br>
+    基于内部手册整理，适合作为安装后的第二步说明书。
+  </div>
+</aside>
+
+<main class="main">
+  <div class="content">
+    <div class="page-hero">
+      <span class="eyebrow">Codex App Guide</span>
+      <h1>Codex App 使用技巧与多 Agent 协同指南</h1>
+      <p class="lead">这页不是安装教程，而是“装好以后怎么真正用起来”的手册。重点讲清几个最容易卡住的点：Plan Mode 什么时候开、Fast Mode 什么时候更快、Skills 和 Automations 是什么、Codex 为什么能动你的电脑、以及多 Agent 到底适合拿来做什么。</p>
+      <div class="hero-pills">
+        <span class="pill">面向非技术人员</span>
+        <span class="pill">10 个高频技巧</span>
+        <span class="pill">含多 Agent 与权限审批说明</span>
+      </div>
+    </div>
+
+    <div class="section-block" id="intro">
+      <div class="section-label">
+        <div class="section-num">🧭</div>
+        <div class="section-title">Codex App 是什么</div>
+      </div>
+
+      <p style="font-size:14px;line-height:1.9;color:var(--muted);margin-bottom:20px">Codex App 是 OpenAI 推出的 AI 助手应用。虽然名字里有 “编程”，但它并不只会写代码。对 HR、法务、风控、合规、运营这些岗位来说，它更像一个能看文件、整理资料、改文档、跑流程、生成初稿的智能助理。</p>
+
+      <div class="intro-grid">
+        <div class="card">
+          <div class="card-kicker">通俗理解</div>
+          <h3>它像一个全能型智能助理</h3>
+          <p>你用自然语言告诉它要做什么，它就能帮你处理文档、查资料、整理表格、批量重命名文件、起草邮件和报告。区别在于，它不是只会说建议，而是真的能在你的电脑或工作区里动手完成一部分任务。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">适合谁用</div>
+          <h3>非技术同事优先用桌面版或网页版</h3>
+          <p>如果你不想碰命令行，推荐直接使用 Codex App 桌面版或网页版。界面更像普通办公软件，上手成本低；CLI 和 IDE 更适合技术同事。</p>
+          <div class="method-row">
+            <span class="tag tag-green">桌面版</span>
+            <span class="tag tag-blue">网页版</span>
+            <span class="tag tag-orange">CLI</span>
+            <span class="tag tag-purple">IDE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">💡</span>
+        <div><strong>一句话理解</strong>：ChatGPT 更像一个会回答问题的顾问；Codex App 更像一个能进入工作区、按步骤帮你把任务做出来的助理。</div>
+      </div>
+
+      <div class="cta-row">
+        <a class="cta-button secondary" href="培训课件/网页版网页/AI编程工具安装指南.html">先回看安装指南</a>
+        <a class="cta-button primary" href="培训课件/网页版网页/AI工具培训_实战课件.html">继续进入实战总览</a>
+      </div>
+    </div>
+
+    <div class="section-block" id="tips">
+      <div class="section-label">
+        <div class="section-num">✨</div>
+        <div class="section-title">10 个高频技巧</div>
+      </div>
+
+      <div class="tip-grid">
+        <div class="card">
+          <div class="card-kicker">Tip 1</div>
+          <h3>复杂任务先开 Plan Mode</h3>
+          <p>Plan Mode 会先让 AI 给出计划，再等你确认后执行，适合多步骤、多人确认、方向容易跑偏的任务。</p>
+          <div class="method-row"><span class="method-pill">/plan</span><span class="method-pill">Shift + Tab</span></div>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Tip 2</div>
+          <h3>简单任务直接 Fast Mode</h3>
+          <p>像格式转换、简单文案修改、快速查信息、表格清洗这类一两句话能说清的任务，直接让它动手更省时间。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Tip 3</div>
+          <h3>自然语言越具体越好</h3>
+          <p>最实用的提示词公式是：<strong>目标 + 受众 + 风格 + 长度 + 特殊要求</strong>。越具体，返工越少。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Tip 4</div>
+          <h3>把 Skills 当成工作 SOP</h3>
+          <p>Skill 像标准操作流程。装好之后，AI 会按固定步骤输出更像真实交付物的结果。</p>
+          <div class="cta-row"><a class="cta-button secondary" href="skills.html">查看 Skills 指南</a></div>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Tip 5</div>
+          <h3>重复任务交给 Automations</h3>
+          <p>适合每周周报、每天邮件摘要、定期文件检查、月度财务整理这类时间驱动的工作。它做完后会进入审查队列，还是你拍板。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Tip 6</div>
+          <h3>用 Threads 管理并行任务</h3>
+          <p>每个线程就是一个独立任务窗口。把“合同审查”“会议纪要”“报表处理”分开建线程，会比把所有事塞在一个对话里清楚得多。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Tip 7</div>
+          <h3>语音输入适合复杂需求</h3>
+          <p>当你需要快速描述多步骤任务、在移动设备上使用、或者头脑风暴时，语音输入往往比打字更顺。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Tip 8</div>
+          <h3>模型级别按任务强度选</h3>
+          <p>低级别更快更省，高级别更强但更慢。不要所有任务都用最高档，简单任务没必要。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Tip 9</div>
+          <h3>审查 AI 输出，不要直接信</h3>
+          <p>特别是法务、合规、财务、风控场景。你要看事实是否准确、口径是否合规、措辞是否合适、有没有遗漏关键信息。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Tip 10</div>
+          <h3>从小任务开始，逐步升级</h3>
+          <p>先从文案修改、格式转换、信息查询开始，再到文档撰写、数据整理、自动化和多 Agent 协同，不用一步到位。</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>❌ 模糊描述</th><th>✅ 更好的说法</th></tr></thead>
+          <tbody>
+            <tr><td>帮我写个通知</td><td>帮我写一份面向全体员工的年假调整通知，语气正式但友好，300 字以内，包含新旧政策对比。</td></tr>
+            <tr><td>检查一下合同</td><td>请审查这份采购合同的付款条款，重点关注违约金比例是否合理，并列出潜在风险点。</td></tr>
+            <tr><td>整理数据</td><td>将这份 Excel 中的客户数据按省份分组，计算每个省的客户总数和平均订单金额，输出为表格。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>任务类型</th><th>推荐级别</th><th>原因</th></tr></thead>
+          <tbody>
+            <tr><td>简单文案修改、格式调整</td><td>低级别</td><td>速度快、节省额度</td></tr>
+            <tr><td>文档撰写、邮件回复</td><td>中级别</td><td>平衡质量与效率</td></tr>
+            <tr><td>复杂分析、合同审查、策略制定</td><td>高级别</td><td>需要更强推理能力</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>阶段</th><th>任务示例</th><th>预计时间</th></tr></thead>
+          <tbody>
+            <tr><td>入门</td><td>简单文案修改、格式转换、信息查询</td><td>第 1 周</td></tr>
+            <tr><td>进阶</td><td>文档撰写、会议纪要、数据整理</td><td>第 2-3 周</td></tr>
+            <tr><td>熟练</td><td>合同审查、多步骤分析、自动化设置</td><td>第 4-6 周</td></tr>
+            <tr><td>精通</td><td>多 Agent 协同、自定义 Skill、复杂工作流</td><td>第 7 周起</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-block" id="control">
+      <div class="section-label">
+        <div class="section-num">🖥️</div>
+        <div class="section-title">它如何操作你的电脑</div>
+      </div>
+
+      <div class="alert alert-purple">
+        <span class="alert-icon">🛠</span>
+        <div><strong>关键区别</strong>：Codex 不只是聊天。它能读取和编辑文件、运行命令、生成文档、批量处理资料。你可以把它理解为“会先解释、再动手、必要时向你审批”的数字助理。</div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>能力类别</th><th>具体操作</th><th>对你意味着什么</th></tr></thead>
+          <tbody>
+            <tr><td>文件操作</td><td>读取、创建、编辑、移动、删除文件</td><td>帮你整理文件夹、批量重命名、归档文档</td></tr>
+            <tr><td>文档处理</td><td>创建和编辑 PDF、Word、Excel、PPT</td><td>帮你做报表、写文档、排版幻灯片</td></tr>
+            <tr><td>运行程序</td><td>执行脚本、测试运行器、包管理器</td><td>帮你自动跑数据处理流程</td></tr>
+            <tr><td>Git 版本控制</td><td>查看变更、暂存、提交、推送</td><td>帮你管理文件修改历史</td></tr>
+            <tr><td>终端命令</td><td>在内置终端中执行各种命令</td><td>相当于替你操作命令行</td></tr>
+            <tr><td>网络搜索</td><td>内置搜索和资料检索</td><td>帮你查资料、找参考信息</td></tr>
+            <tr><td>图像处理</td><td>生成、编辑图像</td><td>帮你做海报素材、UI 示意图</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>工作模式</th><th>说明</th><th>适合谁</th></tr></thead>
+          <tbody>
+            <tr><td>Local</td><td>直接在当前文件夹工作，速度快，但改动会直接影响原文件。</td><td>熟悉工具后的小范围改动</td></tr>
+            <tr><td>Worktree</td><td>在隔离副本中工作，不碰原始文件。</td><td>新手默认推荐</td></tr>
+            <tr><td>Cloud</td><td>在云端环境运行，不占本机资源。</td><td>大任务、长任务、远程执行</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>沙箱级别</th><th>说明</th><th>推荐场景</th></tr></thead>
+          <tbody>
+            <tr><td><code>read-only</code></td><td>只能看，不能改，不能跑命令。</td><td>初次尝试、只查阅资料</td></tr>
+            <tr><td><code>workspace-write</code></td><td>可以在指定工作区读写和运行常规命令。</td><td>日常推荐默认值</td></tr>
+            <tr><td><code>danger-full-access</code></td><td>几乎无限制，风险最高。</td><td>只在完全信任场景下用</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scenario-grid">
+        <div class="card">
+          <div class="card-kicker">场景 1</div>
+          <h4>批量整理文件</h4>
+          <p>你说：“把 download 文件夹里所有 PDF 按日期分类。” 它会读取文件、分组、创建子目录并移动文件。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">场景 2</div>
+          <h4>Excel 数据处理</h4>
+          <p>你说：“按省份汇总客户数据，计算平均订单金额。” 它会读表、分析结构、执行计算，并生成新表。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">场景 3</div>
+          <h4>批量格式转换</h4>
+          <p>你说：“把 20 份 Word 全部转成 PDF。” 它会遍历文件、逐个转换并存到新目录。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">场景 4</div>
+          <h4>根据数据做 PPT</h4>
+          <p>你说：“根据季度销售表生成汇报 PPT。” 它会读数据、生成图表、创建页面并按模板排版。</p>
+        </div>
+      </div>
+
+      <div class="alert alert-yellow">
+        <span class="alert-icon">⚠</span>
+        <div><strong>给非技术同事的安全建议</strong>：首次使用优先选 Worktree 模式，保持默认的 <code>workspace-write</code> 权限；看到审批提示先读清楚它要做什么，不确定就拒绝；重要文件先备份再让它处理。</div>
+      </div>
+    </div>
+
+    <div class="section-block" id="agents">
+      <div class="section-label">
+        <div class="section-num">👥</div>
+        <div class="section-title">多 Agent 协同</div>
+      </div>
+
+      <p style="font-size:14px;line-height:1.9;color:var(--muted);margin-bottom:18px">多 Agent 协同的本质，是让多个 AI 助手并行处理不同子任务，最后把结果汇总起来。你可以把它理解为：一个项目经理，把同一项复杂工作拆给几位不同分工的同事同时推进。</p>
+
+      <div class="scenario-grid">
+        <div class="card">
+          <div class="card-kicker">场景一</div>
+          <h4>并行审查同一份合同</h4>
+          <p>Agent A 看条款风险，Agent B 看合规性，Agent C 看格式规范。三份结果一起回来，比一个人全看更快。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">场景二</div>
+          <h4>批量处理</h4>
+          <p>比如一批简历、一批风控预警、一批文档格式化任务，按批次或按文件拆给多个 Agent 同时做。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">场景三</div>
+          <h4>内容创作流水线</h4>
+          <p>Agent A 起草，Agent B 复核准确性和合规性，Agent C 负责润色排版，最后你只审最终版。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">场景四</div>
+          <h4>分头研究再汇总</h4>
+          <p>多个 Agent 分别调研不同主题或市场，最后由一个汇总 Agent 把结果合并成完整报告。</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>内置角色</th><th>特点</th><th>适用场景</th></tr></thead>
+          <tbody>
+            <tr><td><code>default</code></td><td>全能型，能处理各种任务</td><td>日常工作，不确定选谁时</td></tr>
+            <tr><td><code>worker</code></td><td>偏执行，效率优先</td><td>文档处理、数据整理、明确执行类任务</td></tr>
+            <tr><td><code>explorer</code></td><td>偏探索和收集信息</td><td>调研、分析、资料汇总</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-kicker">批量处理</div>
+        <h4>CSV 驱动的多 Agent</h4>
+        <p>如果你把一批待办事项整理成 CSV，系统可以按行分配 Agent 同时处理。适合 100 份简历初筛、50 份合同初筛、200 条预警批量分析这类高重复任务。</p>
+      </div>
+
+      <div class="alert alert-purple">
+        <span class="alert-icon">📌</span>
+        <div><strong>使用多 Agent 时记住三件事</strong>：额度消耗会更高；建议从 2-3 个 Agent 起步；任务拆分质量决定效果，拆得越清楚，结果越稳定。</div>
+      </div>
+    </div>
+
+    <div class="section-block" id="commands">
+      <div class="section-label">
+        <div class="section-num">⌨️</div>
+        <div class="section-title">常用斜杠命令速查</div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>命令</th><th>作用</th><th>使用场景</th></tr></thead>
+          <tbody>
+            <tr><td><code>/plan</code></td><td>切换到计划模式</td><td>复杂任务先规划，再让 AI 执行</td></tr>
+            <tr><td><code>/status</code></td><td>查看当前状态</td><td>确认当前模式、模型级别、Agent 配置</td></tr>
+            <tr><td><code>/personality</code></td><td>切换 AI 风格</td><td>选择简洁或详细的交互风格</td></tr>
+            <tr><td><code>/agent</code></td><td>切换 Agent 线程</td><td>多 Agent 模式下快速跳转</td></tr>
+            <tr><td><code>/experimental</code></td><td>启用实验功能</td><td>体验测试中的新能力，谨慎使用</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-green">
+        <span class="alert-icon">💡</span>
+        <div><strong>不用死记</strong>：在输入框里打一个 <code>/</code>，命令列表就会弹出来。对大多数同事来说，记住 <code>/plan</code>、<code>/status</code>、<code>/agent</code> 就够用了。</div>
+      </div>
+    </div>
+
+    <div class="section-block" id="resources">
+      <div class="section-label">
+        <div class="section-num">🔗</div>
+        <div class="section-title">推荐学习资源</div>
+      </div>
+
+      <div class="resource-grid">
+        <div class="card">
+          <h4>OpenAI Codex 官方文档</h4>
+          <p>最权威的功能说明和更新入口，适合查具体能力边界。</p>
+          <div class="cta-row"><a class="cta-button secondary" href="https://developers.openai.com/codex/" target="_blank">打开文档</a></div>
+        </div>
+        <div class="card">
+          <h4>多 Agent 官方指南</h4>
+          <p>专门讲多 Agent 协同的使用方式和最佳实践。</p>
+          <div class="cta-row"><a class="cta-button secondary" href="https://developers.openai.com/codex/multi-agent/" target="_blank">打开指南</a></div>
+        </div>
+        <div class="card">
+          <h4>10 Codex Tips for Non-Developers</h4>
+          <p>面向非开发人员的技巧视频，适合快速建立感性认识。</p>
+          <div class="cta-row"><a class="cta-button secondary" href="https://www.youtube.com/watch?v=MavnuV0NRwU" target="_blank">打开视频</a></div>
+        </div>
+        <div class="card">
+          <h4>Codex App Super Guide 2026</h4>
+          <p>覆盖从入门到高级功能的长文指南，适合深挖。</p>
+          <div class="cta-row"><a class="cta-button secondary" href="https://kingy.ai/ai/the-codex-app-super-guide-2026-from-hello-world-to-worktrees-skills-mcp-ci-and-enterprise-governance/" target="_blank">打开长文</a></div>
+        </div>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">📚</span>
+        <div><strong>建议阅读顺序</strong>：先看这页建立操作感，再进实战总览；遇到具体按钮、权限、模式问题时，再回头查官方文档。</div>
+      </div>
+    </div>
+
+    <div class="doc-footer">Noah AI 培训中心 · Codex App 使用技巧 v1.0 · 2026-03-18 · Kora</div>
+  </div>
+</main>
+
+<script>
+const ids = ['intro','tips','control','agents','commands','resources'];
+const links = {};
+ids.forEach(id => {
+  const link = document.querySelector(`nav a[href="#${id}"]`);
+  if (link) links[id] = link;
+});
+window.addEventListener('scroll', () => {
+  let current = 'intro';
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  Object.values(links).forEach(l => l.classList.remove('active'));
+  if (links[current]) links[current].classList.add('active');
+});
+window.dispatchEvent(new Event('scroll'));
+</script>
+</body>
+</html>
