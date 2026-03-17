@@ -1,6 +1,7 @@
 .DS_Store
 *.DS_Store
 Thumbs.db
+~$*.docx
 
 # Internal business/source materials should stay local
 /业务文档/
@@ -11,3 +12,4 @@ Thumbs.db
 /培训课件/*
 !/培训课件/网页版网页/
 !/培训课件/网页版网页/**
+/培训课件/网页版网页/.DS_Store

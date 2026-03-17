@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noah AI · Skills 技能包</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --sidebar-w: 272px;
+  --bg-soft: rgba(255,250,243,0.84);
+  --panel: rgba(255,252,247,0.9);
+  --panel-strong: #fffaf4;
+  --sidebar-bg: #1f252d;
+  --sidebar-border: rgba(255,255,255,0.1);
+  --text: #1f1a17;
+  --muted: #6f655e;
+  --border: rgba(76,52,34,0.14);
+  --shadow: 0 18px 60px rgba(66,45,26,0.12);
+  --shadow-soft: 0 12px 28px rgba(54,39,27,0.08);
+  --accent: #c96d3b;
+  --accent-strong: #a34f24;
+  --accent-soft: rgba(201,109,59,0.12);
+  --accent-alt: #1f6a67;
+  --accent-alt-soft: rgba(31,106,103,0.12);
+  --sidebar-text: rgba(255,255,255,0.92);
+  --sidebar-muted: rgba(255,255,255,0.56);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(201,109,59,0.18), transparent 28%),
+    radial-gradient(circle at 85% 12%, rgba(31,106,103,0.12), transparent 24%),
+    linear-gradient(180deg, #f8f2e9 0%, #f4ede4 52%, #f8f4ee 100%);
+}
+body::before {
+  content:""; position:fixed; inset:0;
+  background-image: linear-gradient(rgba(255,255,255,0.16) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.16) 1px,transparent 1px);
+  background-size: 36px 36px; opacity:.25; pointer-events:none;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  position:fixed; left:0; top:0; bottom:0; width:var(--sidebar-w);
+  padding:22px 18px 18px;
+  background: linear-gradient(180deg,rgba(255,255,255,0.03),transparent 22%), var(--sidebar-bg);
+  border-right:1px solid var(--sidebar-border);
+  display:flex; flex-direction:column; z-index:10; overflow-y:auto;
+}
+.sidebar-logo { padding:18px 16px 16px; border:1px solid rgba(255,255,255,0.08); border-radius:20px; background:rgba(255,255,255,0.03); }
+.sidebar-logo .tag { font-size:11px; letter-spacing:0.16em; color:var(--sidebar-muted); text-transform:uppercase; }
+.sidebar-logo h2 { margin-top:10px; font-family:"Songti SC","STSong",serif; font-size:22px; font-weight:700; color:var(--sidebar-text); }
+.sidebar-logo .sub { margin-top:6px; font-size:12px; line-height:1.7; color:rgba(255,255,255,0.56); }
+.back-link {
+  display:flex; align-items:center; gap:8px; margin:14px 4px 0;
+  padding:10px 14px; border-radius:12px; color:rgba(255,255,255,0.6); font-size:13px;
+  text-decoration:none; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.03);
+  transition:background .18s, color .18s;
+}
+.back-link:hover { background:rgba(255,255,255,0.07); color:var(--sidebar-text); }
+nav { display:flex; flex-direction:column; gap:4px; padding:14px 0; flex:1; }
+.nav-section { padding:12px 16px 4px; font-size:11px; letter-spacing:0.16em; color:var(--sidebar-muted); text-transform:uppercase; }
+nav a {
+  display:flex; align-items:center; gap:10px; padding:11px 14px; margin:0 2px;
+  border-radius:14px; color:var(--sidebar-text); text-decoration:none;
+  border:1px solid transparent; font-size:13.5px;
+  transition:transform .18s, background .18s, border-color .18s;
+}
+nav a:hover { transform:translateX(3px); background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.08); }
+nav a.active { color:#fff; background:linear-gradient(135deg,rgba(201,109,59,0.24),rgba(31,106,103,0.16)); border-color:rgba(255,255,255,0.08); }
+.sidebar-footer { padding:14px 16px; border-radius:18px; border:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.04); font-size:11.5px; color:rgba(255,255,255,0.55); line-height:1.7; }
+
+/* ── Layout ── */
+.main { margin-left:var(--sidebar-w); min-height:100vh; }
+.content { max-width:1080px; padding:40px 40px 88px; }
+
+/* ── Hero ── */
+.page-hero {
+  padding:38px 42px 36px; border-radius:30px;
+  border:1px solid rgba(76,52,34,0.1); background:var(--bg-soft);
+  backdrop-filter:blur(16px); box-shadow:var(--shadow); margin-bottom:28px;
+  position:relative; overflow:hidden;
+}
+.page-hero::after {
+  content:""; position:absolute; right:-60px; bottom:-80px; width:220px; height:220px;
+  border-radius:50%; background:radial-gradient(circle,rgba(201,109,59,0.18),rgba(201,109,59,0)); pointer-events:none;
+}
+.eyebrow { display:inline-flex; padding:6px 12px; border-radius:999px; background:rgba(255,255,255,0.56); color:var(--accent-strong); font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; }
+.page-hero h1 { margin-top:16px; font-family:"Songti SC","STSong",serif; font-size:clamp(28px,3.5vw,44px); line-height:1.1; font-weight:700; }
+.page-hero .lead { margin-top:14px; font-size:15px; line-height:1.9; color:var(--muted); max-width:52em; }
+.hero-pills { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+.pill { padding:8px 14px; border-radius:999px; background:rgba(255,255,255,0.68); border:1px solid rgba(76,52,34,0.08); font-size:12.5px; color:#5b5048; }
+
+/* ── Concept section ── */
+.concept-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:24px; }
+.concept-card {
+  padding:22px 20px; border-radius:22px; border:1px solid rgba(76,52,34,0.1);
+  background:rgba(255,252,247,0.88); backdrop-filter:blur(12px); box-shadow:var(--shadow-soft);
+  display:flex; flex-direction:column; gap:10px;
+}
+.concept-icon { font-size:28px; }
+.concept-card h3 { font-size:15px; font-weight:700; }
+.concept-card p { font-size:13px; line-height:1.7; color:var(--muted); }
+.tool-badges { display:flex; gap:6px; flex-wrap:wrap; margin-top:4px; }
+.tool-badge { padding:3px 9px; border-radius:999px; font-size:11px; font-weight:700; }
+.badge-claude  { background:rgba(201,109,59,0.12); color:#a34f24; }
+.badge-codex   { background:rgba(14,165,233,0.12); color:#075985; }
+.badge-gemini  { background:rgba(16,185,129,0.1);  color:#065F46; }
+.badge-all     { background:rgba(99,102,241,0.12); color:#3730A3; }
+.badge-cowork  { background:rgba(201,109,59,0.15); color:#a34f24; border:1px solid rgba(201,109,59,0.2); }
+
+.example-skill {
+  margin-top:18px; padding:22px 24px; border-radius:20px;
+  background:linear-gradient(145deg, rgba(201,109,59,0.08), rgba(255,255,255,0.88) 42%);
+  border:1px solid rgba(76,52,34,0.1); box-shadow:var(--shadow-soft);
+}
+.example-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+.example-title { font-size:16px; font-weight:700; }
+.example-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+.example-step {
+  padding:16px; border-radius:16px; background:rgba(255,252,247,0.86);
+  border:1px solid rgba(76,52,34,0.08);
+}
+.example-kicker {
+  font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--accent-strong); margin-bottom:8px;
+}
+.example-step h4 { font-size:14px; font-weight:700; margin-bottom:8px; }
+.example-step p, .example-step li { font-size:12.5px; line-height:1.75; color:var(--muted); }
+.example-step ul { padding-left:18px; }
+.example-note {
+  margin-top:12px; font-size:12.5px; line-height:1.75; color:var(--muted);
+}
+
+/* ── Why section ── */
+.why-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:24px; }
+.why-card {
+  padding:20px 22px; border-radius:20px;
+  background:rgba(255,252,247,0.88); border:1px solid rgba(76,52,34,0.1);
+  box-shadow:var(--shadow-soft); display:flex; gap:14px; align-items:flex-start;
+}
+.why-num { width:36px; height:36px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; background:linear-gradient(135deg,var(--accent-soft),var(--accent-alt-soft)); }
+.why-card h4 { font-size:14px; font-weight:700; margin-bottom:4px; }
+.why-card p  { font-size:13px; line-height:1.7; color:var(--muted); }
+
+/* ── Section containers ── */
+.section-block {
+  margin-bottom:36px; padding:34px 36px; border-radius:28px;
+  background:rgba(255,252,247,0.88); border:1px solid rgba(76,52,34,0.1);
+  box-shadow:var(--shadow-soft);
+}
+.section-label { display:flex; align-items:center; gap:14px; margin-bottom:22px; }
+.section-num { width:38px; height:38px; border-radius:12px; flex-shrink:0; background:linear-gradient(135deg,var(--accent-soft),var(--accent-alt-soft)); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; }
+.section-title { font-size:19px; font-weight:700; font-family:"Songti SC","STSong",serif; }
+
+/* ── Alert boxes ── */
+.alert { display:flex; gap:12px; align-items:flex-start; padding:14px 18px; border-radius:12px; margin:14px 0; font-size:13px; line-height:1.7; }
+.alert-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+.alert-green  { background:#F0FDF4; border:1px solid #BBF7D0; color:#065F46; }
+.alert-blue   { background:#EFF6FF; border:1px solid #BFDBFE; color:#1E40AF; }
+.alert-yellow { background:#FFFBEB; border:1px solid #FDE68A; color:#92400E; }
+.alert-purple { background:#FAF5FF; border:1px solid #E9D5FF; color:#5B21B6; }
+
+/* ── Table ── */
+.table-wrap { overflow-x:auto; border-radius:12px; border:1px solid var(--border); margin:14px 0; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th { padding:10px 14px; background:rgba(255,255,255,0.56); font-weight:700; text-align:left; color:var(--muted); font-size:12px; }
+td { padding:10px 14px; border-top:1px solid rgba(76,52,34,0.07); vertical-align:top; line-height:1.6; }
+tr:hover td { background:rgba(255,255,255,0.3); }
+td code { font-family:"SF Mono","Consolas","Monaco",monospace; font-size:11.5px; background:rgba(76,52,34,0.07); padding:1px 5px; border-radius:4px; }
+
+/* ── FAQ ── */
+.faq-list { display:flex; flex-direction:column; gap:12px; }
+.faq-item { padding:18px 20px; border-radius:16px; background:rgba(255,252,247,0.9); border:1px solid rgba(76,52,34,0.1); box-shadow:var(--shadow-soft); }
+.faq-q { font-size:14px; font-weight:700; margin-bottom:8px; display:flex; gap:10px; }
+.faq-q-badge { background:rgba(201,109,59,0.12); color:#a34f24; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700; flex-shrink:0; margin-top:2px; }
+.faq-a { font-size:13px; line-height:1.7; color:var(--muted); }
+
+/* ── CTA button ── */
+.cta-button { display:inline-flex; align-items:center; gap:8px; padding:14px 20px; border-radius:16px; font-size:15px; font-weight:700; text-decoration:none; transition:transform .18s, box-shadow .18s; }
+.cta-button:hover { transform:translateY(-2px); }
+.cta-button.primary { color:#fffaf4; background:linear-gradient(135deg,#c96d3b,#a34f24); box-shadow:0 16px 30px rgba(163,79,36,0.22); }
+.cta-button.secondary { color:var(--accent-alt); background:rgba(255,255,255,0.68); border:1px solid rgba(31,106,103,0.15); }
+
+/* ── Skill table sections ── */
+.skills-section { margin-bottom:36px; }
+.dept-header {
+  display:flex; align-items:center; gap:12px; margin-bottom:16px; padding:14px 18px;
+  border-radius:16px; border:1px solid;
+}
+.dept-header.universal  { background:rgba(99,102,241,0.07);  border-color:rgba(99,102,241,0.18);  }
+.dept-header.finance    { background:rgba(245,158,11,0.07);  border-color:rgba(245,158,11,0.2);   }
+.dept-header.compliance { background:rgba(16,185,129,0.07);  border-color:rgba(16,185,129,0.18);  }
+.dept-header.operations { background:rgba(239,68,68,0.06);   border-color:rgba(239,68,68,0.18);   }
+.dept-header.data       { background:rgba(14,165,233,0.07);  border-color:rgba(14,165,233,0.18);  }
+
+.dept-title { font-size:15px; font-weight:700; }
+.dept-sub   { font-size:12px; color:var(--muted); margin-top:2px; }
+.dept-icon  { font-size:22px; flex-shrink:0; }
+.dept-badge { margin-left:auto; padding:4px 10px; border-radius:999px; font-size:11px; font-weight:700; }
+.dept-header.universal  .dept-badge { background:rgba(99,102,241,0.14); color:#3730A3; }
+.dept-header.finance    .dept-badge { background:rgba(245,158,11,0.15); color:#92400E; }
+.dept-header.compliance .dept-badge { background:rgba(16,185,129,0.12); color:#065F46; }
+.dept-header.operations .dept-badge { background:rgba(239,68,68,0.12);  color:#991B1B; }
+.dept-header.data       .dept-badge { background:rgba(14,165,233,0.12); color:#075985; }
+
+/* ── Skill cards ── */
+.skill-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.skill-card {
+  padding:18px 20px; border-radius:16px; border:1px solid rgba(76,52,34,0.1);
+  background:rgba(255,252,247,0.9); box-shadow:var(--shadow-soft);
+}
+.skill-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:8px; }
+.skill-name { font-size:13px; font-weight:700; font-family:"SF Mono","Consolas","Monaco",monospace; color:#1E3A5F; }
+.skill-platform { display:flex; gap:4px; flex-shrink:0; }
+.skill-desc { font-size:12.5px; line-height:1.7; color:var(--muted); margin-bottom:10px; }
+.skill-trigger-label { font-size:11px; font-weight:700; color:var(--muted); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:6px; }
+.trigger-pills { display:flex; flex-wrap:wrap; gap:5px; }
+.trigger-pill {
+  padding:3px 9px; border-radius:999px; font-size:11.5px;
+  background:rgba(255,255,255,0.7); border:1px solid rgba(76,52,34,0.1); color:#5a4c42;
+}
+
+/* ── Install section ── */
+.install-steps { display:flex; flex-direction:column; gap:14px; margin-bottom:24px; }
+.install-step { display:grid; grid-template-columns:44px 1fr; gap:14px; padding:16px; border-radius:16px; background:rgba(255,252,247,0.9); border:1px solid rgba(76,52,34,0.1); box-shadow:var(--shadow-soft); }
+.step-num { width:44px; height:44px; border-radius:14px; background:linear-gradient(135deg,rgba(201,109,59,0.16),rgba(31,106,103,0.12)); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800; }
+.step-title { font-size:14px; font-weight:700; margin-bottom:5px; }
+.step-body { font-size:13px; line-height:1.7; color:var(--muted); }
+
+/* ── Trigger section ── */
+.trigger-methods { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:24px; }
+.trigger-method { padding:20px 22px; border-radius:18px; border:1px solid rgba(76,52,34,0.1); background:rgba(255,252,247,0.9); box-shadow:var(--shadow-soft); }
+.trigger-method h4 { font-size:14px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+.trigger-method p { font-size:13px; line-height:1.7; color:var(--muted); margin-bottom:12px; }
+
+/* ── Code / command boxes ── */
+.cmd-box { background:#1f252d; border-radius:10px; padding:10px 14px; font-family:"SF Mono","Consolas","Monaco",monospace; font-size:12.5px; color:#e2e8f0; line-height:1.7; overflow-x:auto; position:relative; }
+.cmd-box code { display:block; }
+.c-green  { color:#6EE7B7; }
+.c-blue   { color:#60A5FA; }
+.c-yellow { color:#FCD34D; }
+.c-muted  { color:#64748B; }
+.c-orange { color:#FCA5A5; }
+
+/* ── Where to find ── */
+.resource-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px; }
+.resource-card { padding:18px 20px; border-radius:16px; background:rgba(255,252,247,0.9); border:1px solid rgba(76,52,34,0.1); box-shadow:var(--shadow-soft); }
+.resource-card h4 { font-size:13.5px; font-weight:700; margin-bottom:6px; }
+.resource-card p { font-size:12.5px; line-height:1.7; color:var(--muted); margin-bottom:8px; }
+.resource-card a { font-size:12px; color:var(--accent); text-decoration:none; font-weight:600; }
+.resource-card a:hover { text-decoration:underline; }
+.resource-tag { display:inline-flex; padding:3px 8px; border-radius:999px; font-size:10.5px; font-weight:700; margin-bottom:8px; }
+.tag-official  { background:rgba(201,109,59,0.12); color:#a34f24; }
+.tag-community { background:rgba(99,102,241,0.12); color:#3730A3; }
+.tag-internal  { background:rgba(16,185,129,0.1);  color:#065F46; }
+
+/* ── Footer ── */
+.doc-footer { margin-top:40px; padding:20px 0; text-align:center; font-size:12px; color:var(--muted); border-top:1px solid rgba(76,52,34,0.1); }
+h2.sh { font-size:16px; font-weight:700; margin:20px 0 12px; padding-bottom:8px; border-bottom:1.5px solid rgba(201,109,59,0.2); }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+  .sidebar { display:none; }
+  .content { padding:24px 20px 60px; }
+  .concept-grid, .why-grid, .skill-cards, .trigger-methods, .resource-cards, .example-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="tag">Noah AI · Skills</div>
+    <h2>Skills 技能包</h2>
+    <div class="sub">Claude Cowork 官方提供，直接可用，无需额外配置。</div>
+  </div>
+
+  <a class="back-link" href="index.html">← 返回培训首页</a>
+
+  <nav>
+    <div class="nav-section">了解 Skills</div>
+    <a href="#what">🧩 什么是 Skills？</a>
+    <a href="#why">💡 为什么要用？</a>
+    <a href="#how-trigger">▶ 怎么触发？</a>
+    <a href="#how-install">📥 怎么开启？</a>
+
+    <div class="nav-section">推荐清单</div>
+    <a href="#pkg-universal">🏢 通用文档（全员）</a>
+    <a href="#pkg-finance">💰 财务专属包</a>
+    <a href="#pkg-compliance">✅ 合规与风控包</a>
+    <a href="#pkg-operations">⚙️ 运营与流程包</a>
+    <a href="#pkg-data">📊 数据分析包</a>
+
+    <div class="nav-section">更多</div>
+    <a href="#find-more">🔍 去哪里找更多？</a>
+    <a href="#external-resources">🌐 外部参考资源</a>
+    <a href="#oss-skills">🧰 开源常用 Skills</a>
+    <a href="#faq">❓ 常见问题</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    v4.1 · 2026-03-17 · Kora<br>
+    Skills 来源：Claude Cowork 官方插件库
+  </div>
+</aside>
+
+<main class="main">
+  <div class="content">
+
+    <!-- Hero -->
+    <div class="page-hero">
+      <span class="eyebrow">官方 Skills 指南</span>
+      <h1>Skills 技能包 — 用 AI 的专业模式处理你的工作</h1>
+      <p class="lead">
+        这里列出的都是 <strong>Claude Cowork 官方提供的真实 Skills</strong>，通过插件库即可找到和启用，不是自定义脚本，不需要找开发。每个 Skill 都是针对特定工作场景预配置好的专业模式：格式、流程、输出标准全部内置，说出你要做什么，AI 自动调用。
+      </p>
+      <div class="hero-pills">
+        <span class="pill">✅ 官方可查，插件库直接安装</span>
+        <span class="pill">16 个精选 Skills</span>
+        <span class="pill">全员均有适用的场景</span>
+      </div>
+    </div>
+
+    <!-- ── 什么是 Skills ── -->
+    <div class="section-block" id="what">
+      <div class="section-label">
+        <div class="section-num">🧩</div>
+        <div class="section-title">什么是 Skills？</div>
+      </div>
+
+      <p style="font-size:14px;line-height:1.9;color:var(--muted);margin-bottom:22px">
+        Skills 本质上是给 AI 装的“能力扩展包”。没有 Skill 时，AI 只是一个通用助手；装上某个 Skill 后，AI 就学会了一套固定工作流程，知道该按什么步骤处理任务、该输出什么格式、哪些地方要提醒你人工复核。你可以把它理解成：<strong>给 AI 安装一个专门处理某类工作的 App</strong>。
+      </p>
+
+      <div class="concept-grid">
+        <div class="concept-card">
+          <div class="concept-icon">📱</div>
+          <h3>它是什么</h3>
+          <p>Claude 本体像一台空白手机，先有基础能力；每个 Skill 像一个 App。每装一个 Skill，AI 就多学会一项具体工作技能，比如合同审查、报表整理、会议纪要、数据看板。</p>
+        </div>
+        <div class="concept-card">
+          <div class="concept-icon">🧱</div>
+          <h3>它里面有什么</h3>
+          <p>一个 Skill 背后通常是一组预先写好的规则：核心说明文件 <code style="background:rgba(76,52,34,0.08);padding:1px 5px;border-radius:4px;font-size:12px">SKILL.md</code> 定义名称、适用场景、工作流程和输出要求；有时还会带脚本、模板或参考资料。</p>
+          <div class="tool-badges" style="margin-top:8px">
+            <span class="tool-badge badge-all">开放标准</span>
+            <span class="tool-badge badge-cowork">Claude Cowork 官方</span>
+          </div>
+        </div>
+        <div class="concept-card">
+          <div class="concept-icon">▶</div>
+          <h3>它怎么被用起来</h3>
+          <p>你不用研究代码，也不用理解 Skill 文件。平时只需要说出任务，比如“帮我审查这份合同”或“把这份会议录音整理成纪要”，AI 会自动调用合适的 Skill；需要精确指定时，再用 <code style="background:rgba(76,52,34,0.08);padding:1px 5px;border-radius:4px;font-size:12px">$skill名称</code>。</p>
+        </div>
+      </div>
+
+      <div class="example-skill">
+        <div class="example-head">
+          <div class="example-title">例子：一个“合同审查 Skill”实际会做什么</div>
+          <span class="tool-badge badge-cowork">示例 Skill：contract-review-assistant</span>
+        </div>
+        <div class="example-grid">
+          <div class="example-step">
+            <div class="example-kicker">你怎么说</div>
+            <h4>一句自然语言就够了</h4>
+            <p>比如你对 AI 说：</p>
+            <p><strong>“帮我审查这份 IT 服务合同，标出风险条款，并和公司标准模板对比。”</strong></p>
+          </div>
+          <div class="example-step">
+            <div class="example-kicker">Skill 在后台怎么做</div>
+            <h4>它会按预设流程工作</h4>
+            <ul>
+              <li>提取合同金额、期限、违约责任等关键条款</li>
+              <li>对条款做红 / 黄 / 绿三级风险标注</li>
+              <li>和公司标准模板做偏差对比</li>
+              <li>最后生成法务审核意见摘要</li>
+            </ul>
+          </div>
+          <div class="example-step">
+            <div class="example-kicker">你会拿到什么</div>
+            <h4>输出不是一句话，而是一套结果</h4>
+            <ul>
+              <li>合同基本信息表</li>
+              <li>关键条款清单和风险等级</li>
+              <li>偏差对比表</li>
+              <li>审核意见摘要</li>
+            </ul>
+          </div>
+        </div>
+        <div class="example-note">
+          这就是 Skill 和普通聊天的区别：普通聊天可能只给你一段泛泛建议；调用 Skill 后，AI 会按固定流程产出更接近真实工作交付物的结果。<strong>但它仍然是 AI 草稿</strong>，尤其法务、合规、风控类内容，最后必须由专业人员审核。
+        </div>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">💡</span>
+        <div><strong>一句话记忆</strong>：Skill 不是“一个更长的提示词”，而是“给 AI 预装好的一整套工作方法”。你负责提出任务，Skill 负责把处理步骤和输出结构固定下来。</div>
+      </div>
+    </div>
+
+    <!-- ── 为什么要用 ── -->
+    <div class="section-block" id="why">
+      <div class="section-label">
+        <div class="section-num">💡</div>
+        <div class="section-title">为什么要用 Skills？</div>
+      </div>
+
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-num">1</div>
+          <div>
+            <h4>不用每次重新解释背景</h4>
+            <p>没有 Skill：你每次都要说"你是一个财务分析师，我们的科目分类是……"。有 Skill：直接说"帮我做本月的差异分析"，格式和逻辑已经内置好了。</p>
+          </div>
+        </div>
+        <div class="why-card">
+          <div class="why-num">2</div>
+          <div>
+            <h4>输出格式直接可用</h4>
+            <p>每个 Skill 针对场景预设了输出格式，比如账户核对的表格、合规追踪的检查列表、流程文档的 RACI 矩阵，不需要你再重新整理格式。</p>
+          </div>
+        </div>
+        <div class="why-card">
+          <div class="why-num">3</div>
+          <div>
+            <h4>官方维护，持续更新</h4>
+            <p>Cowork 官方 Skills 由专业团队维护，随着模型升级同步优化，不用担心提示词过时失效。出了问题有官方支持，不是靠个人摸索。</p>
+          </div>
+        </div>
+        <div class="why-card">
+          <div class="why-num">4</div>
+          <div>
+            <h4>全团队用同一套标准</h4>
+            <p>IT 统一安装，全员用相同的 Skills，输出风格和格式保持一致，不会出现每个人用法不同、输出结果差异很大的情况。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 怎么触发 ── -->
+    <div class="section-block" id="how-trigger">
+      <div class="section-label">
+        <div class="section-num">▶</div>
+        <div class="section-title">怎么触发 Skills？</div>
+      </div>
+
+      <div class="trigger-methods">
+        <div class="trigger-method">
+          <h4>🗣 方式一：自然语言（推荐所有人）</h4>
+          <p>直接描述你要做的事，Claude 自动识别并调用对应 Skill。<strong>不需要记任何命令。</strong></p>
+          <div class="cmd-box">
+            <code><span class="c-muted"># 说出任务，AI 自动匹配</span></code>
+            <code><span class="c-green">"帮我做一份月末账户核对"</span></code>
+            <code><span class="c-muted">→ 调用 finance:reconciliation</span></code>
+            <code></code>
+            <code><span class="c-green">"整理这个流程的 SOP 文档"</span></code>
+            <code><span class="c-muted">→ 调用 operations:process-doc</span></code>
+            <code></code>
+            <code><span class="c-green">"帮我做一个数据看板"</span></code>
+            <code><span class="c-muted">→ 调用 data:build-dashboard</span></code>
+          </div>
+        </div>
+        <div class="trigger-method">
+          <h4>⌨️ 方式二：直接指定（进阶用法）</h4>
+          <p>知道 Skill 名称时，可以在对话开头用 <code style="background:rgba(76,52,34,0.08);padding:1px 5px;border-radius:4px;font-size:12px">$skill名称</code> 精确调用。</p>
+          <div class="cmd-box">
+            <code><span class="c-muted"># 格式：$分类:技能名</span></code>
+            <code><span class="c-blue">$finance:reconciliation</span></code>
+            <code><span class="c-blue">$operations:compliance-tracking</span></code>
+            <code><span class="c-blue">$anthropic-skills:xlsx</span></code>
+            <code></code>
+            <code><span class="c-muted"># 查看当前所有已安装 Skills</span></code>
+            <code><span class="c-yellow">/skills</span></code>
+          </div>
+          <div class="alert alert-blue" style="margin-top:10px;padding:10px 14px">
+            <span class="alert-icon">💡</span>
+            <div style="font-size:12.5px">调用 Skill 时，AI 通常会在输出前标注所使用的 Skill 名称，方便你确认是否匹配到了正确的技能。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 怎么开启 ── -->
+    <div class="section-block" id="how-install">
+      <div class="section-label">
+        <div class="section-num">📥</div>
+        <div class="section-title">怎么开启 Skills？</div>
+      </div>
+
+      <div class="alert alert-green" style="margin-bottom:20px">
+        <span class="alert-icon">✅</span>
+        <div><strong>如果 IT 已经帮大家统一安装了</strong>：直接用，不需要做任何操作。下面的步骤是给需要自己安装或补充插件包的同事。</div>
+      </div>
+
+      <div class="install-steps">
+        <div class="install-step">
+          <div class="step-num">1</div>
+          <div>
+            <div class="step-title">打开 Claude Cowork → 设置（Settings）</div>
+            <div class="step-body">点击左下角的设置图标，进入 <strong>Plugins（插件）</strong> 选项卡。这里列出了当前已安装的所有插件包，每个插件包里包含若干个 Skills。</div>
+          </div>
+        </div>
+        <div class="install-step">
+          <div class="step-num">2</div>
+          <div>
+            <div class="step-title">在插件市场搜索并安装对应插件包</div>
+            <div class="step-body">点击 <strong>Browse Plugins（浏览插件）</strong>，搜索下方表格中对应的插件包名称，点击 Install 安装。安装完成后，该包里的所有 Skills 立即可用。</div>
+            <div class="table-wrap" style="margin-top:12px">
+              <table>
+                <thead><tr><th>插件包</th><th>包含 Skills</th><th>适合人群</th></tr></thead>
+                <tbody>
+                  <tr><td><code>anthropic-skills</code></td><td>docx · pptx · xlsx · pdf · schedule</td><td>全员</td></tr>
+                  <tr><td><code>knowledge-work-plugins/finance</code></td><td>reconciliation · variance-analysis · audit-support · close-management</td><td>财务团队</td></tr>
+                  <tr><td><code>knowledge-work-plugins/operations</code></td><td>compliance-tracking · risk-assessment · process-doc · process-optimization · vendor-management</td><td>合规/风控/运营</td></tr>
+                  <tr><td><code>knowledge-work-plugins/data</code></td><td>analyze · build-dashboard · sql-queries · data-exploration</td><td>数据/分析岗位</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="install-step">
+          <div class="step-num">3</div>
+          <div>
+            <div class="step-title">直接开始用，无需重启</div>
+            <div class="step-body">插件安装后立即生效。在对话框里说出你的任务，Claude 会自动调用对应 Skill。输入 <code style="background:rgba(76,52,34,0.08);padding:1px 5px;border-radius:4px">/skills</code> 可以查看已安装列表，确认安装成功。</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-yellow">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>找不到插件市场入口？</strong> 联系 IT 同事，请他们在组织管理后台统一部署插件包，这样全员账号都会自动获得对应 Skills，不需要每个人单独安装。</div>
+      </div>
+    </div>
+
+    <!-- ── 推荐 Skills 清单 ── -->
+    <div class="section-block" id="skills-list">
+      <div class="section-label">
+        <div class="section-num">📦</div>
+        <div class="section-title">公司推荐 Skills 清单（16 个）</div>
+      </div>
+      <p style="font-size:13.5px;color:var(--muted);line-height:1.8;margin-bottom:28px">以下均为 Claude Cowork 官方插件库中真实存在的 Skills，安装对应插件包后即可使用。所有输出均为 AI 草稿，专业判断和最终决定需相关人员审核确认。</p>
+
+      <!-- ── 通用文档 ── -->
+      <div class="skills-section" id="pkg-universal">
+        <div class="dept-header universal">
+          <div class="dept-icon">🏢</div>
+          <div>
+            <div class="dept-title">通用文档处理包</div>
+            <div class="dept-sub">适合所有岗位，无专业门槛，最高频使用</div>
+          </div>
+          <span class="dept-badge">4 个 Skills · 全员推荐 · anthropic-skills</span>
+        </div>
+        <div class="skill-cards">
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">anthropic-skills:docx</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">Word 文档全流程处理。创建带格式的 .docx 文件、编辑现有文档、插入表格/标题/目录，输出专业排版的 Word 文档，可直接打开使用。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">帮我写一份项目汇报文档</span>
+              <span class="trigger-pill">把这些内容整理成 Word 文件</span>
+              <span class="trigger-pill">帮我做一份会议纪要文档</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">anthropic-skills:pptx</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">PowerPoint 演示文稿创建与编辑。从内容大纲生成幻灯片、读取现有 .pptx 文件、提取文本和结构，输出可直接打开的 PPT 文件。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">帮我做一个10页的季度总结PPT</span>
+              <span class="trigger-pill">把这份报告转成演示文稿</span>
+              <span class="trigger-pill">读取我上传的PPT，提取要点</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">anthropic-skills:xlsx</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">Excel 电子表格创建与分析。生成带公式/格式的 .xlsx 文件、读取数据、整理表格结构，适合预算表、数据汇总、跟踪清单等场景。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">帮我做一张费用预算表</span>
+              <span class="trigger-pill">把这些数据整理成 Excel 表格</span>
+              <span class="trigger-pill">分析我上传的这个Excel</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">anthropic-skills:pdf</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">PDF 全功能处理。提取文本和表格、填写表单、合并/分割 PDF、创建新 PDF 文档，是处理客户文件、合规材料、报告的核心工具。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">提取这个PDF里的表格数据</span>
+              <span class="trigger-pill">把这几个PDF合并成一份</span>
+              <span class="trigger-pill">帮我填写这份申请表</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 财务 ── -->
+      <div class="skills-section" id="pkg-finance">
+        <div class="dept-header finance">
+          <div class="dept-icon">💰</div>
+          <div>
+            <div class="dept-title">财务专属包</div>
+            <div class="dept-sub">月末关账、核对、差异分析、审计全流程支持</div>
+          </div>
+          <span class="dept-badge">4 个 Skills · Finance · knowledge-work-plugins/finance</span>
+        </div>
+        <div class="skill-cards">
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">finance:reconciliation</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">账户核对与调节表。比对 GL 余额与子账本/银行对账单/第三方数据，识别和分类差异项，生成标准调节表，适合月末日常对账。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">帮我做本月的银行对账</span>
+              <span class="trigger-pill">GL和子账本差异在哪里</span>
+              <span class="trigger-pill">生成应收账款调节表</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">finance:variance-analysis</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">财务差异分解与说明。将预算 vs 实际、同期对比的差异分解为各驱动因素，生成管理层叙述性说明和瀑布图分析，适合月度/季度财务汇报。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">分析本月预算 vs 实际差异</span>
+              <span class="trigger-pill">帮我写差异说明给管理层</span>
+              <span class="trigger-pill">收入同比下降的原因拆解</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">finance:audit-support</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">SOX 404 审计支持。生成控制测试底稿、样本选择（基于总体规模和置信水平）、控制缺陷分类，以及内外部审计的准备材料。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">帮我准备SOX审计底稿</span>
+              <span class="trigger-pill">这个控制点要抽多少样本</span>
+              <span class="trigger-pill">生成控制测试工作底稿</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">finance:close-management</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">月末关账流程管理。任务排序、依赖关系梳理、进度追踪，按日规划关账活动，识别瓶颈和阻断项，适合财务月末 close 周期管理。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">帮我排这个月的关账日历</span>
+              <span class="trigger-pill">关账哪些任务有依赖关系</span>
+              <span class="trigger-pill">今天关账进度卡在哪里了</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 合规与风控 ── -->
+      <div class="skills-section" id="pkg-compliance">
+        <div class="dept-header compliance">
+          <div class="dept-icon">✅</div>
+          <div>
+            <div class="dept-title">合规与风控包</div>
+            <div class="dept-sub">合规追踪、风险评估、监管要求全覆盖</div>
+          </div>
+          <span class="dept-badge">2 个 Skills · Compliance &amp; Risk · knowledge-work-plugins/operations</span>
+        </div>
+        <div class="skill-cards">
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">operations:compliance-tracking</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">合规要求追踪与审计就绪度评估。支持 SOC 2、ISO 27001、GDPR、监管合规场景，追踪合规活动状态，生成合规检查清单和审计准备材料。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">帮我整理当前合规要求清单</span>
+              <span class="trigger-pill">准备下季度的合规审计材料</span>
+              <span class="trigger-pill">新法规对我们有哪些合规要求</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">operations:risk-assessment</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">运营风险识别与评估。针对项目、供应商、流程或决策识别风险，按影响度和可能性分级，生成风险登记册和缓解建议，支持日常风险评估工作。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">这个项目有什么风险点</span>
+              <span class="trigger-pill">帮我做一份风险评估报告</span>
+              <span class="trigger-pill">这个供应商的合作风险有哪些</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 运营与流程 ── -->
+      <div class="skills-section" id="pkg-operations">
+        <div class="dept-header operations">
+          <div class="dept-icon">⚙️</div>
+          <div>
+            <div class="dept-title">运营与流程包</div>
+            <div class="dept-sub">SOP 制作、流程优化、供应商评估、变更管理</div>
+          </div>
+          <span class="dept-badge">3 个 Skills · Operations · knowledge-work-plugins/operations</span>
+        </div>
+        <div class="skill-cards">
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">operations:process-doc</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">业务流程文档化。生成标准操作程序（SOP）、流程图、RACI 矩阵，将口头描述或笔记转化为结构化流程文档，适合团队培训和流程固化。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">帮我把这个审批流程写成SOP</span>
+              <span class="trigger-pill">生成入职流程的RACI矩阵</span>
+              <span class="trigger-pill">把我描述的流程做成文档</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">operations:process-optimization</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">流程效率分析与改进建议。分析现有流程的瓶颈、冗余环节和自动化机会，给出优化方案和改进路径，支持精益改善和效率提升项目。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">这个审批流程太慢，帮我优化</span>
+              <span class="trigger-pill">找出我们报销流程的瓶颈</span>
+              <span class="trigger-pill">哪些步骤可以自动化或合并</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">operations:vendor-management</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">供应商评估与管理。成本分析、风险评估、多供应商横向对比、续约建议，支持 RFP 制作和供应商评审，适合采购和外包管理场景。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">评估这家供应商要不要续约</span>
+              <span class="trigger-pill">比较这三家供应商的方案</span>
+              <span class="trigger-pill">帮我做一份供应商评审报告</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 数据分析 ── -->
+      <div class="skills-section" id="pkg-data">
+        <div class="dept-header data">
+          <div class="dept-icon">📊</div>
+          <div>
+            <div class="dept-title">数据分析包</div>
+            <div class="dept-sub">数据探索、可视化看板、SQL 查询</div>
+          </div>
+          <span class="dept-badge">3 个 Skills · Data · knowledge-work-plugins/data</span>
+        </div>
+        <div class="skill-cards">
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">data:analyze</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">数据分析全流程。从快速查询到完整分析报告，支持描述统计、趋势分析、分组对比、异常检测，上传 CSV/Excel 即可直接分析。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">分析这份销售数据，找出规律</span>
+              <span class="trigger-pill">这几个月哪个产品增速最快</span>
+              <span class="trigger-pill">帮我找这张表里的异常数据</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">data:build-dashboard</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">交互式 HTML 数据看板。基于数据生成带图表、下拉筛选器和汇总表格的可交互看板，输出可独立打开的 HTML 文件，无需服务器。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">把这份数据做成可视化看板</span>
+              <span class="trigger-pill">做一个可以按部门筛选的报表</span>
+              <span class="trigger-pill">帮我做月度KPI监控页面</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-card-top">
+              <div class="skill-name">data:sql-queries</div>
+              <div class="skill-platform"><span class="tool-badge badge-cowork">官方</span></div>
+            </div>
+            <div class="skill-desc">SQL 查询编写与优化。支持 Snowflake、BigQuery、PostgreSQL 等主流数据仓库方言，编写复杂的 CTE、窗口函数、聚合查询，并附带解释。</div>
+            <div class="skill-trigger-label">自然语言触发示例</div>
+            <div class="trigger-pills">
+              <span class="trigger-pill">帮我写一个查近30天新客的SQL</span>
+              <span class="trigger-pill">这条查询怎么优化速度</span>
+              <span class="trigger-pill">把这个逻辑转成Snowflake的语法</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 去哪里找更多 ── -->
+    <div class="section-block" id="find-more">
+      <div class="section-label">
+        <div class="section-num">🔍</div>
+        <div class="section-title">去哪里找更多 Skills？</div>
+      </div>
+
+      <div class="resource-cards">
+        <div class="resource-card">
+          <span class="resource-tag tag-official">官方首选</span>
+          <h4>Claude Cowork 插件市场</h4>
+          <p>Cowork 设置 → Plugins → Browse Plugins。官方维护，所有插件都经过审核，是找 Skills 的第一入口。按类别浏览或搜索关键词即可找到需要的包。</p>
+          <span style="font-size:12px;color:var(--muted)">路径：Cowork → Settings → Plugins</span>
+        </div>
+        <div class="resource-card">
+          <span class="resource-tag tag-official">官方文档</span>
+          <h4>Anthropic 官方文档</h4>
+          <p>docs.claude.ai 上有关于 Cowork Skills 的完整使用说明，包括各插件包的功能介绍、触发方式和最佳实践，适合深入了解某个 Skill 的用法。</p>
+          <a href="https://docs.claude.ai" target="_blank">docs.claude.ai →</a>
+        </div>
+        <div class="resource-card">
+          <span class="resource-tag tag-internal">内部资源</span>
+          <h4>联系 IT / AI 负责人</h4>
+          <p>如果某个业务场景没有找到合适的官方 Skill，IT 或 AI 推进小组可以评估是否定制开发内部 Skill，或协助在已有插件包里找到对应功能。</p>
+          <span style="font-size:12px;color:var(--muted)">联系方式见内网通讯录</span>
+        </div>
+        <div class="resource-card">
+          <span class="resource-tag tag-official">开放标准</span>
+          <h4>agentskills.io</h4>
+          <p>Skills 基于 agentskills.io 开放标准（SKILL.md 格式），理论上 Claude / Codex CLI / Gemini CLI 均支持。适合有技术背景的同事探索更多社区资源。</p>
+          <a href="https://agentskills.io" target="_blank">agentskills.io →</a>
+        </div>
+      </div>
+
+      <div class="alert alert-purple" id="external-resources">
+        <span class="alert-icon">🌐</span>
+        <div><strong>外部参考 Skills 与 GitHub 资源</strong>：如果官方插件市场里还没有完全匹配的场景，可以继续查看下列公开资源。它们更适合 IT、AI 推进小组或有技术背景的同事做二次筛选、评估和内部引入。</div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>资源名称</th><th>地址</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>OpenAI Codex 官方仓库</td><td><a href="https://github.com/openai/codex" target="_blank">github.com/openai/codex</a></td><td>Codex CLI 源码仓库，可用于了解官方能力边界与原生使用方式。</td></tr>
+            <tr><td>Codex 官方 Skills 文档</td><td><a href="https://developers.openai.com/codex/skills/" target="_blank">developers.openai.com/codex/skills/</a></td><td>OpenAI 官方 Skills 使用指南，适合需要面向 Codex CLI 落地的技术同事。</td></tr>
+            <tr><td>Agent Skills 开放标准</td><td><a href="https://agentskills.io" target="_blank">agentskills.io</a></td><td>SKILL.md 规范来源，适合理解一个 Skill 为什么能跨 Claude / Codex / Gemini 通用。</td></tr>
+            <tr><td>awesome-codex-skills</td><td><a href="https://github.com/ComposioHQ/awesome-codex-skills" target="_blank">github.com/ComposioHQ/awesome-codex-skills</a></td><td>社区维护的 Codex Skills 合集，适合搜索现成办公和自动化技能。</td></tr>
+            <tr><td>Codex Settings 配置包</td><td><a href="https://github.com/feiskyer/codex-settings" target="_blank">github.com/feiskyer/codex-settings</a></td><td>完整 Codex 配置示例，适合 IT 或高级用户统一整理 prompts、配置和工作流。</td></tr>
+            <tr><td>Block Agent Skills</td><td><a href="https://github.com/block/agent-skills" target="_blank">github.com/block/agent-skills</a></td><td>Block 公司维护的通用 Agent Skills 集合，偏工程化和企业场景。</td></tr>
+            <tr><td>Agensi Skills 市场</td><td><a href="https://www.agensi.io" target="_blank">www.agensi.io</a></td><td>提供付费与免费 Skills 的市场，更适合技术团队做资源搜集和对比。</td></tr>
+            <tr><td>LobeHub Skills 市场</td><td><a href="https://lobehub.com/skills" target="_blank">lobehub.com/skills</a></td><td>开放社区技能市场，覆盖面广，但引入前需要自行审核质量和安全性。</td></tr>
+            <tr><td>Codex Skill Creator</td><td><a href="https://github.com/eliasjudin/codex-skill-creator" target="_blank">github.com/eliasjudin/codex-skill-creator</a></td><td>帮助快速生成 Skills 模板和基础结构，适合内部自定义 Skill 起步。</td></tr>
+            <tr><td>awesome-claude-skills</td><td><a href="https://github.com/ComposioHQ/awesome-claude-skills" target="_blank">github.com/ComposioHQ/awesome-claude-skills</a></td><td>Claude Skills 合集，采用同一开放标准，很多内容也能迁移到其他支持 SKILL.md 的工具。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-yellow">
+        <span class="alert-icon">⚠</span>
+        <div><strong>引入外部 Skill 前先审核</strong>：先看 Skill 的描述、来源、仓库活跃度和指令内容，再决定是否进入公司环境。未经审核的外部 Skill，不建议直接用于正式业务或敏感数据场景。</div>
+      </div>
+
+      <div class="section-label" id="oss-skills" style="margin-top:26px">
+        <div class="section-num">🧰</div>
+        <div class="section-title">开源仓库里常见的办公向 Skills</div>
+      </div>
+      <p style="font-size:13.5px;color:var(--muted);line-height:1.8;margin-bottom:18px">以下整理自 <code style="background:rgba(76,52,34,0.08);padding:1px 5px;border-radius:4px">awesome-codex-skills</code> 一类开源仓库，更适合作为灵感来源或内部二次改造的起点。</p>
+
+      <div class="skill-cards">
+        <div class="skill-card">
+          <div class="skill-card-top">
+            <div class="skill-name">meeting-notes-and-actions</div>
+          </div>
+          <div class="skill-desc">会议转写生成纪要和行动项，适合会后快速整理结论、责任人和截止时间。</div>
+          <div class="skill-trigger-label">适用场景</div>
+          <div class="trigger-pills"><span class="trigger-pill">全员</span><span class="trigger-pill">会议纪要</span><span class="trigger-pill">行动项整理</span></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-top">
+            <div class="skill-name">email-draft-polish</div>
+          </div>
+          <div class="skill-desc">商务邮件草稿、润色和语气调整，适合需要快速生成正式邮件的岗位。</div>
+          <div class="skill-trigger-label">适用场景</div>
+          <div class="trigger-pills"><span class="trigger-pill">全员</span><span class="trigger-pill">邮件起草</span><span class="trigger-pill">语气润色</span></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-top">
+            <div class="skill-name">internal-comms</div>
+          </div>
+          <div class="skill-desc">内部通知、公告和组织沟通稿，适合行政、HR、管理层统一口径发布。</div>
+          <div class="skill-trigger-label">适用场景</div>
+          <div class="trigger-pills"><span class="trigger-pill">行政</span><span class="trigger-pill">管理</span><span class="trigger-pill">内部公告</span></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-top">
+            <div class="skill-name">support-ticket-triage</div>
+          </div>
+          <div class="skill-desc">客服工单分类和优先级初筛，适合运营和客服团队做前置整理。</div>
+          <div class="skill-trigger-label">适用场景</div>
+          <div class="trigger-pills"><span class="trigger-pill">客服</span><span class="trigger-pill">运营</span><span class="trigger-pill">工单分流</span></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-top">
+            <div class="skill-name">invoice-organizer</div>
+          </div>
+          <div class="skill-desc">发票数据提取、归档和初步整理，适合财务做票据预处理。</div>
+          <div class="skill-trigger-label">适用场景</div>
+          <div class="trigger-pills"><span class="trigger-pill">财务</span><span class="trigger-pill">票据整理</span><span class="trigger-pill">数据提取</span></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-top">
+            <div class="skill-name">content-research-writer</div>
+          </div>
+          <div class="skill-desc">带引用的研究和写作辅助，适合市场、研究和管理汇报类工作。</div>
+          <div class="skill-trigger-label">适用场景</div>
+          <div class="trigger-pills"><span class="trigger-pill">市场</span><span class="trigger-pill">研究</span><span class="trigger-pill">资料撰写</span></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-top">
+            <div class="skill-name">spreadsheet-formula-helper</div>
+          </div>
+          <div class="skill-desc">辅助编写和排查 Excel 公式，适合经常处理表格的非技术岗位。</div>
+          <div class="skill-trigger-label">适用场景</div>
+          <div class="trigger-pills"><span class="trigger-pill">全员</span><span class="trigger-pill">Excel</span><span class="trigger-pill">公式调试</span></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-top">
+            <div class="skill-name">file-organizer</div>
+          </div>
+          <div class="skill-desc">文件重命名、分类和归档结构建议，适合共享盘和项目资料整理。</div>
+          <div class="skill-trigger-label">适用场景</div>
+          <div class="trigger-pills"><span class="trigger-pill">全员</span><span class="trigger-pill">文件归档</span><span class="trigger-pill">资料整理</span></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-top">
+            <div class="skill-name">lead-research-assistant</div>
+          </div>
+          <div class="skill-desc">销售线索研究和信息补全，适合销售、BD 做前期客户研究。</div>
+          <div class="skill-trigger-label">适用场景</div>
+          <div class="trigger-pills"><span class="trigger-pill">销售</span><span class="trigger-pill">BD</span><span class="trigger-pill">线索研究</span></div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-card-top">
+            <div class="skill-name">notion-knowledge-capture</div>
+          </div>
+          <div class="skill-desc">把零散笔记结构化沉淀到 Notion，适合有知识库建设需求的团队。</div>
+          <div class="skill-trigger-label">适用场景</div>
+          <div class="trigger-pills"><span class="trigger-pill">全员</span><span class="trigger-pill">Notion</span><span class="trigger-pill">知识沉淀</span></div>
+        </div>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">💡</span>
+        <div><strong>建议优先顺序</strong>：先找 Cowork 插件市场官方包 → 联系 IT 团队协助 → 技术同事自行探索社区资源。不建议直接从不明来源安装未审核的 Skill。</div>
+      </div>
+    </div>
+
+    <!-- ── FAQ ── -->
+    <div class="section-block" id="faq">
+      <div class="section-label">
+        <div class="section-num">❓</div>
+        <div class="section-title">常见问题</div>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q"><span class="faq-q-badge">Q1</span>这些 Skills 现在就能用吗？</div>
+          <div class="faq-a">如果 IT 已经给公司账号统一安装了对应插件包，直接在 Cowork 里用自然语言触发即可。如果还没有，按上方"怎么开启"一节的步骤自行安装，或联系 IT 协助统一部署。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span class="faq-q-badge">Q2</span>一个任务可以同时用多个 Skills 吗？</div>
+          <div class="faq-a">可以。Claude 会根据任务内容判断是否需要组合使用 Skills。比如"帮我把这份差异分析做成 Excel 报表"，可能同时调用 finance:variance-analysis 和 anthropic-skills:xlsx，你不需要单独指定。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span class="faq-q-badge">Q3</span>怎么知道 AI 用了哪个 Skill？</div>
+          <div class="faq-a">Claude 调用 Skill 时，通常会在回复开头标注所使用的技能名称（如"正在使用 finance:reconciliation"）。也可以随时输入 <code style="background:rgba(76,52,34,0.08);padding:1px 5px;border-radius:4px">/skills</code> 查看当前已安装和启用的列表。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span class="faq-q-badge">Q4</span>Skill 的输出可以直接用吗？</div>
+          <div class="faq-a">所有 Skill 输出均为 AI 草稿，仅供参考。涉及财务、法务、合规、风控等专业领域，必须经过相关专业人员审核确认后再正式使用。AI 负责起草，人负责判断。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span class="faq-q-badge">Q5</span>我的业务场景没有对应的官方 Skill，怎么办？</div>
+          <div class="faq-a">三条路径：① 先试用最接近的 Skill，看是否够用；② 联系 IT/AI 团队评估是否定制内部 Skill；③ 直接用自然语言描述你的需求，Claude 在没有 Skill 的情况下也能处理大多数任务，只是需要你把背景和格式要求说得更清楚。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span class="faq-q-badge">Q6</span>Skills 会用到我的数据做训练吗？</div>
+          <div class="faq-a">根据 Anthropic 企业版政策，Claude for Work 默认不会将用户输入用于模型训练。具体数据使用条款以公司与 Anthropic 签署的企业协议为准，如有疑问请联系 IT 或法务确认。</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin:32px 0 0">
+      <a class="cta-button primary" href="index.html">← 返回培训首页</a>
+    </div>
+
+    <div class="doc-footer">Noah AI 培训中心 · Skills 指南 v4.2 · 2026-03-17 · Kora</div>
+  </div>
+</main>
+
+<script>
+const ids = ['what','why','how-trigger','how-install','pkg-universal','pkg-finance','pkg-compliance','pkg-operations','pkg-data','find-more','external-resources','oss-skills','faq'];
+const links = {};
+ids.forEach(id => {
+  const link = document.querySelector(`nav a[href="#${id}"]`);
+  if (link) links[id] = link;
+});
+window.addEventListener('scroll', () => {
+  let current = 'what';
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  Object.values(links).forEach(l => l.classList.remove('active'));
+  if (links[current]) links[current].classList.add('active');
+});
+window.dispatchEvent(new Event('scroll'));
+</script>
+</body>
+</html>
