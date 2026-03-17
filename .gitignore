@@ -1,0 +1,13 @@
+.DS_Store
+*.DS_Store
+Thumbs.db
+
+# Internal business/source materials should stay local
+/业务文档/
+/演示素材/
+/实际演示/
+
+# Keep only published web pages under training materials
+/培训课件/*
+!/培训课件/网页版网页/
+!/培训课件/网页版网页/**

@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noah AI 案例库</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --sidebar-w: 272px;
+  --bg: #f6f0e7;
+  --bg-soft: rgba(255, 250, 243, 0.84);
+  --panel: rgba(255, 252, 247, 0.9);
+  --panel-strong: #fffaf4;
+  --sidebar-bg: #1f252d;
+  --sidebar-border: rgba(255,255,255,0.1);
+  --text: #1f1a17;
+  --muted: #6f655e;
+  --border: rgba(76, 52, 34, 0.14);
+  --shadow: 0 18px 60px rgba(66, 45, 26, 0.12);
+  --shadow-soft: 0 12px 28px rgba(54, 39, 27, 0.08);
+  --accent: #c96d3b;
+  --accent-strong: #a34f24;
+  --accent-soft: rgba(201, 109, 59, 0.12);
+  --accent-alt: #1f6a67;
+  --accent-alt-soft: rgba(31, 106, 103, 0.12);
+  --sidebar-text: rgba(255,255,255,0.92);
+  --sidebar-muted: rgba(255,255,255,0.56);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(201, 109, 59, 0.18), transparent 28%),
+    radial-gradient(circle at 85% 12%, rgba(31, 106, 103, 0.12), transparent 24%),
+    linear-gradient(180deg, #f8f2e9 0%, #f4ede4 52%, #f8f4ee 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px);
+  background-size: 36px 36px;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  position: fixed; left:0; top:0; bottom:0; width: var(--sidebar-w);
+  padding: 22px 18px 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent 22%), var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex; flex-direction: column;
+  z-index: 10; overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 18px 16px 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.03);
+}
+
+.sidebar-logo .tag {
+  font-size: 11px; letter-spacing: 0.16em;
+  color: var(--sidebar-muted); text-transform: uppercase;
+}
+.sidebar-logo h2 {
+  margin-top: 10px;
+  font-family: "Songti SC","STSong",serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--sidebar-text);
+}
+.sidebar-logo .sub {
+  margin-top: 6px; font-size: 12px; line-height: 1.7;
+  color: rgba(255,255,255,0.56);
+}
+
+.back-link {
+  display: flex; align-items: center; gap: 8px;
+  margin: 14px 4px 0;
+  padding: 10px 14px; border-radius: 12px;
+  color: rgba(255,255,255,0.6); font-size: 13px;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  transition: background .18s, color .18s;
+}
+.back-link:hover { background: rgba(255,255,255,0.07); color: var(--sidebar-text); }
+
+nav {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 14px 0; flex: 1;
+}
+.nav-section {
+  padding: 12px 16px 4px;
+  font-size: 11px; letter-spacing: 0.16em;
+  color: var(--sidebar-muted); text-transform: uppercase;
+}
+nav a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; margin: 0 2px;
+  border-radius: 14px; color: var(--sidebar-text);
+  text-decoration: none; border: 1px solid transparent; font-size: 13.5px;
+  transition: transform .18s, background .18s, border-color .18s;
+}
+nav a:hover { transform: translateX(3px); background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.08); }
+nav a.active { color:#fff; background: linear-gradient(135deg,rgba(201,109,59,0.24),rgba(31,106,103,0.16)); border-color:rgba(255,255,255,0.08); }
+
+.cat-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.dot-general { background: #6366F1; }
+.dot-hr      { background: #F59E0B; }
+.dot-legal   { background: #EF4444; }
+.dot-auto    { background: #8B5CF6; }
+
+.sidebar-footer {
+  padding: 14px 16px; border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  font-size: 11.5px; color: rgba(255,255,255,0.55); line-height: 1.7;
+}
+
+/* ── Main layout ── */
+.main { margin-left: var(--sidebar-w); min-height: 100vh; }
+.content { max-width: 1080px; padding: 40px 40px 88px; }
+
+/* ── Hero ── */
+.page-hero {
+  padding: 38px 42px 36px;
+  border-radius: 30px;
+  border: 1px solid rgba(76,52,34,0.1);
+  background: var(--bg-soft);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow);
+  margin-bottom: 28px;
+  position: relative; overflow: hidden;
+}
+.page-hero::after {
+  content: ""; position: absolute; right: -60px; bottom: -80px;
+  width: 220px; height: 220px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,109,59,0.18), rgba(201,109,59,0));
+  pointer-events: none;
+}
+.eyebrow {
+  display: inline-flex; padding: 6px 12px; border-radius: 999px;
+  background: rgba(255,255,255,0.56); color: var(--accent-strong);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+}
+.page-hero h1 {
+  margin-top: 16px;
+  font-family: "Songti SC","STSong",serif;
+  font-size: clamp(30px, 3.8vw, 46px);
+  line-height: 1.1; font-weight: 700;
+}
+.page-hero .lead {
+  margin-top: 14px; font-size: 15px; line-height: 1.9;
+  color: var(--muted); max-width: 52em;
+}
+.hero-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.pill {
+  padding: 8px 14px; border-radius: 999px;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(76,52,34,0.08);
+  font-size: 12.5px; color: #5b5048;
+}
+
+/* ── Case categories overview ── */
+.cases-overview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 36px;
+}
+.cat-card {
+  padding: 20px 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(76,52,34,0.1);
+  background: rgba(255,252,247,0.88);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-soft);
+  text-decoration: none;
+  color: var(--text);
+  transition: transform .18s, box-shadow .18s;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.cat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.cat-icon { font-size: 26px; }
+.cat-card h3 { font-size: 14px; font-weight: 700; }
+.cat-card p { font-size: 12px; line-height: 1.7; color: var(--muted); }
+.cat-badge {
+  display: inline-flex; padding: 4px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; margin-top: 4px; width: fit-content;
+}
+.cat-badge.general { background: rgba(99,102,241,0.12); color: #4338CA; }
+.cat-badge.hr      { background: rgba(245,158,11,0.12); color: #92400E; }
+.cat-badge.legal   { background: rgba(239,68,68,0.1);   color: #991B1B; }
+.cat-badge.auto    { background: rgba(139,92,246,0.12); color: #5B21B6; }
+
+/* ── Section ── */
+.case-section {
+  margin-bottom: 44px;
+  background: rgba(255,252,247,0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(76,52,34,0.1);
+  border-radius: 28px;
+  padding: 36px 36px 32px;
+  box-shadow: var(--shadow-soft);
+}
+.case-section-header {
+  display: flex; align-items: flex-start; gap: 16px;
+  margin-bottom: 24px; padding-bottom: 22px;
+  border-bottom: 1px solid rgba(76,52,34,0.08);
+}
+.case-icon-wrap {
+  width: 52px; height: 52px; border-radius: 16px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+}
+.case-icon-wrap.general { background: rgba(99,102,241,0.12); }
+.case-icon-wrap.hr      { background: rgba(245,158,11,0.12); }
+.case-icon-wrap.legal   { background: rgba(239,68,68,0.1); }
+.case-icon-wrap.auto    { background: rgba(139,92,246,0.12); }
+
+.case-section-header h2 {
+  font-family: "Songti SC","STSong",serif;
+  font-size: 22px; font-weight: 700; margin-bottom: 6px;
+}
+.case-section-header .case-sub { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+.case-label-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.case-chip {
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 11.5px; font-weight: 600;
+  background: rgba(255,255,255,0.7); color: var(--muted);
+  border: 1px solid rgba(76,52,34,0.1);
+}
+
+/* ── Scenario cards ── */
+.scenario-grid { display: flex; flex-direction: column; gap: 18px; }
+.scenario-card {
+  border-radius: 18px;
+  border: 1px solid rgba(76,52,34,0.1);
+  overflow: hidden;
+}
+.scenario-card-head {
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.5);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  border-bottom: 1px solid rgba(76,52,34,0.06);
+}
+.scenario-title { font-size: 14.5px; font-weight: 700; }
+.scenario-meta { font-size: 12px; color: var(--muted); }
+.scenario-body { padding: 18px; }
+
+.prompt-label {
+  font-size: 12px; font-weight: 700; color: var(--muted);
+  margin-bottom: 8px; letter-spacing: 0.04em;
+}
+.prompt-box {
+  position: relative;
+  background: #1f252d;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.prompt-content {
+  display: block; padding: 14px 48px 14px 16px;
+  font-family: "SF Mono","Consolas","Monaco",monospace;
+  font-size: 12.5px; color: #e2e8f0;
+  white-space: pre-wrap; word-break: break-word;
+  line-height: 1.7;
+}
+.copy-btn {
+  position: absolute; top: 10px; right: 10px;
+  padding: 5px 10px; border-radius: 8px;
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
+  border: none; cursor: pointer; font-size: 11.5px;
+  transition: background .18s;
+}
+.copy-btn:hover { background: rgba(255,255,255,0.18); }
+.copy-btn.copied { background: rgba(16,185,129,0.3); color: #6EE7B7; }
+
+.context-box {
+  font-size: 13px; line-height: 1.8; color: var(--muted);
+  padding: 12px 16px; border-radius: 10px;
+  background: rgba(255,255,255,0.5);
+  border-left: 3px solid var(--border);
+  margin-bottom: 14px;
+}
+.context-box strong { color: var(--text); }
+
+/* ── Folder visualization ── */
+.folder-section { margin: 22px 0 18px; }
+.folder-section-title {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.folder-cats {
+  display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 0; align-items: center; margin-bottom: 16px;
+}
+.folder-cat {
+  border-radius: 14px;
+  padding: 16px 18px;
+  border: 1px solid;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.folder-cat.docs  { background: #EFF6FF; border-color: #BFDBFE; }
+.folder-cat.flow  { background: #F0FDF4; border-color: #BBF7D0; }
+.folder-cat.auto  { background: #FDF4FF; border-color: #E9D5FF; }
+.folder-cat-title {
+  font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.folder-cat.docs  .folder-cat-title { color: #1D4ED8; }
+.folder-cat.flow  .folder-cat-title { color: #065F46; }
+.folder-cat.auto  .folder-cat-title { color: #5B21B6; }
+.folder-item {
+  display: flex; align-items: flex-start; gap: 7px;
+  font-size: 12.5px; line-height: 1.6;
+}
+.folder-item code {
+  font-family: "SF Mono","Consolas","Monaco",monospace;
+  font-size: 11.5px; font-weight: 700;
+  background: rgba(0,0,0,0.06); padding: 1px 6px; border-radius: 4px;
+}
+.folder-item span { font-size: 12px; color: var(--muted); }
+.folder-arrow {
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 10px; font-size: 20px; color: var(--muted); flex-shrink: 0;
+}
+
+.folder-tree-dark {
+  background: #1f252d; border-radius: 14px;
+  padding: 18px 22px; font-family: "SF Mono","Consolas","Monaco",monospace;
+  font-size: 12.5px; color: #CBD5E1; line-height: 2.1;
+}
+.c-blue   { color: #60A5FA; }
+.c-yellow { color: #FCD34D; }
+.c-green  { color: #6EE7B7; }
+.c-red    { color: #FCA5A5; }
+.c-muted  { color: #64748B; }
+.c-purple { color: #C4B5FD; }
+
+/* ── Tables ── */
+.table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); margin: 14px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { padding: 10px 14px; background: rgba(255,255,255,0.56); font-weight: 700; text-align: left; color: var(--muted); font-size: 12px; }
+td { padding: 10px 14px; border-top: 1px solid rgba(76,52,34,0.07); vertical-align: top; line-height: 1.6; }
+tr:hover td { background: rgba(255,255,255,0.3); }
+.badge-green { color: #059669; font-weight: 600; }
+.badge-red   { color: #DC2626; }
+
+/* ── Alert boxes ── */
+.alert {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 14px 18px; border-radius: 12px; margin: 14px 0;
+  font-size: 13px; line-height: 1.7;
+}
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert-green  { background: #F0FDF4; border: 1px solid #BBF7D0; color: #065F46; }
+.alert-blue   { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF; }
+.alert-yellow { background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E; }
+
+/* ── Two-column ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+
+/* ── Flow box ── */
+.flow-box {
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(76,52,34,0.1);
+  border-radius: 12px; padding: 14px 18px;
+  font-family: "SF Mono","Consolas","Monaco",monospace;
+  font-size: 12.5px; line-height: 1.9; white-space: pre;
+  overflow-x: auto;
+}
+
+/* ── Card variants ── */
+.card {
+  background: var(--panel-strong); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 18px;
+}
+.card-red    { background: #FFF5F5; border-color: #FED7D7; }
+.card-yellow { background: #FFFBEB; border-color: #FDE68A; }
+.card-green  { background: #F0FDF4; border-color: #BBF7D0; }
+.card-blue   { background: #EFF6FF; border-color: #BFDBFE; }
+.card-purple { background: #FAF5FF; border-color: #E9D5FF; }
+
+/* ── 举一反三 ── */
+.scenario-section { margin-bottom: 22px; }
+.scenario-dept {
+  display: inline-flex; padding: 8px 16px; border-radius: 999px;
+  font-size: 13px; font-weight: 700; margin-bottom: 12px;
+}
+.dept-risk       { background: rgba(239,68,68,0.1); color: #991B1B; }
+.dept-legal      { background: rgba(245,158,11,0.12); color: #92400E; }
+.dept-compliance { background: rgba(16,185,129,0.1); color: #065F46; }
+.dept-hr         { background: rgba(99,102,241,0.12); color: #3730A3; }
+.dept-market     { background: rgba(236,72,153,0.1); color: #9D174D; }
+.dept-finance    { background: rgba(14,165,233,0.1); color: #075985; }
+.dept-ops        { background: rgba(168,85,247,0.1); color: #5B21B6; }
+
+/* ── Section label ── */
+.section-label {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+}
+.section-num {
+  width: 38px; height: 38px; border-radius: 12px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent-soft), var(--accent-alt-soft));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 800;
+}
+.section-title { font-size: 18px; font-weight: 700; }
+.section-time  { font-size: 12px; color: var(--muted); margin-left: auto; }
+.section-divider {
+  border: none; border-top: 1px solid rgba(76,52,34,0.1); margin: 32px 0;
+}
+
+/* ── Closing ── */
+.closing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.closing-card { padding: 22px; border-radius: 18px; }
+.closing-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+.closing-item { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; font-size: 13.5px; }
+.closing-card.yes { background: #F0FDF4; border: 1px solid #BBF7D0; }
+.closing-card.no  { background: #FFF5F5; border: 1px solid #FED7D7; }
+
+/* ── Footer ── */
+.doc-footer {
+  margin-top: 40px; padding: 20px 0;
+  text-align: center; font-size: 12px; color: var(--muted);
+  border-top: 1px solid rgba(76,52,34,0.1);
+}
+
+/* ── SH heading ── */
+h2.sh {
+  font-size: 17px; font-weight: 700; color: var(--text);
+  margin: 22px 0 14px; padding-bottom: 8px;
+  border-bottom: 1.5px solid rgba(201,109,59,0.2);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  body { --sidebar-w: 0px; }
+  .sidebar { display: none; }
+  .content { padding: 24px 20px 60px; }
+  .cases-overview { grid-template-columns: 1fr 1fr; }
+  .two-col, .closing-grid { grid-template-columns: 1fr; }
+  .folder-cats { grid-template-columns: 1fr; }
+  .folder-arrow { transform: rotate(90deg); }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="tag">Noah AI · Cases</div>
+    <h2>案例库</h2>
+    <div class="sub">按部门分类，覆盖通用与专业场景，每个岗位都能找到落地入口。</div>
+  </div>
+
+  <a class="back-link" href="index.html">← 返回培训首页</a>
+
+  <nav>
+    <div class="nav-section">案例分类</div>
+    <a href="#caseD">
+      <span class="cat-dot dot-general"></span> 🏢 通用 · 所有岗位
+    </a>
+    <a href="#caseA">
+      <span class="cat-dot dot-hr"></span> 👥 行政与人力
+    </a>
+    <a href="#caseB">
+      <span class="cat-dot dot-legal"></span> ⚖️ 专业业务
+    </a>
+    <a href="#caseC">
+      <span class="cat-dot dot-auto"></span> 🤖 智能自动化
+    </a>
+
+    <div class="nav-section">场景拓展</div>
+    <a href="#extend">💡 举一反三：各部门</a>
+    <a href="#closing">✅ 写在最后</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    v4.1 · 2026-03-16 · Kora<br>
+    适合所有岗位，从案例出发找到你的使用场景。
+  </div>
+</aside>
+
+<main class="main">
+  <div class="content">
+
+    <!-- Hero -->
+    <div class="page-hero">
+      <span class="eyebrow">Case Library</span>
+      <h1>AI 案例库，按部门找你的场景</h1>
+      <p class="lead">
+        真正让培训落地的不是概念，而是案例。无论你在哪个岗位，从通用场景开始，或直接跳到你所在部门，每个案例都给出了真实任务、可复用的提示词和行动路径。
+      </p>
+      <div class="hero-pills">
+        <span class="pill">4 大场景分类</span>
+        <span class="pill">所有岗位均有对应案例</span>
+        <span class="pill">每个案例都有可直接复制的提示词</span>
+      </div>
+    </div>
+
+    <!-- Overview grid -->
+    <div class="cases-overview">
+      <a class="cat-card" href="#caseD">
+        <div class="cat-icon">🏢</div>
+        <h3>通用 · 所有岗位</h3>
+        <p>会议纪要、邮件起草、周报整理、信息检索，每个人每天都能用。</p>
+        <span class="cat-badge general">新 · 全员推荐</span>
+      </a>
+      <a class="cat-card" href="#caseA">
+        <div class="cat-icon">👥</div>
+        <h3>行政与人力</h3>
+        <p>JD 批量生成、面试题库、入职材料，三层文件夹 + 自动审核流程。</p>
+        <span class="cat-badge hr">HR · Admin</span>
+      </a>
+      <a class="cat-card" href="#caseB">
+        <div class="cat-icon">⚖️</div>
+        <h3>专业业务</h3>
+        <p>基金文件审核 AI 赋能：底稿生成、来源映射、偏离点清单。</p>
+        <span class="cat-badge legal">Legal · Compliance</span>
+      </a>
+      <a class="cat-card" href="#caseC">
+        <div class="cat-icon">🤖</div>
+        <h3>智能自动化</h3>
+        <p>OpenClaw 本地助手：新闻推送、公众号、盯盘，24 小时运行。</p>
+        <span class="cat-badge auto">Advanced · 自动化</span>
+      </a>
+    </div>
+
+    <!-- ──────── Case D: Universal ──────── -->
+    <div class="case-section" id="caseD">
+      <div class="case-section-header">
+        <div class="case-icon-wrap general">🏢</div>
+        <div>
+          <h2>案例 D：通用办公 — 所有岗位都能用</h2>
+          <p class="case-sub">不需要懂代码，不需要是特定部门，只要你每天有文字工作，就有立刻能用的场景。以下四类任务，把提示词复制进 Claude，5 分钟内看到效果。</p>
+          <div class="case-label-row">
+            <span class="case-chip">🏢 全员适用</span>
+            <span class="case-chip">无需上传文件</span>
+            <span class="case-chip">5 分钟上手</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scenario-grid">
+
+        <!-- D-1 -->
+        <div class="scenario-card">
+          <div class="scenario-card-head">
+            <div>
+              <div class="scenario-title">📝 会议纪要自动整理</div>
+              <div class="scenario-meta">工具：Claude 网页版 · 无需上传文件</div>
+            </div>
+            <span style="font-size:12px;background:#EFF6FF;color:#1D4ED8;padding:4px 10px;border-radius:999px;font-weight:600;flex-shrink:0">⏱ 2 分钟</span>
+          </div>
+          <div class="scenario-body">
+            <div class="context-box"><strong>背景</strong>：开完会之后，脑子里有一堆散乱记录，但真正花时间写成纪要往往拖到第二天还没做。</div>
+            <div class="prompt-label">▶ 复制以下内容，替换 [ ] 内容后粘贴给 Claude</div>
+            <div class="prompt-box">
+              <pre class="prompt-content" id="pd1">以下是我今天会议的草稿记录，请帮我整理成正式会议纪要，格式包括：
+会议主题、参与人员、讨论要点（按议题分段）、
+结论与决定事项、下一步行动（含负责人和截止日期）。
+保持客观记录，不要添加没有讨论过的内容。
+
+[把你的草稿笔记粘贴在这里]</pre>
+              <button class="copy-btn" onclick="copyPrompt('pd1',this)">复制</button>
+            </div>
+            <div class="alert alert-green">
+              <span class="alert-icon">📢</span>
+              <div><strong>效果</strong>：输入 3 段散乱笔记 → 输出有结构的纪要+行动清单。人工只需核对事实是否准确，不需要从头打字。</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- D-2 -->
+        <div class="scenario-card">
+          <div class="scenario-card-head">
+            <div>
+              <div class="scenario-title">📧 邮件起草与润色</div>
+              <div class="scenario-meta">工具：Claude 网页版 · 无需上传文件</div>
+            </div>
+            <span style="font-size:12px;background:#EFF6FF;color:#1D4ED8;padding:4px 10px;border-radius:999px;font-weight:600;flex-shrink:0">⏱ 1 分钟</span>
+          </div>
+          <div class="scenario-body">
+            <div class="context-box"><strong>背景</strong>：需要给领导/客户/合作方写一封措辞得当的邮件，但不确定语气和内容，花了 20 分钟还没写好。</div>
+            <div class="prompt-label">▶ 复制以下内容，替换 [ ] 内容后粘贴给 Claude</div>
+            <div class="prompt-box">
+              <pre class="prompt-content" id="pd2">请帮我起草一封邮件：
+- 收件人：[对方身份/关系，如"外部合作方负责人"]
+- 背景：[两三句说明情况]
+- 我需要表达：[核心意图，如"推进签约/催进度/拒绝请求/感谢配合"]
+- 语气要求：[正式 / 温和 / 直接 / 友好]
+- 补充限制：[如需在50字内、需要抄送某人等，没有就删掉这行]
+
+草稿即可，我会自己微调。</pre>
+              <button class="copy-btn" onclick="copyPrompt('pd2',this)">复制</button>
+            </div>
+            <div class="alert alert-green">
+              <span class="alert-icon">📢</span>
+              <div><strong>效果</strong>：告诉 AI 核心信息，AI 生成完整初稿，你只需改细节。20 分钟的纠结 → 1 分钟内有可用草稿。</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- D-3 -->
+        <div class="scenario-card">
+          <div class="scenario-card-head">
+            <div>
+              <div class="scenario-title">📊 周报 / 汇报自动生成</div>
+              <div class="scenario-meta">工具：Claude 网页版 · 无需上传文件</div>
+            </div>
+            <span style="font-size:12px;background:#EFF6FF;color:#1D4ED8;padding:4px 10px;border-radius:999px;font-weight:600;flex-shrink:0">⏱ 3 分钟</span>
+          </div>
+          <div class="scenario-body">
+            <div class="context-box"><strong>背景</strong>：每周五要交周报，但本周做了很多事，整理起来乱，写着写着就变成流水账。</div>
+            <div class="prompt-label">▶ 复制以下内容，替换 [ ] 内容后粘贴给 Claude</div>
+            <div class="prompt-box">
+              <pre class="prompt-content" id="pd3">以下是我本周工作的流水账记录，请帮我整理成一份简洁的周报。
+
+格式要求：
+1. 本周完成事项（按重要性排序，最多 5 条，每条 1-2 句）
+2. 进行中 / 下周继续（简述进度）
+3. 遇到的问题或需要支持（有就写，没有就跳过）
+4. 下周重点计划（2-3 条）
+
+语言要求：第一人称，专业简洁，不要废话。
+
+[把你的本周流水账记录粘贴在这里]</pre>
+              <button class="copy-btn" onclick="copyPrompt('pd3',this)">复制</button>
+            </div>
+            <div class="alert alert-green">
+              <span class="alert-icon">📢</span>
+              <div><strong>效果</strong>：把散乱的流水账交给 AI，输出可以直接提交的周报格式。人工只需检查是否遗漏重要事项。</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- D-4 -->
+        <div class="scenario-card">
+          <div class="scenario-card-head">
+            <div>
+              <div class="scenario-title">🔍 信息检索与快速摘要</div>
+              <div class="scenario-meta">工具：Claude 网页版（需开启 Web Search）</div>
+            </div>
+            <span style="font-size:12px;background:#EFF6FF;color:#1D4ED8;padding:4px 10px;border-radius:999px;font-weight:600;flex-shrink:0">⏱ 2 分钟</span>
+          </div>
+          <div class="scenario-body">
+            <div class="context-box"><strong>背景</strong>：临时被问到一个话题，需要快速了解背景，或者要整理一份外部信息给领导/客户看。</div>
+            <div class="prompt-label">▶ 复制以下内容，替换 [ ] 内容后粘贴给 Claude</div>
+            <div class="prompt-box">
+              <pre class="prompt-content" id="pd4">请帮我搜索并整理关于 [具体问题或话题] 的中文摘要。
+
+输出格式：
+1. 核心结论（2-3 句，适合直接引用）
+2. 支撑要点（3-5 条，附来源说明）
+3. 需要进一步核实的地方（AI 标注，不确定的内容）
+
+受众：[我的上司 / 客户 / 内部团队]，语言风格简洁专业。</pre>
+              <button class="copy-btn" onclick="copyPrompt('pd4',this)">复制</button>
+            </div>
+            <div class="alert alert-green">
+              <span class="alert-icon">📢</span>
+              <div><strong>效果</strong>：30 秒搜索 + 整理，已经标注了不确定的地方让你核实。传统方式打开 5 个 tab 来回看 → AI 给你一份可直接使用的摘要。</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /scenario-grid -->
+    </div>
+
+    <!-- ──────── Case A: HR ──────── -->
+    <div class="case-section" id="caseA">
+      <div class="case-section-header">
+        <div class="case-icon-wrap hr">👥</div>
+        <div>
+          <h2>案例 A：行政与人力 — AI 自动生成岗位 JD</h2>
+          <p class="case-sub">传统 JD 更新平均 1.5–2 小时/份，多部门协作时版本混乱，历史 JD 残留旧内容。以下方案用三层文件夹结构把生成、审核、归档全部自动化。</p>
+          <div class="case-label-row">
+            <span class="case-chip">👥 HR / Admin</span>
+            <span class="case-chip">文档自动化</span>
+            <span class="case-chip">三层流程</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 文件夹分类 -->
+      <div class="folder-section">
+        <div class="folder-section-title">
+          📁 实际演示文件夹结构（按功能分类）
+        </div>
+        <div class="folder-cats">
+          <!-- 参考文档 -->
+          <div class="folder-cat docs">
+            <div class="folder-cat-title">📋 参考文档</div>
+            <div class="folder-item">
+              <code>00_规范与模板/</code>
+              <span>JD 写作规范和历史参考模板，AI 写作的"语气标准"</span>
+            </div>
+            <div class="folder-item">
+              <code>00_需求与设计文档/</code>
+              <span>各岗位需求来源、组织架构背景、OKR 参考</span>
+            </div>
+          </div>
+          <!-- Arrow -->
+          <div class="folder-arrow">→</div>
+          <!-- 审核流程 -->
+          <div class="folder-cat flow">
+            <div class="folder-cat-title">🔄 审核流程</div>
+            <div class="folder-item">
+              <code>01_原数据/</code>
+              <span>AI 读取素材：组织架构图 + 当年 OKR + 历史 JD</span>
+            </div>
+            <div class="folder-item">
+              <code>02_待审核/</code>
+              <span>AI 生成草稿，含 <code>REVIEW_PENDING</code> 标记，等 HR 判断</span>
+            </div>
+            <div class="folder-item">
+              <code>03_已审核/</code>
+              <span>HR 改一个字段为 <code>APPROVED</code>，自动输出正式版</span>
+            </div>
+          </div>
+          <!-- Arrow -->
+          <div class="folder-arrow">+</div>
+          <!-- 自动化 -->
+          <div class="folder-cat auto">
+            <div class="folder-cat-title">⚙️ 自动化引擎</div>
+            <div class="folder-item">
+              <code>jd-automation/</code>
+              <span>Claude Code 驱动脚本，定时读取原数据、触发生成、监听审核状态、执行归档</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="folder-tree-dark">
+<span class="c-blue">01_原数据/</span>  ← 组织架构图 + 当年OKR + 历史JD参考
+    <span class="c-muted">↓  Claude Code 自动读取并生成</span>
+<span class="c-yellow">02_待审核/</span>  ← 草稿.md（附 REVIEW_PENDING 标记）
+    <span class="c-muted">↓  HR 只改一个字段：status: APPROVED</span>
+<span class="c-green">03_已审核/</span>  ← 正式版 .docx + .html 自动输出
+    <span class="c-muted">⚙️  jd-automation/ 全程驱动以上流程</span>
+        </div>
+        <p style="font-size:13px;margin:10px 0 0;color:var(--muted)">HR 全程只做一件事：判断草稿内容是否准确，改一个状态字段，系统自动归档。</p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>场景</th><th>传统耗时</th><th>AI 之后</th></tr></thead>
+          <tbody>
+            <tr><td>批量更新 JD（架构调整）</td><td>数周</td><td class="badge-green">1–2 天</td></tr>
+            <tr><td>面试题库生成</td><td>2–3 小时/岗</td><td class="badge-green">15 分钟/岗</td></tr>
+            <tr><td>新员工入职材料打包</td><td>逐一整理</td><td class="badge-green">自动生成个性化版本</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">💡</span>
+        <div><strong>迁移提示</strong>：同样的三层文件夹思路可以用于任何需要"AI 起草 → 人工审核 → 自动归档"的场景，比如采购申请初稿、合同条款比对、项目汇报模板生成。</div>
+      </div>
+    </div>
+
+    <!-- ──────── Case B: Legal ──────── -->
+    <div class="case-section" id="caseB">
+      <div class="case-section-header">
+        <div class="case-icon-wrap legal">⚖️</div>
+        <div>
+          <h2>案例 B：专业业务 — 基金文件审核 AI 赋能</h2>
+          <p class="case-sub">法务国际基金组 3 人，每周 7–10 个项目，单个香港通道项目法务净工时 3.7–5.8 小时/人。以下是从"AI 给建议"到"AI 做底稿，人复核判断"的转变方案。</p>
+          <div class="case-label-row">
+            <span class="case-chip">⚖️ Legal / Compliance</span>
+            <span class="case-chip">文件底稿生成</span>
+            <span class="case-chip">偏离点清单</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-bottom:16px">
+        <div class="card card-red">
+          <div style="font-size:12px;font-weight:700;color:#991B1B;margin-bottom:6px">真实背景</div>
+          <div style="font-size:13px;color:#374151;line-height:1.8">法务国际基金组 <strong>3 人</strong><br>每周 <strong>7–10 个项目</strong><br>单个香港通道项目法务净工时 <strong>3.7–5.8 小时/人</strong></div>
+        </div>
+        <div class="card card-yellow">
+          <div style="font-size:12px;font-weight:700;color:#92400E;margin-bottom:6px">团队反馈</div>
+          <div style="font-size:13px;color:#374151;font-style:italic;line-height:1.7">"AI 更像老师而不是同事，给意见但不干活，翻译、摘抄、校对等苦活还是法务在做。"</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card card-red" style="padding:16px">
+          <div style="font-size:12px;font-weight:700;color:#991B1B;margin-bottom:8px">❌ 低效用法</div>
+          <div class="flow-box" style="font-size:11px;padding:10px 14px;line-height:1.8">上传文件 → AI给建议 → <span class="c-red">法务看完</span> → <span class="c-red">法务自己去改</span> → <span class="c-red">法务排版定稿</span></div>
+          <div style="font-size:12px;color:#991B1B;margin-top:6px">AI 做了 30%，法务还做 70%</div>
+        </div>
+        <div class="card card-green" style="padding:16px">
+          <div style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:8px">✅ 正确方向</div>
+          <div class="flow-box" style="font-size:11px;padding:10px 14px;line-height:1.8">底层文件包+模板 → <span class="c-green">AI生成底稿+来源映射+遗漏清单</span> → <span class="c-yellow">法务审特殊安排+关键偏离+签发</span></div>
+          <div style="font-size:12px;color:#065F46;margin-top:6px">法务角色不是弱化，而是更清晰</div>
+        </div>
+      </div>
+
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin:18px 0 10px">以 2 号文件（Nominee 合同）为例</div>
+      <div class="flow-box">AI 读取 PPM/KTR → <span class="c-blue">强制提取关键字段</span> → <span class="c-yellow">自动填入合同模板</span>
+→ <span class="c-green">自动校验中英文一致性</span>
+→ 输出：<span class="c-green">① 合同草稿</span>  <span class="c-yellow">② 偏离点清单</span>  <span class="c-red">③ AI待确认项</span>
+→ 法务只处理：<span class="c-yellow">特殊安排判断 + 偏离审核 + 最终签发</span></div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>AI 负责（规则型）</th><th>法务负责（判断型）</th></tr></thead>
+          <tbody>
+            <tr><td>文件名/主体/版本号核查</td><td>特殊安排是否接受</td></tr>
+            <tr><td>PPM/DA 关键条款提取与填充</td><td>风险披露是否充分</td></tr>
+            <tr><td>中英文双语同步</td><td>DA 责任条款如何取舍</td></tr>
+            <tr><td>版本差异比对</td><td>跨区分销合规边界</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">💡</span>
+        <div><strong>迁移提示</strong>：同样的模式可用于任何"有模板 + 有底层数据 → 需要生成初稿"的场景，比如项目汇报初稿、客户定期报告、风险评估底稿。</div>
+      </div>
+    </div>
+
+    <!-- ──────── Case C: OpenClaw ──────── -->
+    <div class="case-section" id="caseC">
+      <div class="case-section-header">
+        <div class="case-icon-wrap auto">🤖</div>
+        <div>
+          <h2>案例 C：智能自动化 — OpenClaw 24 小时 AI 助手</h2>
+          <p class="case-sub">OpenClaw 是本地优先 AI 智能体框架，以守护进程形式持续运行，可接入 Telegram 收发指令。简单理解：雇了一个不睡觉的助理，住在你电脑里，24 小时待命，你用手机下指令。</p>
+          <div class="case-label-row">
+            <span class="case-chip">🤖 进阶场景</span>
+            <span class="case-chip">本地 + Telegram</span>
+            <span class="case-chip">定时自动执行</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-box">
+手机 Telegram  ←→  OpenClaw（家里电脑，24小时在线）
+                    <span class="c-blue">├── Bot 1：早间新闻助手</span>     每天 7:30 自动执行
+                    <span class="c-yellow">├── Bot 2：公众号自动发布</span>   每天 12:00 自动执行
+                    <span class="c-green">└── Bot 3：股票盯盘助手</span>     实时监控，触发即通知</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin:18px 0">
+        <div class="card" style="padding:14px 18px">
+          <div style="font-size:13px;font-weight:700;color:#0369A1;margin-bottom:4px">🌅 Bot 1 · 早间新闻助手（7:30 自动推送）</div>
+          <div style="font-size:13px;color:var(--muted)">抓取财经/监管新闻 → AI 提炼 5 条中文简报 → Telegram 推送。对风控/合规特别有用：设定关键词（如"监管""处罚""新规"），有相关内容立即推送。</div>
+        </div>
+        <div class="card" style="padding:14px 18px">
+          <div style="font-size:13px;font-weight:700;color:#0F766E;margin-bottom:4px">📝 Bot 2 · 公众号自动发布（12:00 自动执行）</div>
+          <div style="font-size:13px;color:var(--muted)">12:00 AI 生成文章 → 推送到草稿箱 → Telegram 通知"草稿就绪"。人工只做一件事：点确认。</div>
+        </div>
+        <div class="card" style="padding:14px 18px">
+          <div style="font-size:13px;font-weight:700;color:#7C3AED;margin-bottom:4px">📊 Bot 3 · 股票盯盘助手（实时监控）</div>
+          <div style="font-size:13px;color:var(--muted)">设定条件（如涨跌超 X%）立即推送，收盘后自动生成持仓简报，可用自然语言问"今天我的持仓怎么样"。</div>
+        </div>
+      </div>
+
+      <h2 class="sh">从零开始四步走</h2>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        <div style="display:flex;gap:12px;align-items:center;font-size:13px"><div style="width:24px;height:24px;background:#2563EB;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0">1</div> 安装 Claude Code（见培训首页安装指南）</div>
+        <div style="display:flex;gap:12px;align-items:center;font-size:13px"><div style="width:24px;height:24px;background:#2563EB;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0">2</div> 在 Telegram 创建自己的 Bot（@BotFather 引导，约 10 分钟）</div>
+        <div style="display:flex;gap:12px;align-items:center;font-size:13px"><div style="width:24px;height:24px;background:#2563EB;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0">3</div> 下载 OpenClaw，按向导配置（无需写代码）</div>
+        <div style="display:flex;gap:12px;align-items:center;font-size:13px"><div style="width:24px;height:24px;background:#2563EB;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0">4</div> 用中文描述任务，电脑长期开机，OpenClaw 自动运行</div>
+      </div>
+      <div class="alert alert-blue">
+        <span class="alert-icon">💡</span>
+        <div>建议从 <strong>Bot 1（新闻推送）</strong>开始，最简单，10 分钟搭好，成就感最强。</div>
+      </div>
+    </div>
+
+    <!-- ──────── 举一反三 ──────── -->
+    <div id="extend" style="margin-bottom:44px">
+      <div class="section-label">
+        <div class="section-num">💡</div>
+        <div class="section-title">举一反三：各部门还能怎么用</div>
+      </div>
+
+      <div class="scenario-section">
+        <div class="scenario-dept dept-risk">🛡 风控部门</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>场景</th><th>AI 能做什么</th><th>人工保留什么</th></tr></thead>
+            <tbody>
+              <tr><td>监管动态追踪</td><td>每日自动抓取、分类、推送摘要</td><td>政策解读和应对决策</td></tr>
+              <tr><td>KYC/AML 文件初审</td><td>自动核验格式完整性、标记疑点</td><td>最终合规判断</td></tr>
+              <tr><td>风险报告生成</td><td>数据汇总 + 报告框架 + 文字初稿</td><td>数据核实与最终审签</td></tr>
+              <tr><td>异常交易说明</td><td>自动归类相似案例、生成初稿</td><td>定性判断和责任认定</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="scenario-section">
+        <div class="scenario-dept dept-legal">⚖️ 法务部门</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>场景</th><th>AI 能做什么</th><th>人工保留什么</th></tr></thead>
+            <tbody>
+              <tr><td>合同新旧版本比对</td><td>自动标出所有改动，分类重大/轻微</td><td>条款取舍判断</td></tr>
+              <tr><td>多语言合同一致性</td><td>中英文逐段比对，标出差异</td><td>翻译争议处理</td></tr>
+              <tr><td>常见问题库</td><td>整理历史咨询，自动匹配相似问题</td><td>新问题的专业判断</td></tr>
+              <tr><td>监管函件起草</td><td>基于模板和事实生成初稿</td><td>事实核实和最终签发</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="scenario-section">
+        <div class="scenario-dept dept-compliance">✅ 合规部门</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>场景</th><th>AI 能做什么</th><th>人工保留什么</th></tr></thead>
+            <tbody>
+              <tr><td>合规检查清单自动化</td><td>逐项核查、生成状态报告</td><td>判断性条款的合规认定</td></tr>
+              <tr><td>内部政策变更摘要</td><td>新旧政策自动比对，生成变更摘要</td><td>内部适用性解释</td></tr>
+              <tr><td>培训材料更新</td><td>根据新规自动更新内容框架</td><td>内容审核与定稿</td></tr>
+              <tr><td>年度合规报告</td><td>数据汇总 + 文字初稿</td><td>管理层判断与签字</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="scenario-section">
+        <div class="scenario-dept dept-hr">👥 HR 部门</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>场景</th><th>AI 能做什么</th><th>人工保留什么</th></tr></thead>
+            <tbody>
+              <tr><td>简历初筛</td><td>按岗位要求自动评分并分类</td><td>最终录用判断</td></tr>
+              <tr><td>面试问题生成</td><td>根据岗位和候选人背景定制</td><td>面试现场判断</td></tr>
+              <tr><td>员工反馈分析</td><td>大量文本意见自动分主题汇总</td><td>管理决策</td></tr>
+              <tr><td>上岗前沟通材料</td><td>生成个性化入职信、岗前须知</td><td>内容核准和温度感</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 新增：市场与BD -->
+      <div class="scenario-section">
+        <div class="scenario-dept dept-market">📣 市场与 BD 部门</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>场景</th><th>AI 能做什么</th><th>人工保留什么</th></tr></thead>
+            <tbody>
+              <tr><td>客户背景整理</td><td>快速汇总公司信息、行业动态、新闻</td><td>策略判断和关系维护</td></tr>
+              <tr><td>提案 / 方案初稿</td><td>基于客户背景 + 模板生成提案框架</td><td>个性化调整与客户沟通</td></tr>
+              <tr><td>行业简报</td><td>定期抓取行业新闻、整理成周报格式</td><td>洞察解读和优先级判断</td></tr>
+              <tr><td>外发邮件批量润色</td><td>按目标受众调整语气，批量处理</td><td>关系判断与最终发送决策</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 新增：财务 -->
+      <div class="scenario-section">
+        <div class="scenario-dept dept-finance">💰 财务部门</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>场景</th><th>AI 能做什么</th><th>人工保留什么</th></tr></thead>
+            <tbody>
+              <tr><td>费用报销汇总</td><td>自动提取票据信息、按类目分类汇总</td><td>最终审批与异常判断</td></tr>
+              <tr><td>财务报告底稿</td><td>数据整理 + 格式化 + 文字初稿生成</td><td>数据核实和管理层签字</td></tr>
+              <tr><td>预算差异分析</td><td>同比对比、差异识别、图表生成</td><td>原因解释与管理决策</td></tr>
+              <tr><td>供应商对账核查</td><td>自动比对账单与系统记录，标记差异</td><td>差异处理与付款决策</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 新增：运营 -->
+      <div class="scenario-section">
+        <div class="scenario-dept dept-ops">⚙️ 运营与行政部门</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>场景</th><th>AI 能做什么</th><th>人工保留什么</th></tr></thead>
+            <tbody>
+              <tr><td>SOP / 流程文档更新</td><td>基于旧版本 + 变更说明生成新版草稿</td><td>流程准确性与最终发布</td></tr>
+              <tr><td>会议安排与纪要</td><td>生成会议议程初稿、整理会后纪要</td><td>优先级判断与沟通协调</td></tr>
+              <tr><td>采购比价整理</td><td>多供应商报价对比、生成决策摘要</td><td>最终选择与关系维护</td></tr>
+              <tr><td>员工通知/公告起草</td><td>基于内容要点生成正式通知初稿</td><td>措辞确认与发布时机</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ──────── 写在最后 ──────── -->
+    <div id="closing" style="margin-bottom:44px">
+      <div class="section-label">
+        <div class="section-num">✅</div>
+        <div class="section-title">写在最后</div>
+      </div>
+
+      <div class="closing-grid">
+        <div class="closing-card yes">
+          <h4>✅ 什么工作适合交给 AI？</h4>
+          <div class="closing-item"><span style="color:#059669;font-weight:700">高频重复的</span><span style="font-size:12px;color:var(--muted)">— 每周做好几次的事</span></div>
+          <div class="closing-item"><span style="color:#059669;font-weight:700">有规则可循的</span><span style="font-size:12px;color:var(--muted)">— 有标准格式、有对照依据</span></div>
+          <div class="closing-item"><span style="color:#059669;font-weight:700">文档密集的</span><span style="font-size:12px;color:var(--muted)">— 大量阅读、摘录、比对、翻译</span></div>
+          <div class="closing-item"><span style="color:#059669;font-weight:700">起草类的</span><span style="font-size:12px;color:var(--muted)">— 从零写初稿是最低效的人工任务</span></div>
+        </div>
+        <div class="closing-card no">
+          <h4>❌ 什么工作不能完全交给 AI？</h4>
+          <div class="closing-item"><span style="color:#DC2626;font-weight:700">需要承担最终责任的决定</span></div>
+          <div class="closing-item"><span style="color:#DC2626;font-weight:700">涉及复杂利益关系的判断</span></div>
+          <div class="closing-item"><span style="color:#DC2626;font-weight:700">需要信任和关系的沟通</span></div>
+          <div class="closing-item"><span style="color:#DC2626;font-weight:700">你自己还没想清楚的事</span></div>
+        </div>
+      </div>
+
+      <div class="alert alert-blue" style="margin-top:20px;font-size:14px;padding:16px 20px">
+        <span class="alert-icon" style="font-size:18px">💡</span>
+        <div><strong>一个马上可以行动的方法</strong>：今天下班前，在纸上写下你工作中最让你烦的一件重复性的事。明天试着把它描述给 AI，看看能不能帮你做掉 60% 的工作量。</div>
+      </div>
+
+      <div style="text-align:center;margin-top:28px">
+        <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:16px;background:linear-gradient(135deg,#c96d3b,#a34f24);color:#fff;text-decoration:none;font-size:15px;font-weight:700;box-shadow:0 16px 30px rgba(163,79,36,0.22)">← 返回培训首页</a>
+      </div>
+    </div>
+
+    <div class="doc-footer">Noah AI 培训中心 · 案例库 v4.1 · 2026-03-16 · Kora</div>
+  </div>
+</main>
+
+<script>
+const ids = ['caseD','caseA','caseB','caseC','extend','closing'];
+const links = {};
+ids.forEach(id => {
+  const link = document.querySelector(`nav a[href="#${id}"]`);
+  if (link) links[id] = link;
+});
+window.addEventListener('scroll', () => {
+  let current = 'caseD';
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  Object.values(links).forEach(l => l.classList.remove('active'));
+  if (links[current]) links[current].classList.add('active');
+});
+window.dispatchEvent(new Event('scroll'));
+
+function copyPrompt(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+    btn.textContent = '✓ 已复制';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>

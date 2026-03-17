@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <style>
+[data-color-mode*='light'], [data-color-mode*='light'] body, .markdown-style[theme*='light'] { --color-prettylights-syntax-comment: #6e7781; --color-prettylights-syntax-constant: #0550ae; --color-prettylights-syntax-entity: #8250df; --color-prettylights-syntax-storage-modifier-import: #24292f; --color-prettylights-syntax-entity-tag: #116329; --color-prettylights-syntax-keyword: #cf222e; --color-prettylights-syntax-string: #0a3069; --color-prettylights-syntax-variable: #953800; --color-prettylights-syntax-brackethighlighter-unmatched: #82071e; --color-prettylights-syntax-invalid-illegal-text: #f6f8fa; --color-prettylights-syntax-invalid-illegal-bg: #82071e; --color-prettylights-syntax-carriage-return-text: #f6f8fa; --color-prettylights-syntax-carriage-return-bg: #cf222e; --color-prettylights-syntax-string-regexp: #116329; --color-prettylights-syntax-markup-list: #3b2300; --color-prettylights-syntax-markup-heading: #0550ae; --color-prettylights-syntax-markup-italic: #24292f; --color-prettylights-syntax-markup-bold: #24292f; --color-prettylights-syntax-markup-deleted-text: #82071e; --color-prettylights-syntax-markup-deleted-bg: #FFEBE9; --color-prettylights-syntax-markup-inserted-text: #116329; --color-prettylights-syntax-markup-inserted-bg: #dafbe1; --color-prettylights-syntax-markup-changed-text: #953800; --color-prettylights-syntax-markup-changed-bg: #ffd8b5; --color-prettylights-syntax-markup-ignored-text: #eaeef2; --color-prettylights-syntax-markup-ignored-bg: #0550ae; --color-prettylights-syntax-meta-diff-range: #8250df; --color-prettylights-syntax-brackethighlighter-angle: #57606a; --color-prettylights-syntax-sublimelinter-gutter-mark: #8c959f; --color-prettylights-syntax-constant-other-reference-link: #0a3069; --color-fg-default: #24292f; --color-fg-muted: #57606a; --color-fg-subtle: #6e7781; --color-canvas-default: #ffffff; --color-canvas-subtle: #f6f8fa; --color-border-default: #d0d7de; --color-border-muted: hsla(210,18%,87%,1); --color-neutral-muted: rgba(175,184,193,0.2); --color-accent-fg: #0969da; --color-accent-emphasis: #0969da; --color-attention-subtle: #fff8c5; --color-danger-fg: #cf222e; }
+[data-color-mode*='dark'], [data-color-mode*='dark'] body, .markdown-style[theme*='dark'] { --color-prettylights-syntax-comment: #8b949e; --color-prettylights-syntax-constant: #79c0ff; --color-prettylights-syntax-entity: #d2a8ff; --color-prettylights-syntax-storage-modifier-import: #c9d1d9; --color-prettylights-syntax-entity-tag: #7ee787; --color-prettylights-syntax-keyword: #ff7b72; --color-prettylights-syntax-string: #a5d6ff; --color-prettylights-syntax-variable: #ffa657; --color-prettylights-syntax-brackethighlighter-unmatched: #f85149; --color-prettylights-syntax-invalid-illegal-text: #f0f6fc; --color-prettylights-syntax-invalid-illegal-bg: #8e1519; --color-prettylights-syntax-carriage-return-text: #f0f6fc; --color-prettylights-syntax-carriage-return-bg: #b62324; --color-prettylights-syntax-string-regexp: #7ee787; --color-prettylights-syntax-markup-list: #f2cc60; --color-prettylights-syntax-markup-heading: #1f6feb; --color-prettylights-syntax-markup-italic: #c9d1d9; --color-prettylights-syntax-markup-bold: #c9d1d9; --color-prettylights-syntax-markup-deleted-text: #ffdcd7; --color-prettylights-syntax-markup-deleted-bg: #67060c; --color-prettylights-syntax-markup-inserted-text: #aff5b4; --color-prettylights-syntax-markup-inserted-bg: #033a16; --color-prettylights-syntax-markup-changed-text: #ffdfb6; --color-prettylights-syntax-markup-changed-bg: #5a1e02; --color-prettylights-syntax-markup-ignored-text: #c9d1d9; --color-prettylights-syntax-markup-ignored-bg: #1158c7; --color-prettylights-syntax-meta-diff-range: #d2a8ff; --color-prettylights-syntax-brackethighlighter-angle: #8b949e; --color-prettylights-syntax-sublimelinter-gutter-mark: #484f58; --color-prettylights-syntax-constant-other-reference-link: #a5d6ff; --color-fg-default: #c9d1d9; --color-fg-muted: #8b949e; --color-fg-subtle: #484f58; --color-canvas-default: #0d1117; --color-canvas-subtle: #161b22; --color-border-default: #30363d; --color-border-muted: #21262d; --color-neutral-muted: rgba(110,118,129,0.4); --color-accent-fg: #58a6ff; --color-accent-emphasis: #1f6feb; --color-attention-subtle: rgba(187,128,9,0.15); --color-danger-fg: #f85149; }
+.markdown-style { display: block; -webkit-text-size-adjust: 100%; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"; font-size: 16px; line-height: 1.5; word-wrap: break-word; color: var(--color-fg-default); background-color: var(--color-canvas-default); } .markdown-style details, .markdown-style figcaption, .markdown-style figure { display: block; } .markdown-style summary { display: list-item; } .markdown-style [hidden] { display: none !important; } .markdown-style a { background-color: transparent; color: var(--color-accent-fg); text-decoration: none; } .markdown-style a:active, .markdown-style a:hover { outline-width: 0; } .markdown-style abbr[title] { border-bottom: none; text-decoration: underline dotted; } .markdown-style b, .markdown-style strong { font-weight: 600; } .markdown-style dfn { font-style: italic; } .markdown-style h1 { margin: .67em 0; font-weight: 600; padding-bottom: .3em; font-size: 2em; border-bottom: 1px solid var(--color-border-muted); } .markdown-style mark { background-color: var(--color-attention-subtle); color: var(--color-text-primary); } .markdown-style small { font-size: 90%; } .markdown-style sub, .markdown-style sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; } .markdown-style sub { bottom: -0.25em; } .markdown-style sup { top: -0.5em; } .markdown-style img { border-style: none; max-width: 100%; box-sizing: content-box; background-color: var(--color-canvas-default); } .markdown-style code, .markdown-style kbd, .markdown-style pre, .markdown-style samp { font-family: monospace,monospace; font-size: 1em; } .markdown-style figure { margin: 1em 40px; } .markdown-style hr { box-sizing: content-box; overflow: hidden; background: transparent; border-bottom: 1px solid var(--color-border-muted); height: .25em; padding: 0; margin: 24px 0; background-color: var(--color-border-default); border: 0; } .markdown-style input { font: inherit; margin: 0; overflow: visible; font-family: inherit; font-size: inherit; line-height: inherit; } .markdown-style [type=button], .markdown-style [type=reset], .markdown-style [type=submit] { -webkit-appearance: button; } .markdown-style [type=button]::-moz-focus-inner, .markdown-style [type=reset]::-moz-focus-inner, .markdown-style [type=submit]::-moz-focus-inner { border-style: none; padding: 0; } .markdown-style [type=button]:-moz-focusring, .markdown-style [type=reset]:-moz-focusring, .markdown-style [type=submit]:-moz-focusring { outline: 1px dotted ButtonText; } .markdown-style [type=checkbox], .markdown-style [type=radio] { box-sizing: border-box; padding: 0; } .markdown-style [type=number]::-webkit-inner-spin-button, .markdown-style [type=number]::-webkit-outer-spin-button { height: auto; } .markdown-style [type=search] { -webkit-appearance: textfield; outline-offset: -2px; } .markdown-style [type=search]::-webkit-search-cancel-button, .markdown-style [type=search]::-webkit-search-decoration { -webkit-appearance: none; } .markdown-style ::-webkit-input-placeholder { color: inherit; opacity: .54; } .markdown-style ::-webkit-file-upload-button { -webkit-appearance: button; font: inherit; } .markdown-style a:hover { text-decoration: underline; } .markdown-style hr::before { display: table; content: ""; } .markdown-style hr::after { display: table; clear: both; content: ""; } .markdown-style table { border-spacing: 0; border-collapse: collapse; display: block; width: max-content; max-width: 100%; overflow: auto; } .markdown-style td, .markdown-style th { padding: 0; } .markdown-style details summary { cursor: pointer; } .markdown-style details:not([open])>*:not(summary) { display: none !important; } .markdown-style kbd { display: inline-block; padding: 3px 5px; font: 11px ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace,Helvetica,Arial,sans-serif; line-height: 10px; color: var(--color-fg-default); vertical-align: middle; background-color: var(--color-canvas-subtle); border: solid 1px var(--color-neutral-muted); border-bottom-color: var(--color-neutral-muted); border-radius: 6px; box-shadow: inset 0 -1px 0 var(--color-neutral-muted); } .markdown-style h1, .markdown-style h2, .markdown-style h3, .markdown-style h4, .markdown-style h5, .markdown-style h6 { margin-top: 24px; margin-bottom: 16px; font-weight: 600; line-height: 1.25; } .markdown-style h2 { font-weight: 600; padding-bottom: .3em; font-size: 1.5em; border-bottom: 1px solid var(--color-border-muted); } .markdown-style h3 { font-weight: 600; font-size: 1.25em; } .markdown-style h4 { font-weight: 600; font-size: 1em; } .markdown-style h5 { font-weight: 600; font-size: .875em; } .markdown-style h6 { font-weight: 600; font-size: .85em; color: var(--color-fg-muted); } .markdown-style p { margin-top: 0; margin-bottom: 10px; } .markdown-style blockquote { margin: 0; padding: 0 1em; color: var(--color-fg-muted); border-left: .25em solid var(--color-border-default); } .markdown-style ul, .markdown-style ol { margin-top: 0; margin-bottom: 0; padding-left: 2em; } .markdown-style ol ol, .markdown-style ul ol { list-style-type: lower-roman; } .markdown-style ul ul ol, .markdown-style ul ol ol, .markdown-style ol ul ol, .markdown-style ol ol ol { list-style-type: lower-alpha; } .markdown-style dd { margin-left: 0; } .markdown-style tt, .markdown-style code { font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace,Helvetica,Arial,sans-serif; font-size: 12px; } .markdown-style pre { margin-top: 0; margin-bottom: 0; font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace,Helvetica,Arial,sans-serif; font-size: 12px; word-wrap: normal; } .markdown-style .octicon { display: inline-block; overflow: visible !important; vertical-align: text-bottom; fill: currentColor; } .markdown-style ::placeholder { color: var(--color-fg-subtle); opacity: 1; } .markdown-style input::-webkit-outer-spin-button, .markdown-style input::-webkit-inner-spin-button { margin: 0; -webkit-appearance: none; appearance: none; }
+.markdown-style .token.comment, .markdown-style .token.prolog, .markdown-style .token.doctype, .markdown-style .token.cdata { color: var(--color-prettylights-syntax-comment); } .markdown-style .token.namespace { opacity: 0.7; } .markdown-style .token.tag, .markdown-style .token.selector, .markdown-style .token.constant, .markdown-style .token.symbol, .markdown-style .token.deleted { color: var(--color-prettylights-syntax-entity-tag); } .markdown-style .token.maybe-class-name { color: var(--color-prettylights-syntax-variable); } .markdown-style .token.property-access, .markdown-style .token.operator, .markdown-style .token.boolean, .markdown-style .token.number, .markdown-style .token.selector .markdown-style .token.class, .markdown-style .token.attr-name, .markdown-style .token.string, .markdown-style .token.char, .markdown-style .token.builtin { color: var(--color-prettylights-syntax-constant); } .markdown-style .token.deleted { color: var(--color-prettylights-syntax-markup-deleted-text); } .markdown-style .token.property { color: var(--color-prettylights-syntax-constant); } .markdown-style .token.punctuation { color: var(--color-prettylights-syntax-markup-bold); } .markdown-style .token.function { color: var(--color-prettylights-syntax-entity); } .markdown-style .code-line .token.deleted { background-color: var(--color-prettylights-syntax-markup-deleted-bg); } .markdown-style .token.inserted { color: var(--color-prettylights-syntax-markup-inserted-text); } .markdown-style .code-line .token.inserted { background-color: var(--color-prettylights-syntax-markup-inserted-bg); } .markdown-style .token.variable { color: var(--color-prettylights-syntax-constant); } .markdown-style .token.entity, .markdown-style .token.url, .language-css .markdown-style .token.string, .style .markdown-style .token.string { color: var(--color-prettylights-syntax-string); } .markdown-style .token.color, .markdown-style .token.atrule, .markdown-style .token.attr-value, .markdown-style .token.function, .markdown-style .token.class-name { color: var(--color-prettylights-syntax-string); } .markdown-style .token.rule, .markdown-style .token.regex, .markdown-style .token.important, .markdown-style .token.keyword { color: var(--color-prettylights-syntax-keyword); } .markdown-style .token.coord { color: var(--color-prettylights-syntax-meta-diff-range); } .markdown-style .token.important, .markdown-style .token.bold { font-weight: bold; } .markdown-style .token.italic { font-style: italic; } .markdown-style .token.entity { cursor: help; }
+.markdown-style [data-catalyst] { display: block; } .markdown-style g-emoji { font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"; font-size: 1em; font-style: normal !important; font-weight: 400; line-height: 1; vertical-align: -0.075em; } .markdown-style g-emoji img { width: 1em; height: 1em; } .markdown-style::before { display: table; content: ""; } .markdown-style::after { display: table; clear: both; content: ""; } .markdown-style>*:first-child { margin-top: 0 !important; } .markdown-style>*:last-child { margin-bottom: 0 !important; } .markdown-style a:not([href]) { color: inherit; text-decoration: none; } .markdown-style .absent { color: var(--color-danger-fg); } .markdown-style a.anchor { float: left; padding-right: 4px; margin-left: -20px; line-height: 1; } .markdown-style a.anchor:focus { outline: none; } .markdown-style p, .markdown-style blockquote, .markdown-style ul, .markdown-style ol, .markdown-style dl, .markdown-style table, .markdown-style pre, .markdown-style details { margin-top: 0; margin-bottom: 16px; } .markdown-style blockquote>:first-child { margin-top: 0; } .markdown-style blockquote>:last-child { margin-bottom: 0; } .markdown-style sup>a::before { content: "["; } .markdown-style sup>a::after { content: "]"; }
+.markdown-style .octicon-video { border: 1px solid #d0d7de !important; border-radius: 6px !important; display: block; } .markdown-style .octicon-video summary { border-bottom: 1px solid #d0d7de !important; padding: 8px 16px !important; cursor: pointer; } .markdown-style .octicon-video > video { display: block !important; max-width: 100% !important; padding: 2px; box-sizing: border-box; border-bottom-right-radius: 6px !important; border-bottom-left-radius: 6px !important; } .markdown-style details.octicon-video:not([open])>*:not(summary) { display: none !important; } .markdown-style details.octicon-video:not([open]) > summary { border-bottom: 0 !important; } .markdown-style h1 .octicon-link, .markdown-style h2 .octicon-link, .markdown-style h3 .octicon-link, .markdown-style h4 .octicon-link, .markdown-style h5 .octicon-link, .markdown-style h6 .octicon-link { color: var(--color-fg-default); vertical-align: middle; visibility: hidden; } .markdown-style h1:hover .anchor, .markdown-style h2:hover .anchor, .markdown-style h3:hover .anchor, .markdown-style h4:hover .anchor, .markdown-style h5:hover .anchor, .markdown-style h6:hover .anchor { text-decoration: none; } .markdown-style h1:hover .anchor .octicon-link, .markdown-style h2:hover .anchor .octicon-link, .markdown-style h3:hover .anchor .octicon-link, .markdown-style h4:hover .anchor .octicon-link, .markdown-style h5:hover .anchor .octicon-link, .markdown-style h6:hover .anchor .octicon-link { visibility: visible; } .markdown-style h1 tt, .markdown-style h1 code, .markdown-style h2 tt, .markdown-style h2 code, .markdown-style h3 tt, .markdown-style h3 code, .markdown-style h4 tt, .markdown-style h4 code, .markdown-style h5 tt, .markdown-style h5 code, .markdown-style h6 tt, .markdown-style h6 code { padding: 0 .2em; font-size: inherit; } .markdown-style ul.no-list, .markdown-style ol.no-list { padding: 0; list-style-type: none; } .markdown-style ol[type="1"] { list-style-type: decimal; } .markdown-style ol[type=a] { list-style-type: lower-alpha; } .markdown-style ol[type=i] { list-style-type: lower-roman; } .markdown-style div>ol:not([type]) { list-style-type: decimal; } .markdown-style ul ul, .markdown-style ul ol, .markdown-style ol ol, .markdown-style ol ul { margin-top: 0; margin-bottom: 0; } .markdown-style li>p { margin-top: 16px; } .markdown-style li+li { margin-top: .25em; } .markdown-style dl { padding: 0; } .markdown-style dl dt { padding: 0; margin-top: 16px; font-size: 1em; font-style: italic; font-weight: 600; } .markdown-style dl dd { padding: 0 16px; margin-bottom: 16px; } .markdown-style table th { font-weight: 600; } .markdown-style table th, .markdown-style table td { padding: 6px 13px; border: 1px solid var(--color-border-default); } .markdown-style table tr { background-color: var(--color-canvas-default); border-top: 1px solid var(--color-border-muted); } .markdown-style table tr:nth-child(2n) { background-color: var(--color-canvas-subtle); } .markdown-style table img { background-color: transparent; vertical-align: middle; } .markdown-style img[align=right] { padding-left: 20px; } .markdown-style img[align=left] { padding-right: 20px; } .markdown-style .emoji { max-width: none; vertical-align: text-top; background-color: transparent; } .markdown-style span.frame { display: block; overflow: hidden; } .markdown-style span.frame>span { display: block; float: left; width: auto; padding: 7px; margin: 13px 0 0; overflow: hidden; border: 1px solid var(--color-border-default); } .markdown-style span.frame span img { display: block; float: left; } .markdown-style span.frame span span { display: block; padding: 5px 0 0; clear: both; color: var(--color-fg-default); } .markdown-style span.align-center { display: block; overflow: hidden; clear: both; } .markdown-style span.align-center>span { display: block; margin: 13px auto 0; overflow: hidden; text-align: center; } .markdown-style span.align-center span img { margin: 0 auto; text-align: center; } .markdown-style span.align-right { display: block; overflow: hidden; clear: both; } .markdown-style span.align-right>span { display: block; margin: 13px 0 0; overflow: hidden; text-align: right; } .markdown-style span.align-right span img { margin: 0; text-align: right; } .markdown-style span.float-left { display: block; float: left; margin-right: 13px; overflow: hidden; } .markdown-style span.float-left span { margin: 13px 0 0; } .markdown-style span.float-right { display: block; float: right; margin-left: 13px; overflow: hidden; } .markdown-style span.float-right>span { display: block; margin: 13px auto 0; overflow: hidden; text-align: right; } .markdown-style code, .markdown-style tt { padding: .2em .4em; margin: 0; font-size: 85%; background-color: var(--color-neutral-muted); border-radius: 6px; } .markdown-style code br, .markdown-style tt br { display: none; } .markdown-style del code { text-decoration: inherit; } .markdown-style pre code { font-size: 100%; } .markdown-style pre>code { padding: 0; margin: 0; word-break: normal; white-space: pre; background: transparent; border: 0; } .markdown-style pre { position: relative; font-size: 85%; line-height: 1.45; background-color: var(--color-canvas-subtle); border-radius: 6px; } .markdown-style pre code, .markdown-style pre tt { display: inline; max-width: auto; padding: 0; margin: 0; overflow: visible; line-height: inherit; word-wrap: normal; background-color: transparent; border: 0; } .markdown-style pre > code { padding: 16px; overflow: auto; display: block; } .markdown-style .csv-data td, .markdown-style .csv-data th { padding: 5px; overflow: hidden; font-size: 12px; line-height: 1; text-align: left; white-space: nowrap; } .markdown-style .csv-data .blob-num { padding: 10px 8px 9px; text-align: right; background: var(--color-canvas-default); border: 0; } .markdown-style .csv-data tr { border-top: 0; } .markdown-style .csv-data th { font-weight: 600; background: var(--color-canvas-subtle); border-top: 0; } .markdown-style .footnotes { font-size: 12px; color: var(--color-fg-muted); border-top: 1px solid var(--color-border-default); } .markdown-style .footnotes ol { padding-left: 16px; } .markdown-style .footnotes li { position: relative; } .markdown-style .footnotes li:target::before { position: absolute; top: -8px; right: -8px; bottom: -8px; left: -24px; pointer-events: none; content: ""; border: 2px solid var(--color-accent-emphasis); border-radius: 6px; } .markdown-style .footnotes li:target { color: var(--color-fg-default); } .markdown-style .footnotes .data-footnote-backref g-emoji { font-family: monospace; } .markdown-style .task-list-item { list-style-type: none; } .markdown-style .task-list-item label { font-weight: 400; } .markdown-style .task-list-item.enabled label { cursor: pointer; } .markdown-style .task-list-item+.task-list-item { margin-top: 3px; } .markdown-style .task-list-item .handle { display: none; } .markdown-style .task-list-item-checkbox, .markdown-style input[type="checkbox"] { margin: 0 .2em .25em -1.6em; vertical-align: middle; } .markdown-style .contains-task-list:dir(rtl) .task-list-item-checkbox, .markdown-style .contains-task-list:dir(rtl) input[type="checkbox"] { margin: 0 -1.6em .25em .2em; } .markdown-style ::-webkit-calendar-picker-indicator { filter: invert(50%); }
+
+/** copy button style **/
+.markdown-style pre .copied {
+  display: flex;
+  position: absolute;
+  cursor: pointer;
+  color: #a5afbb;
+  top: 6px;
+  right: 6px;
+  border-radius: 5px;
+  background: #82828226;
+  padding: 6px;
+  font-size: 12px;
+  transition: all .3s;
+}
+.markdown-style pre .copied:not(.active) { visibility: hidden; }
+.markdown-style pre:hover .copied { visibility: visible; }
+.markdown-style pre:hover .copied:hover { background: #4caf50; color: #fff; }
+.markdown-style pre:hover .copied:active,
+.markdown-style pre .copied.active { background: #2e9b33; color: #fff; }
+.markdown-style pre .copied svg { position: relative; }
+.markdown-style pre .copied .octicon-copy { display: block; }
+.markdown-style pre .copied .octicon-check { display: none; }
+.markdown-style pre .active .octicon-copy { display: none; }
+.markdown-style pre .active .octicon-check { display: block; }
+
+/** octicon style **/
+.markdown-style h1:hover a.anchor .octicon-link:before,
+.markdown-style h2:hover a.anchor .octicon-link:before,
+.markdown-style h3:hover a.anchor .octicon-link:before,
+.markdown-style h4:hover a.anchor .octicon-link:before,
+.markdown-style h5:hover a.anchor .octicon-link:before,
+.markdown-style h6:hover a.anchor .octicon-link:before {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+}
+
+.markdown-style ::-webkit-scrollbar {
+  background: transparent;
+  width: 8px;
+  height: 8px;
+}
+
+.markdown-style ::-webkit-scrollbar-thumb {
+  background: var(--color-fg-muted);
+  border-radius: 10px;
+}
+</style>
+  </head>
+  <body><dark-mode style="position: fixed; top: 8px; left: 10px; z-index: 999;" dark="Dark" light="Light" permanent="true"></dark-mode><script>const t=document;const e="_dark_mode_theme_";const s="permanent";const o="colorschemechange";const i="permanentcolorscheme";const h="light";const r="dark";const n=(t,e,s=e)=>{Object.defineProperty(t,s,{enumerable:true,get(){const t=this.getAttribute(e);return t===null?"":t},set(t){this.setAttribute(e,t)}})};const c=(t,e,s=e)=>{Object.defineProperty(t,s,{enumerable:true,get(){return this.hasAttribute(e)},set(t){if(t){this.setAttribute(e,"")}else{this.removeAttribute(e)}}})};class a extends HTMLElement{static get observedAttributes(){return["mode",h,r,s]}LOCAL_NANE=e;constructor(){super();this.t()}connectedCallback(){n(this,"mode");n(this,r);n(this,h);c(this,s);const a=localStorage.getItem(e);if(a&&[h,r].includes(a)){this.mode=a;this.permanent=true}if(this.permanent&&!a){localStorage.setItem(e,this.mode)}const l=[h,r].includes(a);if(this.permanent&&a){this.o()}else{if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches){this.mode=r;this.o()}if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches){this.mode=h;this.o()}}if(!this.permanent&&!l){window.matchMedia("(prefers-color-scheme: light)").onchange=t=>{this.mode=t.matches?h:r;this.o()};window.matchMedia("(prefers-color-scheme: dark)").onchange=t=>{this.mode=t.matches?r:h;this.o()}}const d=new MutationObserver(((s,h)=>{this.mode=t.documentElement.dataset.colorMode;if(this.permanent&&l){localStorage.setItem(e,this.mode);this.i(i,{permanent:this.permanent})}this.h();this.i(o,{colorScheme:this.mode})}));d.observe(t.documentElement,{attributes:true});this.i(o,{colorScheme:this.mode});this.h()}attributeChangedCallback(t,s,o){if(t==="mode"&&s!==o&&[h,r].includes(o)){const t=localStorage.getItem(e);if(this.mode===t){this.mode=o;this.h();this.o()}else if(this.mode&&this.mode!==t){this.h();this.o()}}else if((t===h||t===r)&&s!==o){this.h()}if(t==="permanent"&&typeof this.permanent==="boolean"){this.permanent?localStorage.setItem(e,this.mode):localStorage.removeItem(e)}}o(){t.documentElement.setAttribute("data-color-mode",this.mode)}h(){this.icon.textContent=this.mode===h?"🌒":"🌞";this.text.textContent=this.mode===h?this.getAttribute(r):this.getAttribute(h);if(!this.text.textContent&&this.text.parentElement&&this.text){this.text.parentElement.removeChild(this.text)}}t(){var s=this.attachShadow({mode:"open"});this.label=t.createElement("span");this.label.setAttribute("class","wrapper");this.label.onclick=()=>{this.mode=this.mode===h?r:h;if(this.permanent){localStorage.setItem(e,this.mode)}this.o();this.h()};s.appendChild(this.label);this.icon=t.createElement("span");this.icon.part="icon";this.label.appendChild(this.icon);this.text=t.createElement("span");this.text.part="text";this.label.appendChild(this.text);const o=`
+[data-color-mode*='dark'], [data-color-mode*='dark'] body {
+  color-scheme: dark;
+  --color-theme-bg: #0d1117;
+  --color-theme-text: #c9d1d9;
+  background-color: var(--color-theme-bg);
+  color: var(--color-theme-text);
+}
+
+[data-color-mode*='light'], [data-color-mode*='light'] body {
+  color-scheme: light;
+  --color-theme-bg: #fff;
+  --color-theme-text: #24292f;
+  background-color: var(--color-theme-bg);
+  color: var(--color-theme-text);
+}`;const i="_dark_mode_style_";const n=t.getElementById(i);if(!n){var c=t.createElement("style");c.id=i;c.textContent=o;t.head.appendChild(c)}var a=t.createElement("style");a.textContent=`
+    .wrapper { cursor: pointer; user-select: none; position: relative; }
+    .wrapper > span + span { margin-left: .4rem; }
+    `;s.appendChild(a)}i(t,e){this.dispatchEvent(new CustomEvent(t,{bubbles:true,composed:true,detail:e}))}}customElements.define("dark-mode",a);</script><div style="max-width: 960px; margin: 0 auto 60px auto; padding: 8px;max-width: 960px;" class="markdown-style">
+    <h1 id="ai-编程工具安装指南"><a class="anchor" aria-hidden="true" tabindex="-1" href="#ai-编程工具安装指南"><span class="octicon octicon-link"></span></a>AI 编程工具安装指南</h1>
+    <blockquote>
+      <p>面向零基础用户 · 含 Codex · Claude · Gemini · 国内 GLM 方案 · 2026 年 3 月</p>
+    </blockquote>
+    <hr>
+    <h2 id="术语表小白必读"><a class="anchor" aria-hidden="true" tabindex="-1" href="#术语表小白必读"><span class="octicon octicon-link"></span></a>术语表（小白必读）</h2>
+    <p>在开始之前，先了解这些关键术语：</p>
+    <table>
+      <thead>
+        <tr>
+          <th>术语</th>
+          <th>英文全称</th>
+          <th>通俗解释</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CLI</strong></td>
+          <td>Command Line Interface</td>
+          <td>命令行界面，就是那个黑色/白色的文字输入窗口，通过打字来操作电脑</td>
+        </tr>
+        <tr>
+          <td><strong>原生安装器</strong> ⭐</td>
+          <td>Native Installer</td>
+          <td>Claude Code官方提供的独立安装程序，不需要其他依赖</td>
+        </tr>
+        <tr>
+          <td><strong>LTS</strong></td>
+          <td>Long Term Support</td>
+          <td>长期支持版本，稳健、bug少、官方持续维护，适合正式使用</td>
+        </tr>
+        <tr>
+          <td><strong>API</strong></td>
+          <td>Application Programming Interface</td>
+          <td>应用程序接口，软件之间"对话"的方式</td>
+        </tr>
+        <tr>
+          <td><strong>API Key</strong></td>
+          <td>-</td>
+          <td>API密钥，类似"通行证"，证明你有权使用某个服务</td>
+        </tr>
+        <tr>
+          <td><strong>Token</strong></td>
+          <td>-</td>
+          <td>计费单位，AI处理文字的最小单元，约等于0.75个英文单词或1-2个汉字</td>
+        </tr>
+        <tr>
+          <td><strong>环境变量</strong></td>
+          <td>Environment Variable</td>
+          <td>操作系统级别的配置项，程序可以读取但不会写在代码里</td>
+        </tr>
+        <tr>
+          <td><strong>PATH</strong></td>
+          <td>-</td>
+          <td>系统环境变量之一，告诉电脑去哪里找可执行程序</td>
+        </tr>
+        <tr>
+          <td><strong>终端/Terminal</strong></td>
+          <td>-</td>
+          <td>运行命令行的程序窗口</td>
+        </tr>
+        <tr>
+          <td><strong>全局安装</strong></td>
+          <td>Global Install</td>
+          <td>安装后在电脑任何位置都能使用的安装方式</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+    <h2 id="目录"><a class="anchor" aria-hidden="true" tabindex="-1" href="#目录"><span class="octicon octicon-link"></span></a>目录</h2>
+    <ol>
+      <li><strong>快速上手（必读）</strong>
+        <ol>
+          <li><a href="#%E6%9C%AF%E8%AF%AD%E8%A1%A8%E5%B0%8F%E7%99%BD%E5%BF%85%E8%AF%BB">术语表（小白必读）</a></li>
+          <li><a href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0%E4%BD%A0%E5%B0%86%E5%AE%89%E8%A3%85%E5%93%AA%E4%BA%9B%E5%B7%A5%E5%85%B7">你将安装哪些工具？</a></li>
+          <li><a href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0%E4%BD%A0%E5%B0%86%E5%AE%89%E8%A3%85%E5%93%AA%E4%BA%9B%E5%B7%A5%E5%85%B7">整体安装流程概览</a></li>
+        </ol>
+      </li>
+      <li><strong>安装步骤（高频操作）</strong>
+        <ol>
+          <li><a href="#%E7%AC%AC%E4%B8%80%E7%AB%A0%E7%BD%91%E9%A1%B5%E8%81%8A%E5%A4%A9-vs-%E6%9C%AC%E5%9C%B0%E5%B7%A5%E5%85%B7%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB">网页聊天 vs 本地工具，有什么区别？</a></li>
+          <li><a href="#%E7%AC%AC%E4%B8%89%E7%AB%A0%E5%AE%89%E8%A3%85-codex-app%E6%A1%8C%E9%9D%A2%E5%AE%A2%E6%88%B7%E7%AB%AF">安装 Codex App（桌面客户端）</a></li>
+          <li><a href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0%E5%9C%A8-codex-app-%E5%86%85%E5%AE%89%E8%A3%85-codex-cli">在 Codex App 内安装 Codex CLI</a></li>
+          <li><a href="#%E7%AC%AC%E4%BA%94%E7%AB%A0%E7%94%A8-codex-%E5%B8%AE%E4%BD%A0%E5%AE%89%E8%A3%85-claude-cli">安装 Claude CLI</a></li>
+          <li><a href="#%E7%AC%AC%E5%85%AD%E7%AB%A0%E5%9B%BD%E5%86%85%E7%94%A8%E6%88%B7%E6%96%B9%E6%A1%88claude-cli-%E6%8E%A5%E5%85%A5-glm-%E6%A8%A1%E5%9E%8B">国内用户方案：Claude CLI 接入 GLM 模型</a></li>
+          <li><a href="#%E7%AC%AC%E4%B8%83%E7%AB%A0%E7%94%A8-codex-%E5%B8%AE%E4%BD%A0%E5%AE%89%E8%A3%85-gemini-cli">用 Codex 帮你安装 Gemini CLI</a></li>
+        </ol>
+      </li>
+      <li><strong>常见问题 &amp; 快速参考</strong>
+        <ol>
+          <li><a href="#%E7%AC%AC%E5%85%AB%E7%AB%A0%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94">常见问题解答</a></li>
+          <li><a href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E4%B8%80%E8%A7%88">常用命令一览</a></li>
+          <li><a href="#glm-%E6%A8%A1%E5%9E%8B%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB">GLM 模型环境变量</a></li>
+          <li><a href="#%E5%AE%98%E6%96%B9%E8%B5%84%E6%BA%90%E9%93%BE%E6%8E%A5">官方资源链接</a></li>
+        </ol>
+      </li>
+    </ol>
+    <hr>
+    <h2 id="第一章网页聊天-vs-本地工具有什么区别"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第一章网页聊天-vs-本地工具有什么区别"><span class="octicon octicon-link"></span></a>第一章：网页聊天 vs 本地工具，有什么区别？</h2>
+    <p>在开始安装之前，先弄清楚一个很多新手会有的疑问：我已经可以在网页上和 ChatGPT / Claude / Gemini 对话了，为什么还要安装这些工具？</p>
+    <h3 id="核心区别对比"><a class="anchor" aria-hidden="true" tabindex="-1" href="#核心区别对比"><span class="octicon octicon-link"></span></a>核心区别对比</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>对比维度</th>
+          <th>🌐 网页版（chatgpt.com 等）</th>
+          <th>🖥️ 本地工具（Codex / Claude / Gemini CLI）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>能否读取你的代码文件</td>
+          <td>❌ 不能，只能粘贴文字</td>
+          <td>✅ 可以直接读取电脑上的整个项目</td>
+        </tr>
+        <tr>
+          <td>能否修改并保存文件</td>
+          <td>❌ 给出答案后你要手动复制粘贴</td>
+          <td>✅ 可以直接修改、创建、删除文件</td>
+        </tr>
+        <tr>
+          <td>能否运行代码</td>
+          <td>❌ 不能</td>
+          <td>✅ 可以在你的电脑上直接执行命令</td>
+        </tr>
+        <tr>
+          <td>上下文长度</td>
+          <td>有限制，长对话容易忘记前面内容</td>
+          <td>✅ 可以加载整个代码库作为上下文</td>
+        </tr>
+        <tr>
+          <td>操作多个文件</td>
+          <td>❌ 每次只能处理粘贴进去的内容</td>
+          <td>✅ 跨文件修改，完整项目级别操作</td>
+        </tr>
+        <tr>
+          <td>自动化重复任务</td>
+          <td>❌ 每次都要手动操作</td>
+          <td>✅ 可以批量处理，脚本自动化</td>
+        </tr>
+        <tr>
+          <td>安装难度</td>
+          <td>✅ 无需安装，打开浏览器即用</td>
+          <td>需要一次性安装配置</td>
+        </tr>
+        <tr>
+          <td>适合场景</td>
+          <td>问问题、写短文、头脑风暴</td>
+          <td>写代码、改项目、自动化工作流</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="一个具体的例子"><a class="anchor" aria-hidden="true" tabindex="-1" href="#一个具体的例子"><span class="octicon octicon-link"></span></a>一个具体的例子</h3>
+    <p>假设你有一个有 50 个文件的网站项目，想把所有英文按钮文字改成中文：</p>
+    <p>
+      <strong>🌐 用网页版的做法：</strong>
+      你需要手动打开每个文件，把内容粘贴到网页，让 AI 告诉你改哪里，然后再自己回去改。50 个文件就要重复 50 次，每次还要担心有没有漏掉。
+    </p>
+    <p>
+      <strong>🖥️ 用本地工具的做法：</strong>
+      你在终端里告诉 Codex："把这个项目里所有英文按钮文字改成对应的中文"。Codex 会自动扫描所有文件，批量修改，并给你一份修改清单，你只需要确认就好。
+    </p>
+    <h3 id="什么时候用网页版什么时候用本地工具"><a class="anchor" aria-hidden="true" tabindex="-1" href="#什么时候用网页版什么时候用本地工具"><span class="octicon octicon-link"></span></a>什么时候用网页版，什么时候用本地工具</h3>
+    <ul>
+      <li>问一个问题、查资料、写一段文字 → <strong>网页版就够了</strong></li>
+      <li>处理你电脑上的代码、文件、项目 → <strong>需要本地工具</strong></li>
+      <li>想让 AI 帮你执行命令、安装依赖、运行测试 → <strong>需要本地工具</strong></li>
+      <li>重复性工作、自动化流程 → <strong>本地工具效率远高于网页版</strong></li>
+    </ul>
+    <blockquote>
+      <p>💡 两者不是替代关系，而是互补。网页版用来"聊"，本地工具用来"干活"。很多人同时使用两者：用网页版讨论方案，用本地工具执行代码任务。</p>
+    </blockquote>
+    <h3 id="各平台网页版与本地工具对应关系"><a class="anchor" aria-hidden="true" tabindex="-1" href="#各平台网页版与本地工具对应关系"><span class="octicon octicon-link"></span></a>各平台网页版与本地工具对应关系</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>平台</th>
+          <th>网页版地址</th>
+          <th>本地工具名称</th>
+          <th>主要优势</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OpenAI</td>
+          <td>chatgpt.com</td>
+          <td>Codex App / Codex CLI</td>
+          <td>最广泛使用，GPT-5 模型</td>
+        </tr>
+        <tr>
+          <td>Anthropic</td>
+          <td>claude.ai</td>
+          <td>Claude CLI（Claude Code）</td>
+          <td>复杂推理，超长上下文</td>
+        </tr>
+        <tr>
+          <td>Google</td>
+          <td>gemini.google.com</td>
+          <td>Gemini CLI</td>
+          <td>免费额度最大，多模态</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+    <h2 id="第二章你将安装哪些工具"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第二章你将安装哪些工具"><span class="octicon octicon-link"></span></a>第二章：你将安装哪些工具？</h2>
+    <p>本文档帮助零基础用户，按照逻辑清晰的顺序，把以下四款 AI 编程工具安装到自己的电脑上：</p>
+    <table>
+      <thead>
+        <tr>
+          <th>工具</th>
+          <th>来自</th>
+          <th>形式</th>
+          <th>账号要求</th>
+          <th>免费额度</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Codex App</td>
+          <td>OpenAI</td>
+          <td>桌面客户端</td>
+          <td>ChatGPT Plus+</td>
+          <td>包含在订阅中</td>
+        </tr>
+        <tr>
+          <td>Codex CLI</td>
+          <td>OpenAI</td>
+          <td>命令行</td>
+          <td>ChatGPT Plus+</td>
+          <td>包含在订阅中</td>
+        </tr>
+        <tr>
+          <td>Claude CLI</td>
+          <td>Anthropic</td>
+          <td>命令行</td>
+          <td>Claude 账号</td>
+          <td>有限免费</td>
+        </tr>
+        <tr>
+          <td>Gemini CLI</td>
+          <td>Google</td>
+          <td>命令行</td>
+          <td>Google 账号</td>
+          <td>每天 1000 次免费</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="整体安装流程"><a class="anchor" aria-hidden="true" tabindex="-1" href="#整体安装流程"><span class="octicon octicon-link"></span></a>整体安装流程</h3>
+    <p>推荐按以下四步进行，后面每章对应一个步骤：</p>
+    <table>
+      <thead>
+        <tr>
+          <th>步骤</th>
+          <th>任务</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>安装 Codex App（桌面客户端）</td>
+          <td>图形界面，像装普通软件一样，最简单</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td>在 Codex App 内安装 Codex CLI</td>
+          <td>借助 App 内置终端，一条命令搞定</td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td>用 Codex CLI 安装 Claude CLI</td>
+          <td>让 AI 帮你敲命令，不需要自己记</td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td>用 Codex CLI 安装 Gemini CLI</td>
+          <td>同样让 AI 帮你完成，并用 Google 账号登录</td>
+        </tr>
+      </tbody>
+    </table>
+    <blockquote>
+      <p>💡 整个过程约需 20–30 分钟，只需稳定的网络连接和以下账号：ChatGPT Plus/Pro 订阅、Anthropic 账号（免费可注册）、Google 账号（Gmail 即可）。</p>
+    </blockquote>
+    <hr>
+    <h2 id="第三章安装-codex-app桌面客户端"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第三章安装-codex-app桌面客户端"><span class="octicon octicon-link"></span></a>第三章：安装 Codex App（桌面客户端）</h2>
+    <p>Codex App 是 OpenAI 推出的桌面应用，提供可视化界面，让你像使用普通软件一样与 AI 对话写代码。它同时内置了终端，后续可以直接在里面安装其他工具。</p>
+    <h3 id="系统要求"><a class="anchor" aria-hidden="true" tabindex="-1" href="#系统要求"><span class="octicon octicon-link"></span></a>系统要求</h3>
+    <ul>
+      <li><strong>Windows</strong>：Windows 10 / 11（64 位），2026 年 3 月已正式支持</li>
+      <li><strong>macOS</strong>：macOS 12 及以上，需 Apple Silicon（M1/M2/M3 芯片）</li>
+      <li><strong>Linux</strong>：尚未发布，可在<a href="https://openai.com/codex/">官网</a>登记等待通知</li>
+      <li>需要 ChatGPT Plus、Pro、Business、Enterprise 或 Edu 订阅</li>
+    </ul>
+    <blockquote>
+      <p>⚠️ 目前 macOS 仅支持 Apple Silicon（M 系列芯片）。如果你的 Mac 是 2020 年之前购买的 Intel 版本，暂时无法使用 Codex App，请改用 Codex CLI。</p>
+    </blockquote>
+    <h3 id="下载安装步骤"><a class="anchor" aria-hidden="true" tabindex="-1" href="#下载安装步骤"><span class="octicon octicon-link"></span></a>下载安装步骤</h3>
+    <ol>
+      <li>打开浏览器，访问 OpenAI Codex 官网：<a href="https://openai.com/codex/">https://openai.com/codex/</a></li>
+      <li>找到页面上的下载按钮：
+        <ul>
+          <li>Windows 用户点击 <strong>"Download for Windows"</strong></li>
+          <li>macOS 用户点击 <strong>"Download for macOS"</strong></li>
+        </ul>
+      </li>
+      <li>下载完成后：
+        <ul>
+          <li><strong>Windows</strong>：双击 <code>.exe</code> 安装程序，按提示点击"下一步"直到完成</li>
+          <li><strong>macOS</strong>：打开 <code>.dmg</code> 文件，将 Codex 图标拖到"应用程序"文件夹</li>
+        </ul>
+      </li>
+      <li>安装完成后，在桌面或应用程序中找到 Codex 图标，双击打开</li>
+    </ol>
+    <h3 id="首次登录"><a class="anchor" aria-hidden="true" tabindex="-1" href="#首次登录"><span class="octicon octicon-link"></span></a>首次登录</h3>
+    <ol>
+      <li>打开 Codex App 后，会出现登录界面</li>
+      <li>点击 <strong>"Sign in with ChatGPT"</strong>（用 ChatGPT 账号登录）</li>
+      <li>浏览器会自动打开 OpenAI 登录页面，输入账号和密码完成认证</li>
+      <li>认证成功后，浏览器会提示返回 Codex App，点击确认即可</li>
+    </ol>
+    <blockquote>
+      <p>💡 建议使用 ChatGPT 账号登录，而不是 API Key。ChatGPT 账号登录可以使用所有功能，包括云端任务和会话历史。</p>
+    </blockquote>
+    <h3 id="选择项目文件夹"><a class="anchor" aria-hidden="true" tabindex="-1" href="#选择项目文件夹"><span class="octicon octicon-link"></span></a>选择项目文件夹</h3>
+    <ol>
+      <li>如果已有代码项目，点击 <strong>"Browse"</strong> 选择对应的文件夹</li>
+      <li>如果是第一次使用，可以先在桌面新建一个名为 <code>my-projects</code> 的文件夹，然后选择它</li>
+      <li>点击 <strong>"Select"</strong> 确认，进入主界面</li>
+    </ol>
+    <hr>
+    <h2 id="第四章在-codex-app-内安装-codex-cli"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第四章在-codex-app-内安装-codex-cli"><span class="octicon octicon-link"></span></a>第四章：在 Codex App 内安装 Codex CLI</h2>
+    <p>Codex CLI 是命令行版本的 Codex，能在终端里直接使用。它也是后续帮我们安装 Claude CLI 和 Gemini CLI 的工具。Codex App 内置了终端，我们在这里安装 CLI，无需离开 App。</p>
+    <h3 id="准备工作安装-nodejs"><a class="anchor" aria-hidden="true" tabindex="-1" href="#准备工作安装-nodejs"><span class="octicon octicon-link"></span></a>准备工作：安装 Node.js</h3>
+    <p>Codex CLI 依赖 Node.js 运行环境。安装前，先检查你的电脑是否已有 Node.js：</p>
+    <ol>
+      <li>在 Codex App 中，点击左下角的终端图标（或菜单中的 <strong>"Terminal"</strong>），打开内置终端</li>
+      <li>在终端中，直接告诉 Codex：
+        <blockquote>
+          <p>"请检查我的电脑是否安装了 Node.js，如果没有，帮我安装 Node.js 18 或更高版本"</p>
+        </blockquote>
+      </li>
+      <li>Codex 会自动检查并给出操作建议，按它的提示确认即可</li>
+    </ol>
+    <blockquote>
+      <p>💡 如果想自己手动检查，可以在终端里输入 <code>node --version</code> 然后按回车。如果显示 <code>v18.x.x</code> 或更高版本，说明已安装好。如果提示 <code>command not found</code>，则需要先安装 Node.js。</p>
+    </blockquote>
+    <h3 id="安装-codex-cli"><a class="anchor" aria-hidden="true" tabindex="-1" href="#安装-codex-cli"><span class="octicon octicon-link"></span></a>安装 Codex CLI</h3>
+    <h4 id="方式一直接告诉-codex-帮你安装推荐新手"><a class="anchor" aria-hidden="true" tabindex="-1" href="#方式一直接告诉-codex-帮你安装推荐新手"><span class="octicon octicon-link"></span></a>方式一：直接告诉 Codex 帮你安装（推荐新手）</h4>
+    <ol>
+      <li>在 Codex App 的对话框中输入：
+        <blockquote>
+          <p>"请帮我安装 Codex CLI，使用 npm 全局安装"</p>
+        </blockquote>
+      </li>
+      <li>Codex 会在终端执行以下命令，你只需点击"允许"确认：
+        <pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line line-number" line="1"><span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-g</span> @openai/codex
+</span></code><div onclick="copied(this)" data-code="npm install -g @openai/codex
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+      </li>
+      <li>等待安装完成（约 1-2 分钟），Codex 会告诉你安装成功</li>
+    </ol>
+    <h4 id="方式二在终端手动输入命令"><a class="anchor" aria-hidden="true" tabindex="-1" href="#方式二在终端手动输入命令"><span class="octicon octicon-link"></span></a>方式二：在终端手动输入命令</h4>
+    <ol>
+      <li>打开 Codex App 内置终端</li>
+      <li>输入以下命令并按回车：
+        <pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line line-number" line="1"><span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-g</span> @openai/codex
+</span></code><div onclick="copied(this)" data-code="npm install -g @openai/codex
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+      </li>
+      <li>等待完成后，验证安装：
+        <pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line line-number" line="1">codex <span class="token parameter variable">--version</span>
+</span></code><div onclick="copied(this)" data-code="codex --version
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+      </li>
+      <li>如果显示版本号（如 <code>codex-cli 0.x.x</code>），说明安装成功</li>
+    </ol>
+    <h3 id="首次运行-codex-cli"><a class="anchor" aria-hidden="true" tabindex="-1" href="#首次运行-codex-cli"><span class="octicon octicon-link"></span></a>首次运行 Codex CLI</h3>
+    <ol>
+      <li>在终端中输入 <code>codex</code> 并按回车</li>
+      <li>首次运行会提示登录，选择 <strong>"Sign in with ChatGPT"</strong></li>
+      <li>浏览器会打开认证页面，完成后返回终端</li>
+      <li>认证成功后，Codex CLI 就可以使用了</li>
+    </ol>
+    <blockquote>
+      <p>⚠️ Windows 用户注意：如果遇到"codex 不是内部命令"的错误，请关闭并重新打开终端，或在对话框中告诉 Codex："我安装了 Codex CLI 但命令找不到，帮我解决 PATH 问题"。</p>
+    </blockquote>
+    <hr>
+    <h2 id="第五章用-codex-帮你安装-claude-cli"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第五章用-codex-帮你安装-claude-cli"><span class="octicon octicon-link"></span></a>第五章：用 Codex 帮你安装 Claude CLI</h2>
+    <p>Claude CLI（也叫 Claude Code）是 Anthropic 公司推出的 AI 编程命令行工具，和 Codex CLI 功能类似，但基于 Claude 模型。现在我们让 Codex 帮我们安装它。</p>
+    <blockquote>
+      <p>⚠️ 国内用户注意：如果你无法访问 Anthropic 官方服务，请直接跳到<a href="#%E7%AC%AC%E5%85%AD%E7%AB%A0%E5%9B%BD%E5%86%85%E7%94%A8%E6%88%B7%E6%96%B9%E6%A1%88claude-cli-%E6%8E%A5%E5%85%A5-glm-%E6%A8%A1%E5%9E%8B">第六章</a>，使用 GLM 替代方案。</p>
+    </blockquote>
+    <h3 id="让-codex-帮你安装推荐方式"><a class="anchor" aria-hidden="true" tabindex="-1" href="#让-codex-帮你安装推荐方式"><span class="octicon octicon-link"></span></a>让 Codex 帮你安装（推荐方式）</h3>
+    <p>在 Codex App 的对话框里输入：</p>
+    <blockquote>
+      <p>"请帮我安装 Claude Code（Claude CLI），使用官方推荐的原生安装方式。安装完成后告诉我如何用我的账号登录。"</p>
+    </blockquote>
+    <p>Codex 会自动判断你的操作系统，并执行对应的安装命令，你只需要按提示确认每一步。</p>
+    <h3 id="安装命令参考"><a class="anchor" aria-hidden="true" tabindex="-1" href="#安装命令参考"><span class="octicon octicon-link"></span></a>安装命令参考</h3>
+    <p>Codex 会根据你的系统执行以下命令（供参考，不需要手动输入）：</p>
+    <p><strong>macOS / Linux 系统：</strong></p>
+    <pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line line-number" line="1"><span class="token function">curl</span> <span class="token parameter variable">-fsSL</span> https://claude.ai/install.sh <span class="token operator">|</span> <span class="token function">bash</span>
+</span></code><div onclick="copied(this)" data-code="curl -fsSL https://claude.ai/install.sh | bash
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <p><strong>Windows 系统（PowerShell）：</strong></p>
+    <pre class="language-powershell"><code class="language-powershell code-highlight"><span class="code-line line-number" line="1"><span class="token function">irm</span> https:<span class="token operator">/</span><span class="token operator">/</span>claude<span class="token punctuation">.</span>ai/install<span class="token punctuation">.</span>ps1 <span class="token punctuation">|</span> <span class="token function">iex</span>
+</span></code><div onclick="copied(this)" data-code="irm https://claude.ai/install.ps1 | iex
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <blockquote>
+      <p>💡 官方推荐使用"原生安装方式"（即上面的 curl/irm 命令），无需提前安装 Node.js，而且支持自动更新。如果遇到网络问题无法访问 claude.ai，可以告诉 Codex："请用 npm 方式安装 Claude Code：<code>npm install -g @anthropic-ai/claude-code</code>"。</p>
+    </blockquote>
+    <h3 id="登录-claude-账号"><a class="anchor" aria-hidden="true" tabindex="-1" href="#登录-claude-账号"><span class="octicon octicon-link"></span></a>登录 Claude 账号</h3>
+    <ol>
+      <li>安装完成后，在终端进入你的项目文件夹，例如：<code>cd my-projects</code></li>
+      <li>输入 <code>claude</code> 并按回车，启动 Claude Code</li>
+      <li>首次运行会打开浏览器进行身份认证，用你的 Anthropic 账号或 Google/GitHub 账号登录</li>
+      <li>认证成功后返回终端，Claude Code 即可使用</li>
+    </ol>
+    <p>如果还没有 Anthropic 账号，可以访问 <a href="https://claude.ai/">https://claude.ai</a> 免费注册。</p>
+    <hr>
+    <h2 id="第六章国内用户方案claude-cli-接入-glm-模型"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第六章国内用户方案claude-cli-接入-glm-模型"><span class="octicon octicon-link"></span></a>第六章：国内用户方案：Claude CLI 接入 GLM 模型</h2>
+    <p>在中国大陆，直接访问 Anthropic 官方服务可能遇到网络限制。好消息是：你仍然可以使用 Claude CLI 这个工具，只需把它背后调用的 AI 模型换成国内可正常访问的<strong>智谱 GLM 模型</strong>。这就是"外壳不变，换个大脑"的思路。</p>
+    <h3 id="核心原理claude-cli-不等于-claude-模型"><a class="anchor" aria-hidden="true" tabindex="-1" href="#核心原理claude-cli-不等于-claude-模型"><span class="octicon octicon-link"></span></a>核心原理：Claude CLI 不等于 Claude 模型</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>对比维度</th>
+          <th>原版：Claude CLI + Claude 模型</th>
+          <th>国内方案：Claude CLI + GLM 模型</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>使用的工具界面</td>
+          <td>Claude CLI（<code>claude</code> 命令）</td>
+          <td>Claude CLI（完全相同）</td>
+        </tr>
+        <tr>
+          <td>背后的 AI 模型</td>
+          <td>Anthropic Claude 系列</td>
+          <td>智谱 GLM-5 / GLM-4.7</td>
+        </tr>
+        <tr>
+          <td>服务器位置</td>
+          <td>美国 Anthropic</td>
+          <td>国内智谱 AI 服务器</td>
+        </tr>
+        <tr>
+          <td>网络要求</td>
+          <td>需访问国外服务器</td>
+          <td>无需翻墙，国内直连</td>
+        </tr>
+        <tr>
+          <td>账号要求</td>
+          <td>Anthropic 账号</td>
+          <td>智谱开放平台账号（免费注册）</td>
+        </tr>
+        <tr>
+          <td>操作方式</td>
+          <td>和原版完全一样</td>
+          <td>和原版完全一样</td>
+        </tr>
+        <tr>
+          <td>模型能力</td>
+          <td>Claude Sonnet/Opus（顶级）</td>
+          <td>GLM-5（接近 Opus，国产顶级）</td>
+        </tr>
+        <tr>
+          <td>费用结构</td>
+          <td>按 API 用量付费</td>
+          <td>包月套餐，费用可控</td>
+        </tr>
+      </tbody>
+    </table>
+    <blockquote>
+      <p>💡 一个比喻：Claude CLI 是"驾驶舱+方向盘"，GLM 模型是"发动机"。你的驾驶方式完全不变，感受到的差异主要来自发动机性能（模型能力）。</p>
+    </blockquote>
+    <h3 id="glm-coding-plan-套餐"><a class="anchor" aria-hidden="true" tabindex="-1" href="#glm-coding-plan-套餐"><span class="octicon octicon-link"></span></a>GLM Coding Plan 套餐</h3>
+    <p>智谱 AI 提供专为编程工具设计的订阅套餐，可直接与 Claude CLI 配合使用：</p>
+    <table>
+      <thead>
+        <tr>
+          <th>套餐</th>
+          <th>参考价格</th>
+          <th>支持模型</th>
+          <th>适合人群</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Lite 入门版</td>
+          <td>约 ¥20/月</td>
+          <td><code>GLM-4.5-Air</code></td>
+          <td>偶尔使用，学习尝鲜</td>
+        </tr>
+        <tr>
+          <td>Pro 专业版</td>
+          <td>约 ¥100/月</td>
+          <td><code>GLM-4.7</code> + <code>GLM-4.5-Air</code></td>
+          <td>日常开发，中度使用</td>
+        </tr>
+        <tr>
+          <td>旗舰版（GLM-5）</td>
+          <td>单独定价</td>
+          <td><code>GLM-5</code></td>
+          <td>高强度开发，追求最佳效果</td>
+        </tr>
+      </tbody>
+    </table>
+    <blockquote>
+      <p>⚠️ 价格会随市场变化调整，以智谱开放平台 <a href="https://bigmodel.cn/">bigmodel.cn</a> 官网为准。2026 年 2 月已涨价约 30%，建议购买前核实最新价格。</p>
+    </blockquote>
+    <h3 id="安装配置步骤"><a class="anchor" aria-hidden="true" tabindex="-1" href="#安装配置步骤"><span class="octicon octicon-link"></span></a>安装配置步骤</h3>
+    <h4 id="第一步安装-claude-cli"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第一步安装-claude-cli"><span class="octicon octicon-link"></span></a>第一步：安装 Claude CLI</h4>
+    <p>如果已按第五章安装，直接跳到第二步。否则在 Codex App 里说：</p>
+    <blockquote>
+      <p>"请帮我安装 Claude Code（<code>npm install -g @anthropic-ai/claude-code</code>），安装完成后不要启动，我需要先配置国内模型。"</p>
+    </blockquote>
+    <h4 id="第二步注册智谱账号并获取-api-key"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第二步注册智谱账号并获取-api-key"><span class="octicon octicon-link"></span></a>第二步：注册智谱账号并获取 API Key</h4>
+    <ol>
+      <li>访问智谱开放平台：<a href="https://bigmodel.cn/%EF%BC%8C%E7%82%B9%E5%87%BB%E5%8F%B3%E4%B8%8A%E8%A7%92%22%E6%B3%A8%E5%86%8C/%E7%99%BB%E5%BD%95">https://bigmodel.cn，点击右上角"注册/登录</a>"</li>
+      <li>使用手机号或邮箱完成注册（无需信用卡）</li>
+      <li>登录后进入 <strong>"个人中心" → "API Keys"</strong>，点击"创建 API Key"</li>
+      <li>复制生成的 API Key 并保存（<strong>只显示一次</strong>）</li>
+      <li>根据需求购买合适的 GLM Coding Plan 套餐</li>
+    </ol>
+    <h4 id="第三步一键自动配置推荐"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第三步一键自动配置推荐"><span class="octicon octicon-link"></span></a>第三步：一键自动配置（推荐）</h4>
+    <p>在 Codex App 对话框里说：</p>
+    <blockquote>
+      <p>"请在终端运行 <code>npx @z_ai/coding-helper</code>，帮我按照提示配置 GLM Coding Plan。"</p>
+    </blockquote>
+    <p>该工具会引导你输入 API Key，自动完成所有配置，无需手动修改任何文件。</p>
+    <h4 id="第四步手动配置备选"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第四步手动配置备选"><span class="octicon octicon-link"></span></a>第四步：手动配置（备选）</h4>
+    <p>如果自动工具不可用，让 Codex 说："帮我编辑 <code>~/.claude/settings.json</code>，配置以下 GLM 环境变量，API Key 是：[你的Key]"。配置内容如下：</p>
+    <pre class="language-json"><code class="language-json code-highlight"><span class="code-line line-number" line="1"><span class="token punctuation">{</span>
+</span><span class="code-line line-number" line="2">  <span class="token property">"env"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+</span><span class="code-line line-number" line="3">    <span class="token property">"ANTHROPIC_AUTH_TOKEN"</span><span class="token operator">:</span> <span class="token string">"你的GLM_API_KEY"</span><span class="token punctuation">,</span>
+</span><span class="code-line line-number" line="4">    <span class="token property">"ANTHROPIC_BASE_URL"</span><span class="token operator">:</span> <span class="token string">"https://open.bigmodel.cn/api/anthropic"</span><span class="token punctuation">,</span>
+</span><span class="code-line line-number" line="5">    <span class="token property">"ANTHROPIC_DEFAULT_SONNET_MODEL"</span><span class="token operator">:</span> <span class="token string">"glm-5"</span><span class="token punctuation">,</span>
+</span><span class="code-line line-number" line="6">    <span class="token property">"ANTHROPIC_DEFAULT_OPUS_MODEL"</span><span class="token operator">:</span> <span class="token string">"glm-5"</span><span class="token punctuation">,</span>
+</span><span class="code-line line-number" line="7">    <span class="token property">"ANTHROPIC_DEFAULT_HAIKU_MODEL"</span><span class="token operator">:</span> <span class="token string">"glm-4.5-air"</span>
+</span><span class="code-line line-number" line="8">  <span class="token punctuation">}</span>
+</span><span class="code-line line-number" line="9"><span class="token punctuation">}</span>
+</span></code><div onclick="copied(this)" data-code="{
+  &#x22;env&#x22;: {
+    &#x22;ANTHROPIC_AUTH_TOKEN&#x22;: &#x22;你的GLM_API_KEY&#x22;,
+    &#x22;ANTHROPIC_BASE_URL&#x22;: &#x22;https://open.bigmodel.cn/api/anthropic&#x22;,
+    &#x22;ANTHROPIC_DEFAULT_SONNET_MODEL&#x22;: &#x22;glm-5&#x22;,
+    &#x22;ANTHROPIC_DEFAULT_OPUS_MODEL&#x22;: &#x22;glm-5&#x22;,
+    &#x22;ANTHROPIC_DEFAULT_HAIKU_MODEL&#x22;: &#x22;glm-4.5-air&#x22;
+  }
+}
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <blockquote>
+      <p>⚠️ API Key 属于个人隐私，不要分享给他人，也不要提交到 GitHub 等公开代码仓库。</p>
+    </blockquote>
+    <h4 id="第五步验证配置"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第五步验证配置"><span class="octicon octicon-link"></span></a>第五步：验证配置</h4>
+    <ol>
+      <li><strong>重新打开一个新的终端窗口</strong>（重要！旧窗口不会加载新配置）</li>
+      <li>进入任意项目文件夹，运行 <code>claude</code></li>
+      <li>出现提示时选择 <strong>"Yes"</strong> 确认使用该 API Key</li>
+      <li>进入后输入 <code>/status</code> 并回车，查看模型名称是否包含 <code>glm</code> 字样</li>
+    </ol>
+    <h3 id="glm-与原版-claude-的实际差异"><a class="anchor" aria-hidden="true" tabindex="-1" href="#glm-与原版-claude-的实际差异"><span class="octicon octicon-link"></span></a>GLM 与原版 Claude 的实际差异</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>能力维度</th>
+          <th>Claude Sonnet/Opus（原版）</th>
+          <th>GLM-5（国内替代）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>日常代码生成</td>
+          <td>非常强，行业标杆</td>
+          <td>接近原版，差距极小</td>
+        </tr>
+        <tr>
+          <td>中文理解与输出</td>
+          <td>良好</td>
+          <td><strong>更优秀</strong>，国产模型优势明显</td>
+        </tr>
+        <tr>
+          <td>复杂推理与规划</td>
+          <td>Opus 非常强</td>
+          <td>GLM-5 基本持平</td>
+        </tr>
+        <tr>
+          <td>大型项目重构</td>
+          <td>规划能力强</td>
+          <td>可用，偶有遗漏需复查</td>
+        </tr>
+        <tr>
+          <td>上下文窗口大小</td>
+          <td>200K tokens</td>
+          <td>200K tokens（同等）</td>
+        </tr>
+        <tr>
+          <td>最大单次输出</td>
+          <td>约 32K tokens</td>
+          <td><strong>128K tokens</strong>（GLM-5 更长）</td>
+        </tr>
+        <tr>
+          <td>国内网络稳定性</td>
+          <td>经常超时，需要代理</td>
+          <td><strong>直连流畅，无需代理</strong></td>
+        </tr>
+        <tr>
+          <td>费用</td>
+          <td>按量付费，用多贵多</td>
+          <td>包月固定费用，可控</td>
+        </tr>
+      </tbody>
+    </table>
+    <blockquote>
+      <p>💡 结论：对于绝大多数日常编程任务，使用 GLM-5 的体验与原版 Claude 差别极小。GLM-5 在中文处理和国内网络稳定性上甚至更有优势。如果你主要做国内项目，GLM 方案是强烈推荐的选择。</p>
+    </blockquote>
+    <h3 id="随时切回原版"><a class="anchor" aria-hidden="true" tabindex="-1" href="#随时切回原版"><span class="octicon octicon-link"></span></a>随时切回原版</h3>
+    <p>GLM 配置和原版 Claude 配置可以随时切换。如果将来可以访问 Anthropic 服务，在 Codex App 里说："帮我把 Claude CLI 恢复到使用原版 Claude 模型"，Codex 会帮你修改配置文件。</p>
+    <hr>
+    <h2 id="第七章用-codex-帮你安装-gemini-cli"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第七章用-codex-帮你安装-gemini-cli"><span class="octicon octicon-link"></span></a>第七章：用 Codex 帮你安装 Gemini CLI</h2>
+    <p>Gemini CLI 是 Google 推出的 AI 命令行工具，基于 Gemini 2.5 Pro 模型。它提供每天 1000 次的免费使用额度，对新手非常友好。</p>
+    <h3 id="系统要求-1"><a class="anchor" aria-hidden="true" tabindex="-1" href="#系统要求-1"><span class="octicon octicon-link"></span></a>系统要求</h3>
+    <ul>
+      <li>Node.js 20 及以上版本</li>
+      <li>有效的 Google 账号（Gmail 即可）</li>
+      <li>建议 RAM 4GB 以上（长时间使用建议 16GB）</li>
+    </ul>
+    <h3 id="让-codex-帮你安装"><a class="anchor" aria-hidden="true" tabindex="-1" href="#让-codex-帮你安装"><span class="octicon octicon-link"></span></a>让 Codex 帮你安装</h3>
+    <p>在 Codex App 对话框里输入：</p>
+    <blockquote>
+      <p>"请帮我安装 Gemini CLI（Google 的 AI 命令行工具），使用 npm 全局安装，安装完成后告诉我如何用 Google 账号登录。"</p>
+    </blockquote>
+    <h3 id="安装命令参考-1"><a class="anchor" aria-hidden="true" tabindex="-1" href="#安装命令参考-1"><span class="octicon octicon-link"></span></a>安装命令参考</h3>
+    <pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line line-number" line="1"><span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-g</span> @google/gemini-cli
+</span></code><div onclick="copied(this)" data-code="npm install -g @google/gemini-cli
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <p>安装完成后验证：</p>
+    <pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line line-number" line="1">gemini <span class="token parameter variable">--version</span>
+</span></code><div onclick="copied(this)" data-code="gemini --version
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h3 id="登录-google-账号"><a class="anchor" aria-hidden="true" tabindex="-1" href="#登录-google-账号"><span class="octicon octicon-link"></span></a>登录 Google 账号</h3>
+    <ol>
+      <li>在终端输入 <code>gemini</code> 并按回车</li>
+      <li>首次运行会显示主题选择界面，选择你喜欢的主题</li>
+      <li>然后会显示认证方式，选择 <strong>"Sign in with Google"</strong></li>
+      <li>浏览器自动打开 Google 登录页面，用你的 Gmail 账号登录并授权</li>
+      <li>认证成功后返回终端，Gemini CLI 即可使用</li>
+    </ol>
+    <blockquote>
+      <p>💡 Gemini CLI 每天免费提供 1000 次 Gemini 2.5 Pro 请求，对于日常学习和开发完全够用，不需要信用卡或付费订阅。</p>
+    </blockquote>
+    <hr>
+    <h2 id="第八章常见问题解答"><a class="anchor" aria-hidden="true" tabindex="-1" href="#第八章常见问题解答"><span class="octicon octicon-link"></span></a>第八章：常见问题解答</h2>
+    <h3 id="安装类问题"><a class="anchor" aria-hidden="true" tabindex="-1" href="#安装类问题"><span class="octicon octicon-link"></span></a>安装类问题</h3>
+    <p><strong>Q：安装 Codex CLI 时提示"npm 不是内部命令"</strong></p>
+    <p>原因：Node.js 没有安装，或安装后需要重启终端。解决方法：在 Codex App 对话框里说"帮我安装 Node.js"，Codex 会自动引导你完成安装。</p>
+    <hr>
+    <p><strong>Q：macOS 提示"无法打开，因为来自身份不明的开发者"</strong></p>
+    <p>解决方法：右键点击 Codex 应用图标 → 选择"打开" → 在弹出的对话框中点击"打开"。这是 macOS 对未签名应用的提示，Codex 本身是安全的。</p>
+    <hr>
+    <p><strong>Q：Windows 安装 Claude Code 时网络无法访问 claude.ai</strong></p>
+    <p>解决方法：在 Codex App 对话框里说"请用 npm 方式帮我安装 Claude Code"，Codex 会改用 <code>npm install -g @anthropic-ai/claude-code</code> 命令，通常可以正常安装。</p>
+    <hr>
+    <p><strong>Q：Gemini CLI 安装后运行报错"Not supported in your location"</strong></p>
+    <p>Gemini CLI 在部分地区有访问限制。解决方法：在 Codex App 里告诉 Codex："我在中国使用 Gemini CLI 遇到地区限制，帮我配置代理或找替代方案"。</p>
+    <h3 id="账号类问题"><a class="anchor" aria-hidden="true" tabindex="-1" href="#账号类问题"><span class="octicon octicon-link"></span></a>账号类问题</h3>
+    <p><strong>Q：没有 ChatGPT Plus 订阅，可以使用 Codex 吗？</strong></p>
+    <p>Codex App 和 Codex CLI 需要 ChatGPT Plus、Pro、Business、Enterprise 或 Edu 订阅才能使用。免费版 ChatGPT 账号无法使用 Codex。Gemini CLI 有每日免费额度，推荐作为备选。</p>
+    <hr>
+    <p><strong>Q：Anthropic 账号怎么注册？</strong></p>
+    <p>访问 <a href="https://claude.ai/%EF%BC%8C%E7%82%B9%E5%87%BB%22Sign">https://claude.ai，点击"Sign</a> Up"，可以用 Google 账号或邮箱注册，完全免费。</p>
+    <h3 id="使用类问题"><a class="anchor" aria-hidden="true" tabindex="-1" href="#使用类问题"><span class="octicon octicon-link"></span></a>使用类问题</h3>
+    <p><strong>Q：安装完成后，每次使用要打开哪个软件？</strong></p>
+    <p>日常使用推荐打开 Codex App，它提供最完整的图形界面体验。如果更喜欢纯命令行，也可以直接在系统终端运行 <code>codex</code>、<code>claude</code> 或 <code>gemini</code> 命令。</p>
+    <hr>
+    <p><strong>Q：这几个工具有什么区别，我应该用哪个？</strong></p>
+    <table>
+      <thead>
+        <tr>
+          <th>工具</th>
+          <th>最适合场景</th>
+          <th>特点</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Codex App</td>
+          <td>新手入门、管理多个任务</td>
+          <td>图形界面，最易上手</td>
+        </tr>
+        <tr>
+          <td>Codex CLI</td>
+          <td>终端操作、脚本自动化</td>
+          <td>与 App 同模型，更轻量</td>
+        </tr>
+        <tr>
+          <td>Claude CLI</td>
+          <td>复杂代码分析、长上下文</td>
+          <td>推理能力强，支持 MCP</td>
+        </tr>
+        <tr>
+          <td>Gemini CLI</td>
+          <td>日常免费使用、多模态</td>
+          <td>每日 1000 次免费，超大上下文</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+    <p><strong>Q：Claude CLI 接入 GLM 模型后，跟原版 Claude 有多大差距？</strong></p>
+    <p>对于日常编程任务，差距极小。GLM-5 在编程基准测试中接近 Claude Opus 水平，中文能力和国内网络稳定性反而更好。主要差距在于：复杂多步骤的大型重构任务中，原版 Claude Opus 的规划能力略强；以及部分多模态输入支持尚不完整。</p>
+    <hr>
+    <p><strong>Q：GLM 方案配置完后，Claude CLI 的所有功能都能用吗？</strong></p>
+    <p>绝大多数功能可以正常使用，包括：文件读写、代码生成、终端命令执行、MCP 协议支持等。极少数依赖 Anthropic 特有能力的功能（如某些官方 Skills）可能不可用。</p>
+    <hr>
+    <h2 id="附录快速参考"><a class="anchor" aria-hidden="true" tabindex="-1" href="#附录快速参考"><span class="octicon octicon-link"></span></a>附录：快速参考</h2>
+    <h3 id="常用命令一览"><a class="anchor" aria-hidden="true" tabindex="-1" href="#常用命令一览"><span class="octicon octicon-link"></span></a>常用命令一览</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>操作</th>
+          <th>命令</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>检查 Node.js 版本</td>
+          <td><code>node --version</code></td>
+          <td>确认版本 ≥ 18</td>
+        </tr>
+        <tr>
+          <td>安装 Codex CLI</td>
+          <td><code>npm install -g @openai/codex</code></td>
+          <td>需要 Node.js 18+</td>
+        </tr>
+        <tr>
+          <td>启动 Codex CLI</td>
+          <td><code>codex</code></td>
+          <td>在项目文件夹下运行</td>
+        </tr>
+        <tr>
+          <td>安装 Claude CLI（macOS/Linux）</td>
+          <td><code>curl -fsSL https://claude.ai/install.sh | bash</code></td>
+          <td>官方原生安装</td>
+        </tr>
+        <tr>
+          <td>安装 Claude CLI（Windows）</td>
+          <td><code>irm https://claude.ai/install.ps1 | iex</code></td>
+          <td>PowerShell 中运行</td>
+        </tr>
+        <tr>
+          <td>安装 Claude CLI（npm 备选）</td>
+          <td><code>npm install -g @anthropic-ai/claude-code</code></td>
+          <td>需要 Node.js 18+</td>
+        </tr>
+        <tr>
+          <td>启动 Claude CLI</td>
+          <td><code>claude</code></td>
+          <td>在项目文件夹下运行</td>
+        </tr>
+        <tr>
+          <td>配置 GLM 自动工具</td>
+          <td><code>npx @z_ai/coding-helper</code></td>
+          <td>国内用户使用</td>
+        </tr>
+        <tr>
+          <td>安装 Gemini CLI</td>
+          <td><code>npm install -g @google/gemini-cli</code></td>
+          <td>需要 Node.js 20+</td>
+        </tr>
+        <tr>
+          <td>启动 Gemini CLI</td>
+          <td><code>gemini</code></td>
+          <td>在任意文件夹运行</td>
+        </tr>
+        <tr>
+          <td>更新 Codex CLI</td>
+          <td><code>npm install -g @openai/codex@latest</code></td>
+          <td>升级到最新版本</td>
+        </tr>
+        <tr>
+          <td>更新 Claude CLI</td>
+          <td><code>claude update</code></td>
+          <td>原生安装方式自动更新</td>
+        </tr>
+        <tr>
+          <td>更新 Gemini CLI</td>
+          <td><code>npm update -g @google/gemini-cli</code></td>
+          <td>手动更新</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="glm-模型环境变量对应关系"><a class="anchor" aria-hidden="true" tabindex="-1" href="#glm-模型环境变量对应关系"><span class="octicon octicon-link"></span></a>GLM 模型环境变量对应关系</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Claude CLI 内部变量</th>
+          <th>默认对应 GLM 模型</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ANTHROPIC_DEFAULT_OPUS_MODEL</code></td>
+          <td><code>glm-5</code> 或 <code>glm-4.7</code></td>
+          <td>重型任务，最强模型</td>
+        </tr>
+        <tr>
+          <td><code>ANTHROPIC_DEFAULT_SONNET_MODEL</code></td>
+          <td><code>glm-5</code> 或 <code>glm-4.7</code></td>
+          <td>日常主力模型</td>
+        </tr>
+        <tr>
+          <td><code>ANTHROPIC_DEFAULT_HAIKU_MODEL</code></td>
+          <td><code>glm-4.5-air</code></td>
+          <td>轻量快速任务</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 id="官方资源链接"><a class="anchor" aria-hidden="true" tabindex="-1" href="#官方资源链接"><span class="octicon octicon-link"></span></a>官方资源链接</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>资源</th>
+          <th>地址</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Codex App 下载</td>
+          <td><a href="https://openai.com/codex/">https://openai.com/codex/</a></td>
+        </tr>
+        <tr>
+          <td>Codex 开发者文档</td>
+          <td><a href="https://developers.openai.com/codex/app/">https://developers.openai.com/codex/app/</a></td>
+        </tr>
+        <tr>
+          <td>Claude Code 文档</td>
+          <td><a href="https://code.claude.com/docs">https://code.claude.com/docs</a></td>
+        </tr>
+        <tr>
+          <td>Claude Code 高级配置</td>
+          <td><a href="https://code.claude.com/docs/en/setup">https://code.claude.com/docs/en/setup</a></td>
+        </tr>
+        <tr>
+          <td>Gemini CLI 文档</td>
+          <td><a href="https://geminicli.com/docs/get-started/installation/">https://geminicli.com/docs/get-started/installation/</a></td>
+        </tr>
+        <tr>
+          <td>智谱 GLM 开放平台</td>
+          <td><a href="https://bigmodel.cn/">https://bigmodel.cn</a></td>
+        </tr>
+        <tr>
+          <td>智谱 Claude Code 配置文档</td>
+          <td><a href="https://docs.bigmodel.cn/cn/guide/develop/claude">https://docs.bigmodel.cn/cn/guide/develop/claude</a></td>
+        </tr>
+        <tr>
+          <td>Node.js 下载</td>
+          <td><a href="https://nodejs.org/">https://nodejs.org</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+    <blockquote>
+      <p>如有疑问，可在 Codex App 对话框中直接描述你遇到的问题，让 AI 帮你解决。</p>
+    </blockquote>
+    <script>/*! @uiw/copy-to-clipboard v1.0.12 | MIT (c) 2021 Kenny Wang | https://github.com/uiwjs/copy-to-clipboard.git */
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):(e="undefined"!=typeof globalThis?globalThis:e||self).copyTextToClipboard=t()}(this,(function(){"use strict";return function(e,t){const o=document.createElement("textarea");o.value=e,o.setAttribute("readonly",""),o.style={position:"absolute",left:"-9999px"},document.body.appendChild(o);const n=document.getSelection().rangeCount>0&&document.getSelection().getRangeAt(0);o.select();let c=!1;try{c=!!document.execCommand("copy")}catch(e){c=!1}document.body.removeChild(o),n&&document.getSelection&&(document.getSelection().removeAllRanges(),document.getSelection().addRange(n)),t&&t(c)}}));
+
+function copied(target, str) {
+  target.classList.add('active');
+  copyTextToClipboard(target.dataset.code, function() {
+    setTimeout(() => {
+      target.classList.remove('active');
+    }, 2000);
+  });
+}</script>
+  </div></body>
+</html>

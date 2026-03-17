@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 工具数据安全指南</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --sidebar-w: 276px;
+  --bg: #f6f0e7;
+  --panel: rgba(255, 252, 247, 0.9);
+  --panel-strong: #fffaf4;
+  --sidebar-bg: #1f252d;
+  --sidebar-border: rgba(255,255,255,0.1);
+  --text: #1f1a17;
+  --muted: #6f655e;
+  --shadow: 0 18px 60px rgba(66, 45, 26, 0.12);
+  --shadow-soft: 0 12px 28px rgba(54, 39, 27, 0.08);
+  --accent: #c96d3b;
+  --accent-strong: #a34f24;
+  --accent-soft: rgba(201, 109, 59, 0.12);
+  --accent-alt: #1f6a67;
+  --accent-alt-soft: rgba(31, 106, 103, 0.12);
+  --sidebar-text: rgba(255,255,255,0.92);
+  --sidebar-muted: rgba(255,255,255,0.56);
+  --danger: #b42318;
+  --danger-soft: rgba(180,35,24,0.08);
+  --warning: #b54708;
+  --warning-soft: rgba(181,71,8,0.1);
+  --success: #067647;
+  --success-soft: rgba(6,118,71,0.1);
+  --info-soft: rgba(29, 78, 216, 0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(201, 109, 59, 0.18), transparent 28%),
+    radial-gradient(circle at 85% 12%, rgba(31, 106, 103, 0.12), transparent 24%),
+    linear-gradient(180deg, #f8f2e9 0%, #f4ede4 52%, #f8f4ee 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px);
+  background-size: 36px 36px;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  padding: 22px 18px 18px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.03), transparent 22%),
+    var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.sidebar-logo {
+  padding: 20px 18px 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  background: rgba(255,255,255,0.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.sidebar-logo .tag,
+.sidebar-footer-label {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--sidebar-muted);
+  text-transform: uppercase;
+}
+
+.sidebar-logo h2 {
+  margin-top: 12px;
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--sidebar-text);
+}
+
+.sidebar-logo .sub {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.72);
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 0;
+  flex: 1;
+}
+
+.nav-section {
+  padding: 14px 16px 4px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--sidebar-muted);
+  text-transform: uppercase;
+}
+
+nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  margin: 0 4px;
+  border-radius: 16px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+
+nav a:hover {
+  transform: translateX(4px);
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.08);
+}
+
+nav a.active {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(201,109,59,0.24), rgba(31,106,103,0.16));
+  border-color: rgba(255,255,255,0.08);
+}
+
+.nav-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+
+.nav-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.nav-title { font-size: 14px; font-weight: 600; }
+.nav-desc { font-size: 11px; color: var(--sidebar-muted); }
+
+.sidebar-footer {
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+}
+
+.sidebar-footer-text {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.74);
+}
+
+.main {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+}
+
+.content {
+  max-width: 1140px;
+  padding: 40px 40px 88px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.28fr) minmax(320px, 0.92fr);
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.hero-copy,
+.hero-panel,
+.section,
+.decision-card,
+.risk-card,
+.tool-card,
+.quick-card {
+  border-radius: 30px;
+  border: 1px solid rgba(76, 52, 34, 0.1);
+  background: rgba(255, 250, 243, 0.84);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+}
+
+.hero-copy {
+  padding: 38px 38px 34px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-copy::after {
+  content: "";
+  position: absolute;
+  right: -72px;
+  bottom: -88px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(180,35,24,0.2), rgba(180,35,24,0));
+  pointer-events: none;
+}
+
+.eyebrow {
+  display: inline-flex;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.56);
+  color: var(--danger);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin-top: 18px;
+  font-family: "Songti SC", "STSong", serif;
+  font-size: clamp(34px, 4.1vw, 54px);
+  line-height: 1.08;
+  font-weight: 700;
+  max-width: 12em;
+}
+
+.hero-lead {
+  margin-top: 16px;
+  max-width: 42em;
+  font-size: 16px;
+  line-height: 1.9;
+  color: var(--muted);
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.meta-pill {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(76, 52, 34, 0.08);
+  font-size: 13px;
+  color: #5b5048;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.hero-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.hero-button:hover { transform: translateY(-2px); }
+
+.hero-button.primary {
+  color: #fffaf4;
+  background: linear-gradient(135deg, #b42318 0%, #7a271a 100%);
+  box-shadow: 0 16px 30px rgba(122, 39, 26, 0.22);
+}
+
+.hero-button.secondary {
+  color: var(--accent-alt);
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(31, 106, 103, 0.15);
+}
+
+.hero-panel {
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panel-kicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--danger);
+}
+
+.panel-badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.journey {
+  display: grid;
+  gap: 12px;
+}
+
+.journey-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.66);
+  border: 1px solid rgba(76, 52, 34, 0.08);
+}
+
+.journey-index {
+  width: 36px;
+  height: 36px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(180,35,24,0.14), rgba(31,106,103,0.16));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.journey strong {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.journey span {
+  display: block;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.quick-card {
+  padding: 18px 18px 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+.quick-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--danger);
+}
+
+.quick-value {
+  margin-top: 10px;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.quick-copy {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.section {
+  padding: 30px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-soft);
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.section-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(180,35,24,0.14), rgba(31,106,103,0.16));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.section h2 {
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 30px;
+  line-height: 1.18;
+}
+
+.section-intro {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.85;
+}
+
+.flag {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.flag.red { background: var(--danger-soft); color: var(--danger); }
+.flag.green { background: var(--success-soft); color: var(--success); }
+.flag.blue { background: var(--info-soft); color: #1d4ed8; }
+
+.decision-grid,
+.risk-grid,
+.tool-grid,
+.pair-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.decision-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.risk-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pair-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.decision-card,
+.risk-card,
+.tool-card {
+  padding: 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+.decision-card h3,
+.risk-card h3,
+.tool-card h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.decision-card p,
+.risk-card p,
+.tool-card p,
+.tool-card li {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.decision-card ul,
+.tool-card ul,
+.check-list,
+.bullet-list {
+  padding-left: 18px;
+}
+
+.decision-card li,
+.check-list li,
+.bullet-list li {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 18px;
+  border: 1px solid rgba(76, 52, 34, 0.08);
+  background: rgba(255,255,255,0.74);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+th, td {
+  padding: 13px 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(76, 52, 34, 0.08);
+  font-size: 13px;
+  vertical-align: top;
+}
+
+th {
+  background: rgba(255,255,255,0.8);
+  color: #4d4138;
+  font-weight: 700;
+}
+
+tbody tr:last-child td { border-bottom: 0; }
+
+.tag {
+  display: inline-flex;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tag.green { background: #d1fadf; color: #065f46; }
+.tag.blue { background: #dbeafe; color: #1d4ed8; }
+.tag.yellow { background: #fef3c7; color: #92400e; }
+.tag.red { background: #fee2e2; color: #991b1b; }
+
+.alert {
+  display: flex;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  margin-top: 16px;
+  line-height: 1.8;
+  font-size: 13px;
+  box-shadow: var(--shadow-soft);
+}
+
+.alert-icon { font-size: 18px; flex-shrink: 0; }
+.alert.red { background: #fff1f0; border: 1px solid #fecaca; color: #7f1d1d; }
+.alert.blue { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; }
+.alert.green { background: #ecfdf3; border: 1px solid #a7f3d0; color: #065f46; }
+
+.prompt-box {
+  position: relative;
+  margin-top: 14px;
+}
+
+.prompt-content {
+  background: #1b2028;
+  border-radius: 18px;
+  padding: 16px 20px;
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 12.5px;
+  color: #dceeff;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(201,109,59,0.22);
+  border: 1px solid rgba(201,109,59,0.35);
+  color: #ffe8dc;
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: .15s;
+}
+
+.copy-btn:hover { background: rgba(201,109,59,0.4); }
+.copy-btn.copied { background: rgba(16,185,129,0.2); border-color: rgba(16,185,129,0.4); color: #6ee7b7; }
+
+.decision-flow {
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: linear-gradient(140deg, rgba(31,106,103,0.08), rgba(180,35,24,0.04));
+  border: 1px solid rgba(76,52,34,0.08);
+  box-shadow: var(--shadow-soft);
+  font-size: 13px;
+  line-height: 2.1;
+}
+
+.c-blue { color: #1d4ed8; font-weight: 700; }
+.c-yellow { color: #b45309; font-weight: 700; }
+.c-green { color: #047857; font-weight: 700; }
+.c-red { color: #b42318; font-weight: 700; }
+
+.footer {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+@media (max-width: 1120px) {
+  .hero,
+  .summary-grid,
+  .decision-grid,
+  .risk-grid,
+  .tool-grid,
+  .pair-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    position: static;
+    width: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--sidebar-border);
+  }
+
+  .main { margin-left: 0; }
+}
+
+@media (max-width: 720px) {
+  .content { padding: 22px 18px 56px; }
+  .hero-copy,
+  .hero-panel,
+  .section,
+  .quick-card,
+  .decision-card,
+  .risk-card,
+  .tool-card {
+    padding: 22px;
+    border-radius: 24px;
+  }
+
+  .section h2 { font-size: 25px; }
+  .hero h1 { font-size: 34px; }
+  .section-head,
+  .section-title-wrap { align-items: flex-start; }
+  .section-head { flex-direction: column; }
+  table { min-width: 640px; }
+}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="tag">Security Guide</div>
+    <h2>数据安全页</h2>
+    <div class="sub">给第一次把 AI 用进真实工作的同事。一页讲清楚：哪些数据能给，哪些必须脱敏，哪些根本不要外发。</div>
+  </div>
+
+  <nav>
+    <div class="nav-section">快速入口</div>
+    <a href="../../index.html">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-copy">
+        <span class="nav-title">返回培训中心</span>
+        <span class="nav-desc">回到首页总览</span>
+      </span>
+    </a>
+    <a href="AI编程工具安装指南.html">
+      <span class="nav-icon">🚀</span>
+      <span class="nav-copy">
+        <span class="nav-title">工具安装指南</span>
+        <span class="nav-desc">先装工具再看本页</span>
+      </span>
+    </a>
+
+    <div class="nav-section">阅读顺序</div>
+    <a href="#decision">
+      <span class="nav-icon">🧭</span>
+      <span class="nav-copy">
+        <span class="nav-title">先做判断</span>
+        <span class="nav-desc">3 个问题定边界</span>
+      </span>
+    </a>
+    <a href="#routing">
+      <span class="nav-icon">📡</span>
+      <span class="nav-copy">
+        <span class="nav-title">数据去向</span>
+        <span class="nav-desc">先知道数据发到哪</span>
+      </span>
+    </a>
+    <a href="#tools">
+      <span class="nav-icon">🛠</span>
+      <span class="nav-copy">
+        <span class="nav-title">工具红线</span>
+        <span class="nav-desc">Claude / Codex / Cursor / Gemini</span>
+      </span>
+    </a>
+    <a href="#classify">
+      <span class="nav-icon">📂</span>
+      <span class="nav-copy">
+        <span class="nav-title">数据分级</span>
+        <span class="nav-desc">四档处理方式</span>
+      </span>
+    </a>
+    <a href="#desensitize">
+      <span class="nav-icon">🎭</span>
+      <span class="nav-copy">
+        <span class="nav-title">脱敏操作</span>
+        <span class="nav-desc">两分钟学会</span>
+      </span>
+    </a>
+    <a href="#local">
+      <span class="nav-icon">🖥️</span>
+      <span class="nav-copy">
+        <span class="nav-title">本地模型</span>
+        <span class="nav-desc">Ollama 与安全边界</span>
+      </span>
+    </a>
+    <a href="#checklist">
+      <span class="nav-icon">✅</span>
+      <span class="nav-copy">
+        <span class="nav-title">上手清单</span>
+        <span class="nav-desc">每次使用前后核查</span>
+      </span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-label">参考来源</div>
+    <div class="sidebar-footer-text">基于首页安全附录重组，并参考《AI工具数据安全指南.pdf》的主题范围整理成可直接阅读的网页版。</div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="content">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Risk First</span>
+        <h1>AI 工具数据安全指南</h1>
+        <p class="hero-lead">在金融、法务、合规、风控场景里，AI 不是“能不能提高效率”那么简单，而是“这份数据能不能出机房、能不能出本机、能不能出给第三方”。这页不讲抽象原则，只讲真正会遇到的判断和动作。</p>
+        <div class="hero-meta">
+          <span class="meta-pill">首次阅读约 8–12 分钟</span>
+          <span class="meta-pill">建议在正式使用 AI 前完整看一遍</span>
+          <span class="meta-pill">判断 → 工具 → 分级 → 脱敏 → 本地模型</span>
+        </div>
+        <div class="hero-actions">
+          <a class="hero-button primary" href="#decision">先看判断框架</a>
+          <a class="hero-button secondary" href="AI编程工具安装指南.html">打开安装指南</a>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <div class="panel-head">
+          <div class="panel-kicker">最短路径</div>
+          <div class="panel-badge">先判断后操作</div>
+        </div>
+        <div class="journey">
+          <div class="journey-step">
+            <div class="journey-index">01</div>
+            <div>
+              <strong>先分数据等级</strong>
+              <span>公开信息、内部一般信息、客户敏感信息、监管级机密，处理方式完全不同。</span>
+            </div>
+          </div>
+          <div class="journey-step">
+            <div class="journey-index">02</div>
+            <div>
+              <strong>再选使用方式</strong>
+              <span>网页版、API 模式、本地模型，不只是体验差异，更是数据边界差异。</span>
+            </div>
+          </div>
+          <div class="journey-step">
+            <div class="journey-index">03</div>
+            <div>
+              <strong>最后做脱敏和隔离</strong>
+              <span>用 `.claudeignore`、`.cursorignore`、沙盒和占位符，别把风险留给习惯。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="summary-grid">
+      <div class="quick-card">
+        <div class="quick-label">第一判断</div>
+        <div class="quick-value">能不能外发</div>
+        <div class="quick-copy">不是所有 AI 问题都该先想“哪个模型更强”，先想“这份内容能不能离开本机”。</div>
+      </div>
+      <div class="quick-card">
+        <div class="quick-label">优先路径</div>
+        <div class="quick-value">API 模式</div>
+        <div class="quick-copy">在企业账户和正确配置下，Claude Code、Codex CLI、Gemini CLI 比网页聊天更可控。</div>
+      </div>
+      <div class="quick-card">
+        <div class="quick-label">高风险场景</div>
+        <div class="quick-value">客户 PII / 审计材料</div>
+        <div class="quick-copy">含真实姓名、证件号、账号、调查材料时，不要默认丢给云端模型。</div>
+      </div>
+      <div class="quick-card">
+        <div class="quick-label">兜底方案</div>
+        <div class="quick-value">本地模型</div>
+        <div class="quick-copy">Ollama 不是万能，但对“不能外发”的内容，至少给了一个现实的可用选项。</div>
+      </div>
+    </section>
+
+    <section class="section" id="decision">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="section-badge">🧭</div>
+          <div>
+            <h2>先问 3 个问题</h2>
+            <p class="section-intro">大多数误用不是出在不会配工具，而是出在一开始就没判断清楚这份数据属于什么。先把这三问走完，再决定用哪个工具。</p>
+          </div>
+        </div>
+        <span class="flag red">先看这一节</span>
+      </div>
+
+      <div class="decision-grid">
+        <div class="decision-card">
+          <h3>1. 这份内容是否包含真实客户信息？</h3>
+          <ul>
+            <li>姓名、身份证、护照号、手机号、银行卡、账户余额、KYC 材料，都算。</li>
+            <li>只要有一项是真实可识别信息，就不要默认直接发云端。</li>
+          </ul>
+        </div>
+        <div class="decision-card">
+          <h3>2. 这份内容是否属于监管级或调查级材料？</h3>
+          <ul>
+            <li>内部审计报告、处罚调查、未公开风险事件、监管沟通材料，默认高敏。</li>
+            <li>这类内容通常更适合本地模型，或者干脆不用 AI。</li>
+          </ul>
+        </div>
+        <div class="decision-card">
+          <h3>3. 这次 AI 需要做什么？</h3>
+          <ul>
+            <li>只是提纲、归类、格式化，还是需要完整读文件、改文件、跑命令？</li>
+            <li>任务越深，越要先收权限范围，再让 AI 开始处理。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert red">
+        <span class="alert-icon">⚠️</span>
+        <div><strong>底线</strong>：如果你都说不清这份内容能不能外发，就先不要把它交给云端 AI。先确认数据等级，再决定是脱敏、改走 API，还是改成本地模型。</div>
+      </div>
+
+      <div class="decision-flow" style="margin-top:18px">
+<span class="c-blue">这份数据要给 AI 处理？</span>
+    ↓
+<span class="c-yellow">包含真实客户 PII（姓名 / 证件 / 账户）？</span>
+├── <span class="c-red">是</span> → 先脱敏，或改用 Ollama 本地模型
+└── <span class="c-green">否</span> →
+        <span class="c-yellow">属于监管级机密（调查 / 审计 / 未公开事件）？</span>
+        ├── <span class="c-red">是</span> → 用本地模型，或不用 AI
+        └── <span class="c-green">否</span> →
+                走 API 模式（Claude Code / Codex CLI / Gemini CLI）
+                ↓
+                确认 ignore 文件与权限范围
+                ↓
+                使用企业账户 / 企业合同
+                ↓
+                <span class="c-green">✅ 可以开始操作</span>
+      </div>
+    </section>
+
+    <section class="section" id="routing">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="section-badge">📡</div>
+          <div>
+            <h2>你的内容发到哪里了？</h2>
+            <p class="section-intro">很多人以为“我只是粘了一段文本”不算外发。实际上只要用了云端服务，内容就已经发到了对应供应商的服务器。区别只在于训练政策、账户类型和隔离程度。</p>
+          </div>
+        </div>
+        <span class="flag blue">先搞清数据去向</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>工具</th>
+              <th>数据发送到</th>
+              <th>是否可能用于训练</th>
+              <th>推荐做法</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>网页版 Claude（免费 / Pro）</td>
+              <td>Anthropic 服务器</td>
+              <td>视设置与账户策略而定</td>
+              <td>关闭“改进产品”类选项，不上传敏感文件</td>
+            </tr>
+            <tr>
+              <td><strong>Claude Code（API 模式）</strong></td>
+              <td>Anthropic API</td>
+              <td>默认不用于训练</td>
+              <td>优先使用企业账户，配 `.claudeignore`</td>
+            </tr>
+            <tr>
+              <td>网页版 ChatGPT</td>
+              <td>OpenAI 服务器</td>
+              <td>需手动关闭相关数据开关</td>
+              <td>只适合非敏感文本问答</td>
+            </tr>
+            <tr>
+              <td><strong>Codex CLI（API 模式）</strong></td>
+              <td>OpenAI API</td>
+              <td>默认不用于训练</td>
+              <td>优先企业账户，敏感操作先预演</td>
+            </tr>
+            <tr>
+              <td>Cursor</td>
+              <td>Cursor + 选用的 AI 提供商</td>
+              <td>视 Privacy Mode 与供应商模式而定</td>
+              <td>开启 Privacy Mode，避免打开敏感文件</td>
+            </tr>
+            <tr>
+              <td><strong>Gemini CLI（企业 API）</strong></td>
+              <td>Google Cloud</td>
+              <td>企业 API 不用于训练</td>
+              <td>必须走企业 Google 账户，不要混用免费层</td>
+            </tr>
+            <tr>
+              <td>Ollama（本地模型）</td>
+              <td>本机</td>
+              <td>不外发</td>
+              <td>适合不能出网的数据，但能力弱于顶级云模型</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert blue">
+        <span class="alert-icon">💡</span>
+        <div><strong>关键结论</strong>：如果你必须用云端，优先走 <strong>API 模式</strong> 而不是网页聊天。它的优势不是“更技术”，而是账户策略更清楚、训练政策更明确、权限和上下文隔离更可控。</div>
+      </div>
+    </section>
+
+    <section class="section" id="tools">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="section-badge">🛠</div>
+          <div>
+            <h2>各工具的实操红线</h2>
+            <p class="section-intro">同样是“让 AI 处理文件”，不同工具的默认行为差别很大。这里不讲功能，只讲你真正该盯住的几条红线。</p>
+          </div>
+        </div>
+        <span class="flag green">配置比口头提醒更重要</span>
+      </div>
+
+      <div class="tool-grid">
+        <div class="tool-card">
+          <h3>Claude Code</h3>
+          <ul class="bullet-list">
+            <li>先看权限提示，再授权，不要图快一路确认。</li>
+            <li>在工作目录里放 `.claudeignore`，把客户原始数据、凭证、未脱敏文件先挡掉。</li>
+            <li>不要用 `--dangerously-skip-permissions` 这类绕过检查的方式。</li>
+            <li>法务 / 合规场景下，先限定工作目录，再开 Claude。</li>
+          </ul>
+          <div class="prompt-box">
+            <pre class="prompt-content" id="ig-claude"># .claudeignore 示例
+/客户原始数据/
+**/*未脱敏*
+/内部账户信息/
+.env
+secrets/</pre>
+            <button class="copy-btn" onclick="copyPrompt('ig-claude',this)">复制</button>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <h3>Codex CLI</h3>
+          <ul class="bullet-list">
+            <li>优先从受限模式开始，先让 AI 说“准备怎么做”，再放开执行。</li>
+            <li>敏感任务先做“建议模式 / 干跑预演”，不要直接让它自动跑。</li>
+            <li>提示词里不要直接放 API Key、账号密码、证件号。</li>
+            <li>高敏材料不要混在当前工作目录里一起打开。</li>
+          </ul>
+        </div>
+
+        <div class="tool-card">
+          <h3>Cursor</h3>
+          <ul class="bullet-list">
+            <li>开启 Privacy Mode，再开始接触真实业务文件。</li>
+            <li>当前打开的文件会被补全和上下文读取，敏感文件不要“顺手点开”。</li>
+            <li>用 `.cursorignore` 先屏蔽数据目录、KYC 文件、密钥文件。</li>
+          </ul>
+          <div class="prompt-box">
+            <pre class="prompt-content" id="ig-cursor"># .cursorignore 示例
+/客户数据/
+/KYC文件/
+*.pem
+*.env
+/内部报告/未脱敏/</pre>
+            <button class="copy-btn" onclick="copyPrompt('ig-cursor',this)">复制</button>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <h3>Gemini CLI / 网页版 AI</h3>
+          <ul class="bullet-list">
+            <li>Gemini CLI 只建议用企业 Google 账户，不要把免费层当企业工具用。</li>
+            <li>网页版 Claude / ChatGPT 更适合非敏感问答，不适合上传真实客户材料。</li>
+            <li>“只是传一页 PDF 让它看看”也算外发，不要被交互形式误导。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="classify">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="section-badge">📂</div>
+          <div>
+            <h2>敏感数据分级使用原则</h2>
+            <p class="section-intro">不要把“敏感不敏感”只理解成带不带姓名。真正好用的方式，是把常见数据分成四档，每档对应固定处理动作。</p>
+          </div>
+        </div>
+        <span class="flag red">先分级再操作</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>数据级别</th>
+              <th>常见例子</th>
+              <th>推荐做法</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag green">公开信息</span></td>
+              <td>监管官网公告、公开基金说明书、公开新闻稿</td>
+              <td>可直接交给任意 AI 工具处理</td>
+            </tr>
+            <tr>
+              <td><span class="tag blue">内部一般信息</span></td>
+              <td>内部流程文档、非客户模板、通用培训材料</td>
+              <td>优先用 API 模式，并配置 ignore / 权限范围</td>
+            </tr>
+            <tr>
+              <td><span class="tag yellow">客户敏感信息</span></td>
+              <td>真实姓名、证件号、手机号、账号、余额、KYC 文件</td>
+              <td><strong>必须先脱敏</strong>，再提交；或改用本地模型</td>
+            </tr>
+            <tr>
+              <td><span class="tag red">监管级机密</span></td>
+              <td>处罚调查、内部审计报告、未公开风险事件、监管沟通记录</td>
+              <td>优先本地模型；不能明确控边界时，宁可不用 AI</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="risk-grid" style="margin-top:16px">
+        <div class="risk-card">
+          <h3>可以大胆用 AI 的内容</h3>
+          <p>公开新闻、公开法规、公开说明书、内部通用模板、培训讲义、无真实客户识别信息的草稿，通常都适合直接用 AI 提高效率。</p>
+        </div>
+        <div class="risk-card">
+          <h3>不要抱侥幸心理的内容</h3>
+          <p>“只是先让 AI 帮我看一下”的客户材料、包含账号或证件的截图、内部调查报告、带项目名单的 Excel，都不该默认往云端丢。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="desensitize">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="section-badge">🎭</div>
+          <div>
+            <h2>脱敏操作：两分钟学会</h2>
+            <p class="section-intro">“脱敏”不是删光信息，而是把可识别字段替换成占位符，让 AI 还能完成分析，但拿不到真实身份信息。</p>
+          </div>
+        </div>
+        <span class="flag blue">最实用的日常动作</span>
+      </div>
+
+      <div class="pair-grid">
+        <div class="risk-card">
+          <h3>❌ 原文（不能直接提交）</h3>
+          <p>客户张三，身份证 440301199001011234，账户余额 1,200,000 港元，联系电话 138xxxx8888。</p>
+        </div>
+        <div class="risk-card">
+          <h3>✅ 脱敏后（可以提交）</h3>
+          <p>客户 [客户A]，身份证 [证件号已核验]，账户余额 [X金额] 港元，联系电话 [联系方式已脱敏]。</p>
+        </div>
+      </div>
+
+      <div class="alert green">
+        <span class="alert-icon">🧩</span>
+        <div><strong>核心原则</strong>：让 AI 保留结构和关系，但看不到真实标识。它仍然能做分类、比对、摘要、找不一致，但无法还原出具体客户。</div>
+      </div>
+
+      <div class="prompt-box">
+        <pre class="prompt-content" id="p-desensitize">请扫描当前目录中的所有 .docx 和 .pdf 文件，
+识别并替换以下敏感字段（不删除，用占位符替换）：
+- 真实人名 → [姓名已脱敏]
+- 身份证 / 护照号 → [证件号已脱敏]
+- 银行账号 → [账号已脱敏]
+- 手机号 → [联系方式已脱敏]
+
+要求：
+1. 保留文档原有结构，不要删除段落
+2. 输出一份脱敏报告，说明每份文件替换了哪些字段以及数量
+3. 另存为新的脱敏版本，不要覆盖原文件</pre>
+        <button class="copy-btn" onclick="copyPrompt('p-desensitize',this)">复制</button>
+      </div>
+    </section>
+
+    <section class="section" id="local">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="section-badge">🖥️</div>
+          <div>
+            <h2>本地模型与安全边界</h2>
+            <p class="section-intro">Ollama 不是为了“更酷”，而是为了给不能外发的数据一个现实可行的落点。它不一定最强，但它让数据不离开本机。</p>
+          </div>
+        </div>
+        <span class="flag green">高敏场景的重要选项</span>
+      </div>
+
+      <div class="pair-grid">
+        <div class="risk-card">
+          <h3>☁️ 云端模式</h3>
+          <p>你输入内容 → 加密发到 Anthropic / OpenAI / Google 服务器 → 模型处理 → 返回结果。优点是能力强，缺点是数据离开本机。</p>
+        </div>
+        <div class="risk-card">
+          <h3>🖥️ 本地模式</h3>
+          <p>你输入内容 → 本机 CPU / GPU 运算 → 本机直接返回结果。优点是数据零出境，缺点是能力和速度取决于硬件。</p>
+        </div>
+      </div>
+
+      <div class="table-wrap" style="margin-top:16px">
+        <table>
+          <thead>
+            <tr>
+              <th>电脑配置</th>
+              <th>推荐模型</th>
+              <th>能力水平</th>
+              <th>适合场景</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>普通笔记本（8GB 内存）</td>
+              <td><code>qwen2.5:3b</code> / <code>llama3.2:3b</code></td>
+              <td>基础水平</td>
+              <td>文档核查、关键词提取</td>
+            </tr>
+            <tr>
+              <td>16GB 内存 / 独显</td>
+              <td><code>qwen2.5:14b</code> / <code>llama3.1:8b</code></td>
+              <td>推荐档</td>
+              <td>多数法务文档与脱敏任务</td>
+            </tr>
+            <tr>
+              <td>32GB 内存 / 高端显卡</td>
+              <td><code>qwen2.5:32b</code> / <code>llama3.3:70b</code></td>
+              <td>接近高端云模型</td>
+              <td>复杂文件分析、长文档处理</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tool-grid" style="margin-top:16px">
+        <div class="tool-card">
+          <h3>本地模型适合什么</h3>
+          <ul class="bullet-list">
+            <li>不能出网的材料做初步整理、脱敏、摘要。</li>
+            <li>内部机密内容做第一轮结构化提取。</li>
+            <li>作为云端模型前的安全缓冲层。</li>
+          </ul>
+        </div>
+        <div class="tool-card">
+          <h3>本地模型的现实局限</h3>
+          <ul class="bullet-list">
+            <li>综合推理能力仍普遍弱于顶级云模型。</li>
+            <li>速度和可用性受本机硬件影响很大。</li>
+            <li>不适合把所有复杂任务都完全替代云端。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert blue">
+        <span class="alert-icon">💡</span>
+        <div><strong>最实用的组合</strong>：敏感数据先用 Ollama 做初步整理和脱敏，脱敏后的文本再交给 Claude Code 或 Codex CLI 做深度分析。安全和能力不是二选一，可以分阶段组合。</div>
+      </div>
+
+      <div class="prompt-box">
+        <pre class="prompt-content" id="ig-ollama"># 1. 安装 Ollama
+# https://ollama.com
+
+# 2. 下载中文优化模型（推荐）
+ollama pull qwen2.5:14b
+
+# 3. 启动并测试
+ollama run qwen2.5:14b</pre>
+        <button class="copy-btn" onclick="copyPrompt('ig-ollama',this)">复制</button>
+      </div>
+    </section>
+
+    <section class="section" id="checklist">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="section-badge">✅</div>
+          <div>
+            <h2>每次使用前后的检查清单</h2>
+            <p class="section-intro">真正防风险的不是“我知道原则”，而是每次操作前后都重复同一个检查动作。把它变成惯例，比任何口号都有效。</p>
+          </div>
+        </div>
+        <span class="flag red">建议打印 / 固化到流程</span>
+      </div>
+
+      <div class="risk-grid">
+        <div class="risk-card">
+          <h3>操作前</h3>
+          <ul class="check-list">
+            <li>我是否明确知道这份数据的等级？</li>
+            <li>当前工具是网页版、API 模式，还是本地模型？</li>
+            <li>工作目录里有没有不该被读取的文件？</li>
+            <li>ignore 文件和权限范围是否已经配置？</li>
+            <li>若含客户信息，是否已经脱敏？</li>
+          </ul>
+        </div>
+        <div class="risk-card">
+          <h3>操作后</h3>
+          <ul class="check-list">
+            <li>生成结果里是否残留真实客户信息？</li>
+            <li>导出的文件是否误带原始附件或截图？</li>
+            <li>是否需要把脱敏版和原始版分开存放？</li>
+            <li>这次 AI 做了哪些关键操作，是否要记录？</li>
+            <li>下次同类任务是否该沉淀成固定模板？</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="alert red">
+        <span class="alert-icon">🔒</span>
+        <div><strong>最后一句</strong>：在高敏业务里，AI 首先是一个需要被管控的外部处理能力，其次才是一个效率工具。把边界定清楚，才有资格谈提效。</div>
+      </div>
+    </section>
+
+    <div class="footer">Noah AI 培训中心 · AI 工具数据安全指南 · 2026-03-17 · Kora</div>
+  </div>
+</main>
+
+<script>
+const sections = ["decision", "routing", "tools", "classify", "desensitize", "local", "checklist"];
+const links = {};
+sections.forEach((id) => {
+  const link = document.querySelector(`nav a[href="#${id}"]`);
+  if (link) links[id] = link;
+});
+
+window.addEventListener("scroll", () => {
+  let current = "decision";
+  sections.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  Object.values(links).forEach((link) => link.classList.remove("active"));
+  if (links[current]) links[current].classList.add("active");
+});
+window.dispatchEvent(new Event("scroll"));
+
+function copyPrompt(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+    btn.textContent = "✓ 已复制";
+    btn.classList.add("copied");
+    setTimeout(() => {
+      btn.textContent = "复制";
+      btn.classList.remove("copied");
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>

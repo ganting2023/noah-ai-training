@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 工具实战总览</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --sidebar-w: 276px;
+  --text: #1f1a17;
+  --muted: #6f655e;
+  --panel: rgba(255, 252, 247, 0.9);
+  --sidebar-bg: #1f252d;
+  --sidebar-border: rgba(255,255,255,0.1);
+  --sidebar-text: rgba(255,255,255,0.92);
+  --sidebar-muted: rgba(255,255,255,0.56);
+  --shadow: 0 18px 60px rgba(66, 45, 26, 0.12);
+  --shadow-soft: 0 12px 28px rgba(54, 39, 27, 0.08);
+  --accent: #c96d3b;
+  --accent-strong: #a34f24;
+  --accent-alt: #1f6a67;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(201, 109, 59, 0.18), transparent 28%),
+    radial-gradient(circle at 85% 12%, rgba(31, 106, 103, 0.12), transparent 24%),
+    linear-gradient(180deg, #f8f2e9 0%, #f4ede4 52%, #f8f4ee 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px);
+  background-size: 36px 36px;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-w);
+  padding: 22px 18px 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent 22%), var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex; flex-direction: column;
+  z-index: 10; overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 20px 18px 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  background: rgba(255,255,255,0.03);
+}
+
+.sidebar-logo .tag, .sidebar-footer-label {
+  font-size: 11px; letter-spacing: 0.16em;
+  color: var(--sidebar-muted); text-transform: uppercase;
+}
+
+.sidebar-logo h2 {
+  margin-top: 12px;
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 28px; font-weight: 700; color: var(--sidebar-text);
+}
+
+.sidebar-logo .sub {
+  margin-top: 8px; font-size: 13px; line-height: 1.7;
+  color: rgba(255,255,255,0.72);
+}
+
+nav { display: flex; flex-direction: column; gap: 6px; padding: 20px 0; flex: 1; }
+
+.nav-section {
+  padding: 14px 16px 4px; font-size: 11px;
+  letter-spacing: 0.16em; color: var(--sidebar-muted); text-transform: uppercase;
+}
+
+nav a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; margin: 0 4px; border-radius: 16px;
+  color: var(--sidebar-text); text-decoration: none;
+  border: 1px solid transparent;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+nav a:hover { transform: translateX(4px); background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.08); }
+nav a.active { color: #fff; background: linear-gradient(135deg, rgba(201,109,59,0.24), rgba(31,106,103,0.16)); border-color: rgba(255,255,255,0.08); }
+
+.nav-icon { width: 28px; height: 28px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.08); flex-shrink: 0; }
+.nav-copy { display: flex; flex-direction: column; gap: 3px; }
+.nav-title { font-size: 14px; font-weight: 600; }
+.nav-desc { font-size: 11px; color: var(--sidebar-muted); }
+
+.sidebar-footer { padding: 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); }
+.sidebar-footer-text { margin-top: 8px; font-size: 12px; line-height: 1.7; color: rgba(255,255,255,0.74); }
+
+.main { margin-left: var(--sidebar-w); min-height: 100vh; }
+.content { max-width: 1140px; padding: 40px 40px 88px; }
+
+.hero { display: grid; grid-template-columns: minmax(0, 1.28fr) minmax(320px, 0.92fr); gap: 24px; margin-bottom: 28px; }
+
+.hero-copy, .hero-panel, .section, .demo-card, .next-card, .quick-card {
+  border-radius: 30px; border: 1px solid rgba(76, 52, 34, 0.1);
+  background: rgba(255, 250, 243, 0.84); backdrop-filter: blur(14px); box-shadow: var(--shadow);
+}
+
+.hero-copy { padding: 38px 38px 34px; position: relative; overflow: hidden; }
+.hero-copy::after {
+  content: ""; position: absolute; right: -72px; bottom: -88px;
+  width: 240px; height: 240px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,109,59,0.22), rgba(201,109,59,0)); pointer-events: none;
+}
+
+.eyebrow { display: inline-flex; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,0.56); color: var(--accent-strong); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.hero h1 { margin-top: 18px; font-family: "Songti SC","STSong",serif; font-size: clamp(34px,4.1vw,54px); line-height: 1.08; font-weight: 700; }
+.hero-lead { margin-top: 16px; max-width: 42em; font-size: 16px; line-height: 1.9; color: var(--muted); }
+
+.hero-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+.meta-pill { padding: 10px 14px; border-radius: 999px; background: rgba(255,255,255,0.68); border: 1px solid rgba(76,52,34,0.08); font-size: 13px; color: #5b5048; }
+
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.hero-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 20px; border-radius: 16px; font-size: 15px; font-weight: 700; text-decoration: none; transition: transform .18s ease, box-shadow .18s ease, background .18s ease; }
+.hero-button:hover { transform: translateY(-2px); }
+.hero-button.primary { color: #fffaf4; background: linear-gradient(135deg, #c96d3b 0%, #a34f24 100%); box-shadow: 0 16px 30px rgba(163,79,36,0.22); }
+.hero-button.secondary { color: var(--accent-alt); background: rgba(255,255,255,0.68); border: 1px solid rgba(31,106,103,0.15); }
+
+.hero-panel { padding: 26px; display: flex; flex-direction: column; gap: 18px; }
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.panel-kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-alt); }
+.panel-badge { padding: 6px 10px; border-radius: 999px; background: rgba(31,106,103,0.12); color: var(--accent-alt); font-size: 12px; font-weight: 700; }
+
+.journey { display: grid; gap: 12px; }
+.journey-step { display: grid; grid-template-columns: auto 1fr; gap: 12px; padding: 14px; border-radius: 18px; background: rgba(255,255,255,0.66); border: 1px solid rgba(76,52,34,0.08); }
+.journey-index { width: 36px; height: 36px; border-radius: 14px; background: linear-gradient(135deg, rgba(201,109,59,0.2), rgba(31,106,103,0.16)); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; }
+.journey strong { display: block; font-size: 14px; margin-bottom: 4px; }
+.journey span { display: block; font-size: 12px; line-height: 1.7; color: var(--muted); }
+
+.summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 16px; margin-bottom: 26px; }
+.quick-card { padding: 18px 18px 16px; box-shadow: var(--shadow-soft); }
+.quick-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-strong); }
+.quick-value { margin-top: 10px; font-size: 26px; font-weight: 800; line-height: 1.1; }
+.quick-copy { margin-top: 8px; font-size: 12px; line-height: 1.7; color: var(--muted); }
+
+.section { padding: 30px; margin-bottom: 24px; box-shadow: var(--shadow-soft); }
+.section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.section-title-wrap { display: flex; align-items: center; gap: 14px; }
+.section-badge { width: 46px; height: 46px; border-radius: 16px; background: linear-gradient(135deg, rgba(201,109,59,0.14), rgba(31,106,103,0.16)); display: inline-flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.section h2 { font-family: "Songti SC","STSong",serif; font-size: 30px; line-height: 1.18; }
+.section-intro { font-size: 14px; color: var(--muted); line-height: 1.85; }
+
+.flag { padding: 8px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; background: rgba(31,106,103,0.12); color: var(--accent-alt); }
+
+.agenda { display: grid; grid-template-columns: auto 1fr auto; gap: 0; margin-top: 6px; border-radius: 18px; overflow: hidden; border: 1px solid rgba(76,52,34,0.08); background: rgba(255,255,255,0.76); }
+.agenda-row { display: contents; }
+.agenda-row > div { padding: 14px 16px; border-bottom: 1px solid rgba(76,52,34,0.08); font-size: 13px; }
+.agenda-row:last-child > div { border-bottom: 0; }
+.agenda-row.header > div { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #7b6d63; background: rgba(255,255,255,0.84); }
+.a-num { font-weight: 800; color: var(--accent-strong); }
+.a-time { font-weight: 700; color: var(--accent-alt); white-space: nowrap; }
+
+.demo-card { overflow: hidden; margin-bottom: 18px; }
+.demo-header { display: flex; align-items: center; gap: 14px; padding: 18px 22px; background: linear-gradient(90deg, rgba(201,109,59,0.08), rgba(255,255,255,0.72)); border-bottom: 1px solid rgba(76,52,34,0.08); }
+.demo-num { width: 38px; height: 38px; border-radius: 14px; background: linear-gradient(135deg, rgba(201,109,59,0.2), rgba(31,106,103,0.16)); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; flex-shrink: 0; }
+.demo-title-group { flex: 1; }
+.demo-title { font-size: 17px; font-weight: 700; }
+.demo-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.demo-time { font-size: 11px; background: rgba(31,106,103,0.12); color: var(--accent-alt); padding: 5px 10px; border-radius: 999px; font-weight: 700; }
+
+.demo-body { padding: 20px 22px; }
+
+.demo-context, .mini-card {
+  background: rgba(255,255,255,0.72); border-radius: 14px; padding: 14px 16px;
+  font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.8;
+  border: 1px solid rgba(76,52,34,0.06);
+}
+.demo-context strong { color: var(--text); }
+
+.badge-row { margin-top: 5px; display: flex; gap: 6px; flex-wrap: wrap; }
+.pill { font-size: 11px; padding: 3px 8px; border-radius: 999px; font-weight: 600; }
+.pill-red { background: rgba(239,68,68,0.1); color: #991b1b; }
+.pill-yellow { background: rgba(245,158,11,0.12); color: #92400e; }
+.pill-green { background: rgba(16,185,129,0.1); color: #065f46; }
+.pill-muted { background: rgba(76,52,34,0.07); color: var(--muted); }
+
+.prompt-label, .subheading {
+  font-size: 11px; font-weight: 700; color: var(--accent-strong);
+  letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px;
+}
+.prompt-box { position: relative; margin: 14px 0; }
+.prompt-content {
+  background: #1b2028; border-radius: 16px; padding: 16px 20px;
+  font-family: "SF Mono","Fira Code","Consolas",monospace; font-size: 12.5px;
+  color: #dceeff; line-height: 1.7; white-space: pre-wrap; word-break: break-word;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.copy-btn {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(201,109,59,0.22); border: 1px solid rgba(201,109,59,0.35);
+  color: #ffe8dc; font-size: 11px; padding: 5px 10px; border-radius: 8px;
+  cursor: pointer; font-family: inherit; transition: .15s;
+}
+.copy-btn:hover { background: rgba(201,109,59,0.4); }
+.copy-btn.copied { background: rgba(16,185,129,0.2); border-color: rgba(16,185,129,0.4); color: #6ee7b7; }
+
+.table-wrap { overflow-x: auto; border-radius: 18px; border: 1px solid rgba(76,52,34,0.08); background: rgba(255,255,255,0.74); }
+table { width: 100%; border-collapse: collapse; min-width: 700px; }
+th, td { padding: 13px 14px; text-align: left; border-bottom: 1px solid rgba(76,52,34,0.08); font-size: 13px; vertical-align: top; }
+th { background: rgba(255,255,255,0.8); color: #4d4138; font-weight: 700; }
+tbody tr:last-child td { border-bottom: 0; }
+
+.alert { display: flex; gap: 10px; padding: 14px 16px; border-radius: 14px; font-size: 13px; margin: 12px 0; line-height: 1.7; }
+.alert-icon { font-size: 18px; flex-shrink: 0; }
+.alert-blue { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; }
+.alert-yellow { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; }
+.alert-green { background: #ecfdf3; border: 1px solid #a7f3d0; color: #065f46; }
+
+.two-col, .next-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.next-card { padding: 20px; }
+.next-card h3 { font-size: 18px; margin-bottom: 10px; }
+.next-card p { font-size: 13px; line-height: 1.8; color: var(--muted); }
+.next-card a { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; padding: 12px 16px; border-radius: 14px; background: linear-gradient(135deg, #c96d3b, #a34f24); color: #fffaf4; text-decoration: none; font-size: 14px; font-weight: 700; }
+
+.footer { margin-top: 10px; text-align: center; font-size: 12px; color: var(--muted); }
+
+/* ───────── 新增：详细操作步骤样式 ───────── */
+
+.section-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.tag-prep { background: rgba(31,106,103,0.1); color: var(--accent-alt); }
+.tag-steps { background: rgba(201,109,59,0.1); color: var(--accent-strong); }
+.tag-check { background: rgba(16,185,129,0.1); color: #065f46; }
+.tag-faq { background: rgba(245,158,11,0.1); color: #92400e; }
+.tag-more { background: rgba(124,58,237,0.1); color: #5b21b6; }
+
+.prereq-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 16px; }
+.prereq-item { padding: 14px; background: rgba(255,255,255,0.72); border-radius: 14px; border: 1px solid rgba(76,52,34,0.08); }
+.prereq-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+.prereq-label { font-size: 10px; font-weight: 700; color: var(--accent-alt); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+.prereq-text { font-size: 12.5px; line-height: 1.7; color: var(--muted); }
+
+.step-timeline { display: flex; flex-direction: column; gap: 0; margin: 8px 0 16px; }
+
+.step-item {
+  display: grid; grid-template-columns: 52px 1fr; gap: 0 14px;
+  position: relative;
+}
+.step-item:not(:last-child)::after {
+  content: ""; position: absolute;
+  left: 25px; top: 50px; bottom: 0; width: 2px;
+  background: linear-gradient(180deg, rgba(201,109,59,0.3), rgba(201,109,59,0.06));
+}
+
+.step-dot {
+  width: 50px; height: 50px; border-radius: 50%;
+  background: linear-gradient(135deg, rgba(201,109,59,0.14), rgba(31,106,103,0.12));
+  border: 2px solid rgba(201,109,59,0.28);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 800; color: var(--accent-strong); flex-shrink: 0;
+  margin-top: 2px; position: relative; z-index: 1;
+}
+
+.step-body { padding: 4px 0 22px 0; }
+.step-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; color: var(--text); }
+.step-desc { font-size: 13px; line-height: 1.85; color: var(--muted); }
+
+.step-visual {
+  margin-top: 10px; padding: 12px 14px;
+  background: rgba(255,255,255,0.72); border-radius: 12px;
+  border: 1px solid rgba(76,52,34,0.08); font-size: 12.5px; line-height: 1.8;
+}
+.ui-btn {
+  display: inline-block; background: rgba(201,109,59,0.12); color: var(--accent-strong);
+  font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 6px;
+  border: 1px solid rgba(201,109,59,0.22); margin: 0 2px;
+}
+.ui-code {
+  display: inline-block; background: #1b2028; color: #dceeff;
+  font-family: "SF Mono","Consolas",monospace; font-size: 11.5px;
+  padding: 1px 6px; border-radius: 5px; margin: 0 2px;
+}
+.ui-path {
+  display: inline-block; background: rgba(31,106,103,0.1); color: var(--accent-alt);
+  font-size: 11.5px; font-weight: 600; padding: 2px 7px; border-radius: 6px; margin: 0 2px;
+}
+
+.step-tip {
+  margin-top: 8px; display: flex; gap: 7px; align-items: flex-start;
+  font-size: 12px; color: #92400e; background: #fff7ed;
+  border: 1px solid #fed7aa; padding: 8px 12px; border-radius: 10px; line-height: 1.7;
+}
+.step-ok {
+  margin-top: 8px; display: flex; gap: 7px; align-items: flex-start;
+  font-size: 12px; color: #065f46; background: #ecfdf3;
+  border: 1px solid #a7f3d0; padding: 8px 12px; border-radius: 10px; line-height: 1.7;
+}
+
+.divider { height: 1px; background: rgba(76,52,34,0.08); margin: 20px 0; }
+
+.checklist { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+.check-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 11px 14px; background: rgba(255,255,255,0.72);
+  border-radius: 12px; border: 1px solid rgba(76,52,34,0.06);
+  font-size: 13px; line-height: 1.65;
+}
+.check-box {
+  width: 18px; height: 18px; border-radius: 5px;
+  border: 2px solid rgba(76,52,34,0.22); flex-shrink: 0; margin-top: 2px;
+}
+
+.faq-list { display: flex; flex-direction: column; gap: 10px; margin: 10px 0; }
+.faq-item { padding: 14px 16px; background: rgba(255,255,255,0.72); border-radius: 14px; border: 1px solid rgba(76,52,34,0.08); }
+.faq-q { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; display: flex; gap: 6px; }
+.faq-a { font-size: 12.5px; line-height: 1.85; color: var(--muted); }
+
+.iteration-box { background: linear-gradient(135deg, rgba(31,106,103,0.06), rgba(201,109,59,0.04)); border: 1px solid rgba(31,106,103,0.15); border-radius: 16px; padding: 16px; margin: 14px 0; }
+.iteration-title { font-size: 11px; font-weight: 700; color: var(--accent-alt); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
+.iteration-prompt { font-family: "SF Mono","Consolas",monospace; font-size: 12px; background: rgba(255,255,255,0.7); border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; border: 1px solid rgba(76,52,34,0.08); color: #1b2028; line-height: 1.6; }
+.iteration-prompt:last-child { margin-bottom: 0; }
+
+.phase-block { margin: 14px 0; border-radius: 18px; overflow: hidden; border: 1px solid rgba(76,52,34,0.08); }
+.phase-header { padding: 12px 16px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+.phase-a { background: linear-gradient(90deg, rgba(31,106,103,0.12), rgba(31,106,103,0.04)); color: var(--accent-alt); }
+.phase-b { background: linear-gradient(90deg, rgba(201,109,59,0.12), rgba(201,109,59,0.04)); color: var(--accent-strong); }
+.phase-c { background: linear-gradient(90deg, rgba(16,185,129,0.1), rgba(16,185,129,0.03)); color: #065f46; }
+.phase-steps { padding: 14px 16px; background: rgba(255,255,255,0.6); }
+
+@media (max-width: 1120px) { .hero,.summary-grid,.two-col,.next-grid,.prereq-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .sidebar { position: static; width: auto; border-right: 0; border-bottom: 1px solid var(--sidebar-border); } .main { margin-left: 0; } }
+@media (max-width: 720px) {
+  .content { padding: 22px 18px 56px; }
+  .hero-copy,.hero-panel,.section,.demo-card,.next-card,.quick-card { border-radius: 24px; }
+  .hero-copy,.hero-panel,.section { padding: 22px; }
+  .section h2 { font-size: 25px; } .hero h1 { font-size: 34px; }
+  table { min-width: 640px; }
+}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="tag">Practice Overview</div>
+    <h2>实战总览</h2>
+    <div class="sub">每个 Demo 都含准备步骤、逐步操作、人工复核清单和常见问题。</div>
+  </div>
+  <nav>
+    <div class="nav-section">快速入口</div>
+    <a href="../../index.html"><span class="nav-icon">🏠</span><span class="nav-copy"><span class="nav-title">返回培训中心</span><span class="nav-desc">回到首页总览</span></span></a>
+    <a href="AI编程工具安装指南.html"><span class="nav-icon">🚀</span><span class="nav-copy"><span class="nav-title">工具安装指南</span><span class="nav-desc">没装好先回去补</span></span></a>
+    <a href="AI工具数据安全指南.html"><span class="nav-icon">🔒</span><span class="nav-copy"><span class="nav-title">数据安全指南</span><span class="nav-desc">高敏场景必读</span></span></a>
+    <div class="nav-section">实战目录</div>
+    <a href="#overview"><span class="nav-icon">🧭</span><span class="nav-copy"><span class="nav-title">议程总览</span><span class="nav-desc">先看路径和时间</span></span></a>
+    <a href="#demo1"><span class="nav-icon">1</span><span class="nav-copy"><span class="nav-title">监管动态日报</span><span class="nav-desc">合规 / 风控</span></span></a>
+    <a href="#demo2"><span class="nav-icon">2</span><span class="nav-copy"><span class="nav-title">文件一致性核查</span><span class="nav-desc">法务 / 行政 / 运营</span></span></a>
+    <a href="#demo3"><span class="nav-icon">3</span><span class="nav-copy"><span class="nav-title">风险揭示书初稿</span><span class="nav-desc">法务 / 合规</span></span></a>
+    <a href="#demo4"><span class="nav-icon">4</span><span class="nav-copy"><span class="nav-title">手机远程指挥</span><span class="nav-desc">所有岗位</span></span></a>
+    <a href="#next"><span class="nav-icon">→</span><span class="nav-copy"><span class="nav-title">下一步</span><span class="nav-desc">案例库与安全页</span></span></a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-label">当前版本</div>
+    <div class="sidebar-footer-text">含完整操作步骤的详细版实战课件。适合自学复盘和现场投屏。</div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="content">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Hands-On First</span>
+        <h1>AI 工具实战总览</h1>
+        <p class="hero-lead">装完工具之后，最重要的不是继续看说明，而是立刻做一个真实任务。这页把 4 个 Demo 的<strong>每一步操作</strong>写清楚——打开哪个界面、点哪个按钮、看到什么才算对、遇到问题怎么处理。</p>
+        <div class="hero-meta">
+          <span class="meta-pill">完整浏览约 20–25 分钟</span>
+          <span class="meta-pill">4 个真实 Demo · 含逐步操作</span>
+          <span class="meta-pill">含人工复核清单 + 常见问题</span>
+        </div>
+        <div class="hero-actions">
+          <a class="hero-button primary" href="#overview">先看议程总览</a>
+          <a class="hero-button secondary" href="#demo1">直接从 Demo 1 开始</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div class="panel-head">
+          <div class="panel-kicker">推荐顺序</div>
+          <div class="panel-badge">先动手再扩展</div>
+        </div>
+        <div class="journey">
+          <div class="journey-step"><div class="journey-index">01</div><div><strong>看 4 个 Demo</strong><span>按步骤跟着做一遍，感受 AI 在真实工作里的用法和边界。</span></div></div>
+          <div class="journey-step"><div class="journey-index">02</div><div><strong>去案例库找岗位场景</strong><span>把今天看到的能力，迁移到你自己的部门和工作流里。</span></div></div>
+          <div class="journey-step"><div class="journey-index">03</div><div><strong>高敏任务先看安全页</strong><span>涉及客户数据、审计材料、监管文件时，先过数据边界判断。</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUMMARY GRID -->
+    <section class="summary-grid">
+      <div class="quick-card"><div class="quick-label">实战方式</div><div class="quick-value">4 个 Demo</div><div class="quick-copy">每个 Demo 都有准备清单、操作步骤、预期输出和人工复核清单。</div></div>
+      <div class="quick-card"><div class="quick-label">适合对象</div><div class="quick-value">全员可看</div><div class="quick-copy">从合规、法务到行政、运营，至少能找到一个立刻可用的场景。</div></div>
+      <div class="quick-card"><div class="quick-label">核心原则</div><div class="quick-value">AI 先做，人复核</div><div class="quick-copy">搜索、提取、比对、草稿生成交给 AI，判断和签发留给人。</div></div>
+      <div class="quick-card"><div class="quick-label">下一步</div><div class="quick-value">案例库</div><div class="quick-copy">看完总览后，按岗位进入案例库，把思路迁移到自己业务里。</div></div>
+    </section>
+
+    <!-- OVERVIEW -->
+    <section class="section" id="overview">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="section-badge">🧭</div>
+          <div>
+            <h2>议程总览</h2>
+            <p class="section-intro">先把四个 Demo 看完，再决定要不要继续深挖具体岗位案例。</p>
+          </div>
+        </div>
+        <span class="flag">建议先看</span>
+      </div>
+      <div class="agenda">
+        <div class="agenda-row header"><div>#</div><div>模块</div><div>时长</div></div>
+        <div class="agenda-row"><div class="a-num">一</div><div>现场 Demo × 4（边看边做）</div><div class="a-time">15 min</div></div>
+        <div class="agenda-row"><div class="a-num">二</div><div>深度案例：通用 / HR / 法务合规 / 自动化 → 去案例库延展</div><div class="a-time">7 min</div></div>
+        <div class="agenda-row"><div class="a-num">三</div><div>高敏场景补判断 → 去数据安全页</div><div class="a-time">3 min</div></div>
+      </div>
+      <div class="alert alert-blue" style="margin-top:16px">
+        <span class="alert-icon">📋</span>
+        <div>以下四个 Demo 全部适合现场演示或自学复盘。每个 Demo 都包含<strong>操作前准备 → 逐步操作 → 预期输出 → 人工复核清单 → 常见问题</strong>五个部分，按顺序走一遍即可。</div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════ DEMO 1 ═══════════════════════════════════════ -->
+    <section class="demo-card" id="demo1">
+      <div class="demo-header">
+        <div class="demo-num">1</div>
+        <div class="demo-title-group">
+          <div class="demo-title">监管动态日报自动生成</div>
+          <div class="demo-meta">工具：Claude 网页版（claude.ai）· 无需上传文件 · 需要联网搜索功能</div>
+          <div class="badge-row">
+            <span class="pill pill-red">合规 / 风控</span>
+            <span class="pill pill-muted">任何需要跟进外部监管信息的岗位均适用</span>
+          </div>
+        </div>
+        <div class="demo-time">⏱ 3 分钟</div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-context"><strong>背景</strong>：合规 / 风控每天需要跟进 SFC、MAS 等监管机构动态，传统方式是手动浏览官网，耗时约半天整理。这个 Demo 展示如何用 Claude 在 30 秒内生成格式化简报。</div>
+
+        <!-- 准备工作 -->
+        <div class="section-tag tag-prep">📋 操作前准备</div>
+        <div class="prereq-grid">
+          <div class="prereq-item">
+            <span class="prereq-icon">🌐</span>
+            <div class="prereq-label">浏览器账号</div>
+            <div class="prereq-text">用 Chrome 或 Safari 打开 <strong>claude.ai</strong>，确认已登录账号（右上角显示头像）。</div>
+          </div>
+          <div class="prereq-item">
+            <span class="prereq-icon">🔍</span>
+            <div class="prereq-label">搜索功能确认</div>
+            <div class="prereq-text">Claude.ai 默认支持联网搜索。若看到输入框有「🌐 搜索」图标或开关，确认已开启。</div>
+          </div>
+          <div class="prereq-item">
+            <span class="prereq-icon">📄</span>
+            <div class="prereq-label">提示词已复制</div>
+            <div class="prereq-text">先点下方「复制」按钮把提示词存到剪贴板，待会直接粘贴，不要手动打。</div>
+          </div>
+        </div>
+
+        <!-- 操作步骤 -->
+        <div class="section-tag tag-steps">▶ 逐步操作</div>
+        <div class="step-timeline">
+
+          <div class="step-item">
+            <div class="step-dot">1</div>
+            <div class="step-body">
+              <div class="step-title">打开 Claude 网页版，新建对话</div>
+              <div class="step-desc">在浏览器地址栏输入 <strong>claude.ai</strong> 进入。点击左侧边栏顶部的 <span class="ui-btn">+ 新建对话</span>（或页面上的「New Chat」），确认进入空白对话界面——输入框是空的，没有历史消息。</div>
+              <div class="step-ok">✅ 看到空白对话界面 + 输入框在底部，说明已准备好。</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">2</div>
+            <div class="step-body">
+              <div class="step-title">确认联网搜索功能已开启</div>
+              <div class="step-desc">查看输入框下方或左侧是否有「搜索网页」「🌐 Search」开关。Claude.ai 网页版默认开启联网搜索，一般无需额外操作。</div>
+              <div class="step-visual">
+                <strong>常见状态</strong>：<br>
+                • 看到 <span class="ui-path">🌐 搜索</span> 图标亮起 = 已开启，直接进行下一步<br>
+                • 看不到任何搜索开关 = Claude.ai 默认模式，也可以直接用，Claude 会自动判断是否需要搜索<br>
+                • 如果明确看到搜索开关处于关闭状态 → 点击打开
+              </div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">3</div>
+            <div class="step-body">
+              <div class="step-title">复制下方提示词</div>
+              <div class="step-desc">点击提示词右上角的 <span class="ui-btn">复制</span> 按钮，等按钮变成「✓ 已复制」，说明提示词已进入剪贴板。<strong>不要手动打</strong>，提示词的换行和格式非常重要。</div>
+              <div class="step-tip">⚠️ 如果「复制」按钮没反应：部分浏览器需要授权剪贴板权限，点击后弹窗选「允许」即可。或者手动全选提示词文字 (Ctrl+A) 再复制 (Ctrl+C)。</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 提示词 -->
+        <div class="prompt-label">▶ 复制以下内容粘贴给 Claude</div>
+        <div class="prompt-box">
+          <pre class="prompt-content" id="p1">请帮我搜索香港证监会（SFC）和新加坡 MAS 最近3个月关于基金代销合规的最新监管动态，
+整理成一份中文简报，格式：监管机构 / 主要变化 / 生效时间 / 合规关注重点
+
+要求：
+1. 每个机构至少列出2条动态
+2. 如有咨询期截止日期请特别标注
+3. 最后用一句话总结本月最需要优先处理的合规事项</pre>
+          <button class="copy-btn" onclick="copyPrompt('p1',this)">复制</button>
+        </div>
+
+        <div class="step-timeline" style="margin-top:16px">
+
+          <div class="step-item">
+            <div class="step-dot">4</div>
+            <div class="step-body">
+              <div class="step-title">粘贴到输入框并发送</div>
+              <div class="step-desc">点击输入框，按 <span class="ui-code">Ctrl + V</span>（Mac 用 <span class="ui-code">⌘ + V</span>）粘贴。检查文字格式是否完整——应该有多行和编号。确认无误后按 <span class="ui-code">Enter</span> 发送，或点击输入框右侧的 <span class="ui-btn">发送 ↑</span> 按钮。</div>
+              <div class="step-tip">⚠️ 注意：按 <strong>Enter</strong> 直接发送。如需换行（不发送），用 <strong>Shift + Enter</strong>。</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">5</div>
+            <div class="step-body">
+              <div class="step-title">等待 Claude 搜索并生成（约 20–40 秒）</div>
+              <div class="step-desc">发送后你会看到 Claude 开始"思考"。整个过程分三个阶段：</div>
+              <div class="step-visual">
+                <strong>阶段 1（0–5秒）</strong>：出现「🔍 正在搜索...」或旋转图标，Claude 在检索相关页面<br><br>
+                <strong>阶段 2（5–20秒）</strong>：出现「📄 正在阅读...」，Claude 在提取和整理信息<br><br>
+                <strong>阶段 3（20–40秒）</strong>：文字开始流式输出，像打字机一样逐字显示——这是正常现象，不是卡住了
+              </div>
+              <div class="step-ok">✅ 只要文字在持续出现，说明 Claude 正在工作，耐心等待即可。</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">6</div>
+            <div class="step-body">
+              <div class="step-title">阅读输出，检查结构是否完整</div>
+              <div class="step-desc">输出完成后，逐项检查以下内容是否都有：</div>
+              <div class="step-visual">
+                • 是否有表格或分条呈现：<strong>监管机构 / 主要变化 / 生效时间 / 合规关注重点</strong><br>
+                • SFC 是否至少有 2 条动态<br>
+                • MAS 是否至少有 1 条动态<br>
+                • 末尾是否有「本月优先事项」汇总句<br>
+                • 如有咨询期截止日，是否已<strong>加粗或标注⚠️</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">7</div>
+            <div class="step-body">
+              <div class="step-title">如格式不对，追问调整</div>
+              <div class="step-desc">如果 Claude 输出的是纯文字段落而不是表格，在同一对话里追加一条指令即可，不需要重新开始。</div>
+              <div class="step-visual">
+                在输入框里发送：<br>
+                <span class="ui-code">请把上面的内容整理成表格格式，列标题：监管机构 / 主要变化 / 生效时间 / 合规关注重点</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-item" style="--last:1">
+            <div class="step-dot">8</div>
+            <div class="step-body">
+              <div class="step-title">保存输出结果</div>
+              <div class="step-desc">确认内容符合要求后，有三种保存方式：</div>
+              <div class="step-visual">
+                <strong>方式 A（最快）</strong>：全选输出内容 → 复制 → 粘贴到 Word 或邮件<br><br>
+                <strong>方式 B（格式更好）</strong>：点击对话右上角「⋯」菜单 → 选「导出对话」（PDF 或 Markdown）<br><br>
+                <strong>方式 C（追问生成文件）</strong>：在对话里发送「请把上面的简报整理为可直接发送给团队的格式，包含日期和来源」，再复制输出
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 预期输出 -->
+        <div class="divider"></div>
+        <div class="subheading">已验证输出示例</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>监管机构</th><th>主要变化</th><th>生效时间</th><th>合规关注重点</th></tr></thead>
+            <tbody>
+              <tr><td>香港 SFC</td><td>UT Code 修订咨询，引入 VaR 衡量衍生品风险</td><td>⚠️ 咨询截至 2026年1月21日</td><td>检视现有产品风险披露分类</td></tr>
+              <tr><td>香港 SFC</td><td>封闭式另类资产基金代销新规，明确适合性评估要求</td><td>2025年2月17日起</td><td>另类基金代销前须完成客户知识测试</td></tr>
+              <tr><td>香港 SFC</td><td>FASTrack 简捷授权通道上线，审批缩短至 15 工作日</td><td>2025年5月5日起</td><td>符合条件基金可申请快速授权</td></tr>
+              <tr><td>新加坡 MAS</td><td>AML/CFT 通知及指引修订版生效</td><td>2025年7月1日起</td><td>全面检视 KYC/AML 内部流程</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 人工复核清单 -->
+        <div class="divider"></div>
+        <div class="section-tag tag-check">✅ 人工复核清单（发给团队前必须过一遍）</div>
+        <div class="checklist">
+          <div class="check-item"><div class="check-box"></div><div>生效时间是否合理？未来日期与过去日期分别核实逻辑（AI 偶尔会混淆）</div></div>
+          <div class="check-item"><div class="check-box"></div><div>标注的咨询期截止日期，是否已提醒相关同事跟进？</div></div>
+          <div class="check-item"><div class="check-box"></div><div>输出中的监管机构网站链接（如有），抽查点开 1–2 个验证真实性</div></div>
+          <div class="check-item"><div class="check-box"></div><div>本月优先事项的判断，是否符合本司实际业务重点？如不符合，在对话里补充背景让 AI 重新判断</div></div>
+          <div class="check-item"><div class="check-box"></div><div>如作为正式报告发出，需在文末注明「信息来源：AI 辅助整理，最终以监管机构官网为准」</div></div>
+        </div>
+
+        <!-- 常见问题 -->
+        <div class="divider"></div>
+        <div class="section-tag tag-faq">❓ 常见问题</div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q">❓ Claude 说「我没有实时网络访问权限，无法搜索最新动态」</div>
+            <div class="faq-a">这说明当前用的是不带搜索功能的模型或模式。解决办法：① 确认用的是 claude.ai 官网（不是 API 直接调用）；② 检查输入框的「搜索」开关是否开启；③ 如果公司用的是 API 接入，联系 IT 配置联网搜索工具。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">❓ 输出只有 1 条监管动态，或某机构完全没有</div>
+            <div class="faq-a">在同一对话追加：「请补充关于 [机构名称] 最近3个月的监管动态，至少2条，格式与上面保持一致。」如果 AI 说确实找不到，可能该时间段内确实没有相关更新，去官网手动确认一次。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">❓ 生成速度很慢，等了1分钟还没结果</div>
+            <div class="faq-a">联网搜索类任务比普通生成慢，等待 60 秒是正常的。如果超过 2 分钟仍无响应，刷新页面重试。高峰时段（午休、下班前）服务器较忙，可换时间段操作。</div>
+          </div>
+        </div>
+
+        <!-- 进阶迭代 -->
+        <div class="divider"></div>
+        <div class="section-tag tag-more">🔁 进阶：在同一对话里继续追问</div>
+        <div class="iteration-box">
+          <div class="iteration-title">同一对话内的追问示例</div>
+          <div class="iteration-prompt">请把上面的简报翻译成英文版本，格式保持一致。</div>
+          <div class="iteration-prompt">请进一步列出哪些监管变化可能影响我们的代销资质，需要在30天内提交报告或更新文件？</div>
+          <div class="iteration-prompt">帮我起草一封通知邮件，将上面的简报发给合规团队，语气专业简洁，不超过200字。</div>
+        </div>
+
+        <div class="alert alert-green">
+          <span class="alert-icon">📢</span>
+          <div><strong>说给受众</strong>：这份简报传统方式要半天手动整理，AI 30 秒完成。可以配置成每天早上自动生成，直接发到邮箱或企业微信——你不需要自己盯着官网。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════ DEMO 2 ═══════════════════════════════════════ -->
+    <section class="demo-card" id="demo2">
+      <div class="demo-header">
+        <div class="demo-num">2</div>
+        <div class="demo-title-group">
+          <div class="demo-title">文件一致性核查</div>
+          <div class="demo-meta">工具：Claude 网页版 · 需上传文件：基金签约包文件清单.docx</div>
+          <div class="badge-row">
+            <span class="pill pill-yellow">法务 / 行政 / 运营</span>
+            <span class="pill pill-muted">任何需要核对多份文档一致性的岗位均适用</span>
+          </div>
+        </div>
+        <div class="demo-time">⏱ 4 分钟</div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-context"><strong>背景</strong>：法务审核签约包时，基金名称、公司名称、版本号在不同文件里不一致，高频发生，容易漏，全靠人眼扫。这个演示文件里<strong>预置了 5 处错误</strong>，看 AI 能不能全部找出来。</div>
+
+        <!-- 准备工作 -->
+        <div class="section-tag tag-prep">📋 操作前准备</div>
+        <div class="prereq-grid">
+          <div class="prereq-item">
+            <span class="prereq-icon">📥</span>
+            <div class="prereq-label">下载演示文件</div>
+            <div class="prereq-text">从培训素材包下载 <strong>【Demo2演示文件】基金签约包文件清单.docx</strong>，保存到桌面或下载文件夹（需是本地文件，不能是云盘链接）。</div>
+          </div>
+          <div class="prereq-item">
+            <span class="prereq-icon">🌐</span>
+            <div class="prereq-label">登录 Claude 网页版</div>
+            <div class="prereq-text">打开 <strong>claude.ai</strong>，确认已登录。新建一个空白对话，不要在已有对话里操作。</div>
+          </div>
+          <div class="prereq-item">
+            <span class="prereq-icon">📄</span>
+            <div class="prereq-label">文件格式确认</div>
+            <div class="prereq-text">文件必须是 <strong>.docx 格式</strong>，大小在 30MB 以内。如文件是 .doc（旧格式），先在 Word 里「另存为 .docx」再上传。</div>
+          </div>
+        </div>
+
+        <!-- 操作步骤 -->
+        <div class="section-tag tag-steps">▶ 逐步操作</div>
+        <div class="step-timeline">
+
+          <div class="step-item">
+            <div class="step-dot">1</div>
+            <div class="step-body">
+              <div class="step-title">在 Claude 对话界面找到文件上传入口</div>
+              <div class="step-desc">在输入框的<strong>左侧</strong>找到 <span class="ui-btn">📎 回形针图标</span>（附件/上传按钮）。不同浏览器显示位置略有不同，但都在输入框旁边。</div>
+              <div class="step-visual">
+                <strong>找不到？</strong> 试试以下方法：<br>
+                • 鼠标悬停在输入框左侧各图标上，看提示文字<br>
+                • 查看是否有「+」按钮或「附件」字样<br>
+                • 如果输入框很小，先点击它让它展开，上传图标会出现
+              </div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">2</div>
+            <div class="step-body">
+              <div class="step-title">点击上传图标，选择文件</div>
+              <div class="step-desc">点击 📎 图标后，系统弹出<strong>文件选择对话框</strong>。导航到桌面或下载文件夹，找到 <strong>基金签约包文件清单.docx</strong>，双击或选中后点「打开」。</div>
+              <div class="step-tip">⚠️ 也可以直接把文件<strong>拖拽</strong>到 Claude 对话窗口，效果相同。</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">3</div>
+            <div class="step-body">
+              <div class="step-title">等待上传完成，确认文件已显示</div>
+              <div class="step-desc">上传需要约 3–8 秒。上传成功后，输入框<strong>上方</strong>会显示文件名和文件图标（通常显示 Word 图标 + 文件名）。</div>
+              <div class="step-ok">✅ 看到「基金签约包文件清单.docx」出现在输入框上方，说明上传成功，可以继续。</div>
+              <div class="step-tip">⚠️ 如果一直转圈超过 30 秒：检查网络，刷新页面重试。刷新后需要重新上传。</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">4</div>
+            <div class="step-body">
+              <div class="step-title">在同一输入框粘贴提示词</div>
+              <div class="step-desc">文件显示后，<strong>不要新建消息</strong>，直接在同一输入框里粘贴下方提示词。提示词和文件在同一条消息里发出，Claude 才能对照文件内容作答。</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 提示词 -->
+        <div class="prompt-label">▶ 复制以下内容粘贴给 Claude（文件上传后粘贴）</div>
+        <div class="prompt-box">
+          <pre class="prompt-content" id="p2">请根据文件中"项目主数据"表的信息（基金名称、管理人名称、版本号），
+逐一核查"文件清单"表中每行文件的：
+1. 基金全称是否与主数据一致
+2. 公司/管理人名称是否与主数据一致
+3. 版本号是否与主数据一致
+4. 是否有日期超期或其他明显异常
+
+输出格式：文件序号 / 核查项 / 主数据 / 文件内容 / 状态（✅/❌）/ 建议处理
+最后统计：共发现 X 处问题。</pre>
+          <button class="copy-btn" onclick="copyPrompt('p2',this)">复制</button>
+        </div>
+
+        <div class="step-timeline" style="margin-top:16px">
+
+          <div class="step-item">
+            <div class="step-dot">5</div>
+            <div class="step-body">
+              <div class="step-title">发送，等待约 30–45 秒</div>
+              <div class="step-desc">按 <span class="ui-code">Enter</span> 发送。Claude 会先读取文件内容（约 5 秒），然后逐行比对，最后生成核查表格。因为要处理整个文件，时间比 Demo 1 略长。</div>
+              <div class="step-ok">✅ 文字开始输出即说明 Claude 已在处理，等待输出完毕。</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">6</div>
+            <div class="step-body">
+              <div class="step-title">核对：AI 是否找出全部 5 处预置错误</div>
+              <div class="step-desc">输出完成后，对照下表逐条检查。这是验证 AI 核查能力的关键步骤。</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 预置错误表 -->
+        <div class="subheading">文件中预置的 5 处错误（AI 应全部找出）</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>文件</th><th>核查项</th><th>问题描述</th><th>状态</th></tr></thead>
+            <tbody>
+              <tr><td>文件 1</td><td>基金全称</td><td>写为「远景成长混合型基金」，缺「证券投资」四字</td><td>❌</td></tr>
+              <tr><td>文件 1</td><td>版本号</td><td>显示 v2.1，主数据为 v2.3</td><td>❌</td></tr>
+              <tr><td>文件 3</td><td>公司名称</td><td>写为「远景财富管理（香港）」，应为「远景资产管理」</td><td>❌</td></tr>
+              <tr><td>文件 4</td><td>基金全称</td><td>写为「远景成长混合型证券基金」，缺「投资」一字</td><td>❌</td></tr>
+              <tr><td>文件 6</td><td>有效期</td><td>授权委托书有效期 2023年12月31日，已过期</td><td>❌</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="step-timeline" style="margin-top:16px">
+          <div class="step-item">
+            <div class="step-dot">7</div>
+            <div class="step-body">
+              <div class="step-title">如 AI 漏掉某处错误，追问补全</div>
+              <div class="step-desc">如果对比后发现 AI 漏掉了某条，不用重新开始，在同一对话追加指令。</div>
+              <div class="step-visual">
+                例如追问：<span class="ui-code">你刚才没有提到文件6的有效期问题，请再检查一下所有文件的日期字段是否有超期情况。</span><br><br>
+                或者：<span class="ui-code">请再检查文件3的公司名称是否和主数据一致。</span>
+              </div>
+              <div class="step-tip">⚠️ AI 漏检不代表「它不好用」——真实场景中，AI 的价值是把核查效率提高 80%，剩下的 20% 由人最终把关。AI + 人，比纯人工更快更准。</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 人工复核清单 -->
+        <div class="divider"></div>
+        <div class="section-tag tag-check">✅ 人工复核清单</div>
+        <div class="checklist">
+          <div class="check-item"><div class="check-box"></div><div>AI 找出的每处问题，在原始文件里手动确认一遍（不要只看 AI 的描述）</div></div>
+          <div class="check-item"><div class="check-box"></div><div>AI 标注「✅ 正确」的文件，抽查 2–3 份，确认 AI 没有错判</div></div>
+          <div class="check-item"><div class="check-box"></div><div>过期文件（如文件 6）：立即联系相关方补充有效文件，不要等到审核截止日</div></div>
+          <div class="check-item"><div class="check-box"></div><div>核查报告留档：把 AI 输出的核查表格粘贴到内部系统或文档，注明日期和核查人</div></div>
+        </div>
+
+        <!-- 常见问题 -->
+        <div class="divider"></div>
+        <div class="section-tag tag-faq">❓ 常见问题</div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q">❓ 上传文件后 Claude 说「无法读取文件内容」</div>
+            <div class="faq-a">① 确认文件是 .docx 格式（不是 .doc）；② 确认文件没有密码保护（有密码的文件先解锁）；③ 文件大小是否超过 30MB？如超过，把表格内容复制为纯文本后粘贴给 Claude。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">❓ AI 的输出格式和要求不一样（没有表格，只有文字描述）</div>
+            <div class="faq-a">追问：「请把核查结果整理成表格，列标题为：文件序号 / 核查项 / 主数据内容 / 文件实际内容 / 状态（✅❌）/ 建议处理」</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">❓ 真实工作中文件不是 .docx，是 PDF 怎么办？</div>
+            <div class="faq-a">Claude 同样支持上传 PDF 文件，操作步骤相同。如果 PDF 是扫描件（图片格式），Claude 会尝试 OCR 识别，但准确率略低，建议提供文字版 PDF 或直接复制文字粘贴。</div>
+          </div>
+        </div>
+
+        <!-- 进阶 -->
+        <div class="divider"></div>
+        <div class="section-tag tag-more">🔁 真实文件核查怎么操作</div>
+        <div class="iteration-box">
+          <div class="iteration-title">换成你自己的文件时，提示词改写示例</div>
+          <div class="iteration-prompt">【上传你的实际文件后发送】
+请以第一行的基金名称和公司名称作为主数据基准，
+核查后续所有行的文件名称是否与基准一致，
+找出所有不一致之处并列表说明，最后给出修改建议。</div>
+          <div class="iteration-prompt">【同时上传多个文件时】
+以下上传了3份文件（合同、说明书、授权书），
+请核查三份文件中的基金名称、管理人名称、签署日期是否完全一致，
+把差异列成表格。</div>
+        </div>
+
+        <div class="alert alert-green">
+          <span class="alert-icon">📢</span>
+          <div><strong>说给受众</strong>：法务通常要逐份打开文件对照，几十份文件全靠人眼极易漏。AI 秒级完成，而且能处理几百份。<strong>关键：AI 找出问题，人来决定怎么处理。</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════ DEMO 3 ═══════════════════════════════════════ -->
+    <section class="demo-card" id="demo3">
+      <div class="demo-header">
+        <div class="demo-num">3</div>
+        <div class="demo-title-group">
+          <div class="demo-title">风险揭示书初稿自动生成</div>
+          <div class="demo-meta">工具：Claude 网页版 · 素材已包含在提示词中，无需上传文件</div>
+          <div class="badge-row">
+            <span class="pill pill-red">法务 / 合规</span>
+            <span class="pill pill-muted">需要从底层文件提炼要点、生成初稿的岗位均适用</span>
+          </div>
+        </div>
+        <div class="demo-time">⏱ 4 分钟</div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-context"><strong>背景</strong>：风险揭示书需从 PPM、DA 等底层文件提炼关键信息。传统做法法务手动摘录，约 30 分钟/份，质量高度依赖个人经验。这个 Demo 展示 AI 如何在 3 分钟内完成初稿，并自动标注不确定点供法务确认。</div>
+
+        <!-- 准备工作 -->
+        <div class="section-tag tag-prep">📋 操作前准备</div>
+        <div class="prereq-grid">
+          <div class="prereq-item">
+            <span class="prereq-icon">🌐</span>
+            <div class="prereq-label">打开新对话</div>
+            <div class="prereq-text">在 claude.ai 新建空白对话。这个 Demo 无需上传文件，提示词里已经包含了演示用的条款摘录。</div>
+          </div>
+          <div class="prereq-item">
+            <span class="prereq-icon">📋</span>
+            <div class="prereq-label">提示词较长</div>
+            <div class="prereq-text">下方提示词包含完整的条款内容，复制时要确保<strong>完整复制到底部</strong>，不要漏掉最后几行。复制后可粘贴到记事本检查行数。</div>
+          </div>
+          <div class="prereq-item">
+            <span class="prereq-icon">⏱</span>
+            <div class="prereq-label">等待时间较长</div>
+            <div class="prereq-text">因为输出内容较多（完整风险揭示书初稿），生成时间约 <strong>40–90 秒</strong>，比前两个 Demo 长，属正常现象。</div>
+          </div>
+        </div>
+
+        <!-- 操作步骤 -->
+        <div class="section-tag tag-steps">▶ 逐步操作</div>
+        <div class="step-timeline">
+
+          <div class="step-item">
+            <div class="step-dot">1</div>
+            <div class="step-body">
+              <div class="step-title">复制完整提示词（含条款内容）</div>
+              <div class="step-desc">点击下方「复制」按钮。这条提示词较长，包含了模拟 PPM 和 DA 的条款摘录。<strong>必须完整复制</strong>，包括最后的「§5.2 估值方式」那一行。</div>
+              <div class="step-tip">⚠️ 复制后建议先粘贴到记事本看一下，确认末尾包含「滞后期最长T+5」这行，再粘贴给 Claude。</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 提示词 -->
+        <div class="prompt-label">▶ 复制以下完整内容粘贴给 Claude（含样本条款）</div>
+        <div class="prompt-box">
+          <pre class="prompt-content" id="p3">请基于以下底层文件信息，生成一份中文版风险揭示书初稿，格式要求：
+1. 产品基本要素表格（基金类型、货币、认购起点、费用、赎回限制）
+2. 主要风险列表，每条标注"必披露 / 策略特有 / 背景风险"三类
+3. 最后单独列出你不确定的地方，供法务重点核查【AI待确认】
+
+【PPM 关键条款摘录 — 远景成长混合型证券投资基金】
+§1.2 基金类型：混合型开放式证券投资基金，权益类60%-90%，固定收益类10%-40%
+§2.1 基础货币：美元（USD），可以港元认购，按前一日收盘价折算
+§4.1 认购限额：最低初始认购100,000美元；最低追加认购10,000美元
+§6.1 管理费1.5%/年（按月），托管费0.2%/年，绩效费超额收益20%（基准8%，高水位线）
+§9.1 赎回：每季度开放一次，须提前30个自然日申请
+§9.2 锁定期：首次认购后12个月强制锁定
+§11.3 集中投资：可将不超过25%资产投资于单一发行人
+
+【DA 关键条款摘录】
+§4.1 赎回限制补充：特殊市场情况下可暂停赎回，通知期不少于5个工作日
+     （注：DA §4.1 与 PPM §9.1 关于通知期表述略有差异，DA未明确是否适用季度赎回）
+§5.2 估值方式：非上市资产按第三方独立估值，滞后期最长T+5</pre>
+          <button class="copy-btn" onclick="copyPrompt('p3',this)">复制</button>
+        </div>
+
+        <div class="step-timeline" style="margin-top:16px">
+
+          <div class="step-item">
+            <div class="step-dot">2</div>
+            <div class="step-body">
+              <div class="step-title">粘贴到 Claude 输入框并发送</div>
+              <div class="step-desc">点击输入框，<span class="ui-code">Ctrl+V</span> 粘贴，检查内容完整（滚动到最底部确认有「滞后期最长T+5」），然后按 <span class="ui-code">Enter</span> 发送。</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">3</div>
+            <div class="step-body">
+              <div class="step-title">等待生成（40–90 秒），观察输出结构</div>
+              <div class="step-desc">Claude 生成的内容较长，会按顺序输出三个部分，文字流式出现：</div>
+              <div class="step-visual">
+                <strong>第一部分先出现</strong>：产品基本要素表格（从条款提取后整理成表格）<br><br>
+                <strong>第二部分随后</strong>：主要风险列表（每条都有「必披露 / 策略特有 / 背景风险」分类标签）<br><br>
+                <strong>第三部分最后</strong>：【AI待确认】专区，列出 Claude 无法自行判断、需要法务介入的点
+              </div>
+              <div class="step-ok">✅ 如果看到三个部分都出现了，说明生成完整。</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">4</div>
+            <div class="step-body">
+              <div class="step-title">重点检查【AI待确认】区域</div>
+              <div class="step-desc">这是本 Demo 最重要的亮点：<strong>AI 会主动把自己不确定的地方标注出来</strong>。拉到最底部，找到「【AI待确认】」部分，这里会列出类似下面的内容——这些点必须由法务人员手动确认。</div>
+              <div class="step-visual">
+                <strong>预期出现的待确认点：</strong><br>
+                「DA §4.1（通知期5工作日）与 PPM §9.1（30自然日）存在差异，建议法务确认以哪份文件为准，并在揭示书中统一表述。」
+              </div>
+              <div class="step-ok">✅ AI 主动标出差异是最有价值的功能——传统方式法务需要自己发现这个差异，AI 帮你提前标出来。</div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">5</div>
+            <div class="step-body">
+              <div class="step-title">逐项核查产品基本要素表格</div>
+              <div class="step-desc">对照原始条款，确认 AI 提取的数据是否正确：</div>
+              <div class="step-visual">
+                基金类型：混合型开放式 ← 来自 PPM §1.2 ✅<br>
+                认购起点：100,000 美元 ← 来自 PPM §4.1 ✅<br>
+                赎回：每季度开放一次 ← 来自 PPM §9.1 ✅<br>
+                锁定期：首次认购后12个月 ← 来自 PPM §9.2 ✅<br>
+                管理费：1.5%/年 + 绩效费 20% ← 来自 PPM §6.1 ✅
+              </div>
+            </div>
+          </div>
+
+          <div class="step-item">
+            <div class="step-dot">6</div>
+            <div class="step-body">
+              <div class="step-title">在同一对话迭代优化</div>
+              <div class="step-desc">如对某部分不满意，在同一对话追加指令，不需要重新粘贴全部内容。</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 预期输出展示 -->
+        <div class="divider"></div>
+        <div class="two-col">
+          <div class="mini-card">
+            <div class="subheading">产品基本要素表（自动提取）</div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>项目</th><th>内容</th><th>来源</th></tr></thead>
+                <tbody>
+                  <tr><td>基金类型</td><td>混合型开放式</td><td>PPM §1.2</td></tr>
+                  <tr><td>认购起点</td><td>100,000 美元</td><td>PPM §4.1</td></tr>
+                  <tr><td>赎回限制</td><td>每季度开放一次</td><td>PPM §9.1</td></tr>
+                  <tr><td>锁定期</td><td>首次认购后 12 个月</td><td>PPM §9.2</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="mini-card">
+            <div class="subheading">风险分类（约10条）</div>
+            <div style="font-size:12.5px;line-height:2.1">
+              <div><strong style="color:#dc2626">★★★ 必披露</strong>：市场风险、流动性风险、汇率风险</div>
+              <div><strong style="color:#d97706">★★ 策略特有</strong>：集中风险、管理人风险、绩效费机制</div>
+              <div><strong style="color:#7c3aed">★ 背景风险</strong>：对手方风险、监管风险、估值风险</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-yellow">
+          <span class="alert-icon">🤖</span>
+          <div><strong>【AI待确认】自动标注</strong>：DA §4.1 与 PPM §9.1 通知期表述差异（5工作日 vs 30自然日），建议法务确认以哪份为准，并在揭示书中统一表述。</div>
+        </div>
+
+        <!-- 人工复核清单 -->
+        <div class="divider"></div>
+        <div class="section-tag tag-check">✅ 人工复核清单（法务必过）</div>
+        <div class="checklist">
+          <div class="check-item"><div class="check-box"></div><div>产品基本要素每一项，对照原始 PPM/DA 逐条确认数字是否正确（尤其是费率和时间节点）</div></div>
+          <div class="check-item"><div class="check-box"></div><div>风险分类是否完整——AI 根据条款生成，可能漏掉某些隐含风险，法务需结合产品实际情况补充</div></div>
+          <div class="check-item"><div class="check-box"></div><div>【AI待确认】区的每一条，必须逐条处理并在初稿旁注明处理结论</div></div>
+          <div class="check-item"><div class="check-box"></div><div>生成的语言风格是否符合公司内部文件规范？如有固定模板，告诉 AI：「请按照以下语言风格调整……」</div></div>
+          <div class="check-item"><div class="check-box"></div><div>最终版本签发前，删除文件中所有「【AI待确认】」标注，确认无遗漏</div></div>
+        </div>
+
+        <!-- 常见问题 -->
+        <div class="divider"></div>
+        <div class="section-tag tag-faq">❓ 常见问题</div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q">❓ AI 没有生成【AI待确认】区域，直接给出了确定答案</div>
+            <div class="faq-a">追问：「请检查你刚才的输出，对于文件中存在矛盾或表述不清楚的地方，用【AI待确认】标注出来，并说明具体的矛盾点。」这个追问在任何文档处理任务里都通用。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">❓ 真实工作中 PPM 是 PDF 文件，怎么操作？</div>
+            <div class="faq-a">直接上传 PDF 给 Claude（操作方法同 Demo 2），然后把提示词改为：「请阅读上传的 PPM 文件，提取关键产品条款，生成风险揭示书初稿，格式要求同上，并标注【AI待确认】项目。」</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">❓ 生成的风险条款语言不符合公司内部规范</div>
+            <div class="faq-a">在同一对话追加：「请参考以下语言风格重新撰写风险部分：[粘贴公司内部规范语言示例1-2段]。保持结构和分类不变，只调整措辞。」</div>
+          </div>
+        </div>
+
+        <div class="alert alert-green">
+          <span class="alert-icon">📢</span>
+          <div><strong>说给受众</strong>：传统 30 分钟/份 → AI 辅助后约 5–8 分钟，节省 75% 以上。真正有用的 AI，不是假装完美，而是把需要专业判断的点单独标出来，让法务聚焦在最有价值的判断上。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════ DEMO 4 ═══════════════════════════════════════ -->
+    <section class="demo-card" id="demo4">
+      <div class="demo-header">
+        <div class="demo-num" style="background:#7c3aed;color:#fff">4</div>
+        <div class="demo-title-group">
+          <div class="demo-title">手机远程指挥，电脑后台干活</div>
+          <div class="demo-meta">工具：Cowork 桌面端（电脑）+ Claude 手机端（同账号） · 无需上传文件</div>
+          <div class="badge-row">
+            <span class="pill pill-green">所有岗位适用</span>
+            <span class="pill pill-muted">只要你装了 Cowork + 有 Claude 手机端，就能用</span>
+          </div>
+        </div>
+        <div class="demo-time">⏱ 3 分钟</div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-context"><strong>背景</strong>：你正在开会，想让 AI 在电脑上处理一个文件整理任务。过去要等散会回到电脑前才能开始，现在用手机下指令，AI 在电脑后台执行，散会后直接看结果。</div>
+
+        <!-- 准备工作 -->
+        <div class="section-tag tag-prep">📋 操作前准备</div>
+        <div class="prereq-grid">
+          <div class="prereq-item">
+            <span class="prereq-icon">💻</span>
+            <div class="prereq-label">电脑端已安装 Cowork</div>
+            <div class="prereq-text">Cowork 桌面应用已安装并登录。打开 Cowork，确认左下角显示你的账号头像，工作目录已选择（显示你的文件夹路径）。</div>
+          </div>
+          <div class="prereq-item">
+            <span class="prereq-icon">📱</span>
+            <div class="prereq-label">手机端已登录 Claude</div>
+            <div class="prereq-text">在手机上打开 <strong>claude.ai</strong>（浏览器或 App），<strong>登录与电脑端相同的账号</strong>。这样手机和电脑共享同一个对话历史。</div>
+          </div>
+          <div class="prereq-item">
+            <span class="prereq-icon">📁</span>
+            <div class="prereq-label">工作目录已设置</div>
+            <div class="prereq-text">Cowork 已选中你的工作文件夹（含「待处理」子文件夹）。如尚未选择，打开 Cowork 点击右上角文件夹图标选择。</div>
+          </div>
+        </div>
+
+        <!-- 三阶段操作 -->
+        <div class="section-tag tag-steps">▶ 操作分三个阶段（整个过程 3 分钟）</div>
+
+        <!-- Phase A -->
+        <div class="phase-block">
+          <div class="phase-header phase-a">💻 Phase A · 出发开会前——在电脑端启动远程接入（30 秒）</div>
+          <div class="phase-steps">
+            <div class="step-timeline">
+
+              <div class="step-item">
+                <div class="step-dot">1</div>
+                <div class="step-body">
+                  <div class="step-title">打开 Cowork，进入新对话</div>
+                  <div class="step-desc">在电脑上打开 Cowork 桌面应用，点击 <span class="ui-btn">+ 新建对话</span>，或直接打开一个已有的工作对话。</div>
+                </div>
+              </div>
+
+              <div class="step-item">
+                <div class="step-dot">2</div>
+                <div class="step-body">
+                  <div class="step-title">输入 /remote-control 启动远程接入</div>
+                  <div class="step-desc">在 Cowork 的输入框里输入：</div>
+                  <div class="prompt-box">
+                    <pre class="prompt-content" id="p4a" style="padding:10px 14px">/remote-control</pre>
+                    <button class="copy-btn" onclick="copyPrompt('p4a',this)">复制</button>
+                  </div>
+                  <div class="step-desc">按 <span class="ui-code">Enter</span>。Cowork 会生成一个<strong>专属二维码或数字连接码</strong>，显示在对话窗口里。</div>
+                  <div class="step-ok">✅ 看到二维码或 6 位连接码出现，说明电脑端已准备好接受手机指令。</div>
+                </div>
+              </div>
+
+              <div class="step-item">
+                <div class="step-dot">3</div>
+                <div class="step-body">
+                  <div class="step-title">用手机扫码，建立连接</div>
+                  <div class="step-desc">拿出手机，打开 Claude 手机端（claude.ai）。在手机端找到「扫码连接」或「输入连接码」入口，扫描电脑屏幕上的二维码，或手动输入连接码。</div>
+                  <div class="step-visual">
+                    <strong>连接成功后你会看到：</strong><br>
+                    • 手机端出现「已连接到 [你的电脑名称] 上的 Cowork 会话」提示<br>
+                    • 电脑端 Cowork 显示「📱 手机已接入」<br>
+                    • 此时手机发出的消息会直接进入电脑端的 Cowork 会话
+                  </div>
+                  <div class="step-tip">⚠️ 如果手机端找不到扫码入口：在 claude.ai 手机端设置里找「远程会话」选项，或从电脑端 Cowork 菜单复制连接链接，发到手机打开。</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase B -->
+        <div class="phase-block" style="margin-top:14px">
+          <div class="phase-header phase-b">📱 Phase B · 在开会途中——用手机发送任务指令（1 分钟）</div>
+          <div class="phase-steps">
+            <div class="step-timeline">
+
+              <div class="step-item">
+                <div class="step-dot">4</div>
+                <div class="step-body">
+                  <div class="step-title">在手机端输入任务指令</div>
+                  <div class="step-desc">连接成功后，在手机 Claude 界面输入你想让电脑执行的任务。可以用语音输入（按住麦克风），也可以打字。</div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- 手机指令提示词 -->
+            <div class="prompt-label" style="margin-top:8px">▶ 现场演示指令（在手机端发送）</div>
+            <div class="prompt-box">
+              <pre class="prompt-content" id="p4b">帮我把"待处理"文件夹里所有基金文件按文件类型分类整理，
+生成清单，注明每份文件的名称、类型和是否含风险披露内容，
+完成后把清单保存为"文件分类报告.docx"</pre>
+              <button class="copy-btn" onclick="copyPrompt('p4b',this)">复制</button>
+            </div>
+
+            <div class="step-timeline" style="margin-top:8px">
+              <div class="step-item">
+                <div class="step-dot">5</div>
+                <div class="step-body">
+                  <div class="step-title">发送后把手机放进口袋，继续开会</div>
+                  <div class="step-desc">指令发出后，电脑端 Cowork 开始在<strong>后台自动执行</strong>：读取文件夹、分析文件、生成报告。你不需要盯着手机或电脑，任务会自动完成。</div>
+                  <div class="step-ok">✅ 整个等待过程你在开会，大约 2–5 分钟后手机收到完成通知。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase C -->
+        <div class="phase-block" style="margin-top:14px">
+          <div class="phase-header phase-c">✅ Phase C · 散会后——查收结果并复核（1 分钟）</div>
+          <div class="phase-steps">
+            <div class="step-timeline">
+
+              <div class="step-item">
+                <div class="step-dot">6</div>
+                <div class="step-body">
+                  <div class="step-title">手机收到完成通知，查看摘要</div>
+                  <div class="step-desc">Cowork 完成任务后会在手机端推送通知，点开看简要结果：「已处理 X 份文件，生成清单，发现 Y 份含风险披露内容，报告已保存。」</div>
+                </div>
+              </div>
+
+              <div class="step-item">
+                <div class="step-dot">7</div>
+                <div class="step-body">
+                  <div class="step-title">回到电脑，打开生成的报告</div>
+                  <div class="step-desc">在 Cowork 工作目录里找到 <span class="ui-path">文件分类报告.docx</span>，打开确认内容：文件列表、类型分类、风险披露标注是否准确。</div>
+                  <div class="step-visual">
+                    <strong>人工复核重点：</strong><br>
+                    • 文件数量是否与实际一致（有没有漏掉某个子文件夹）<br>
+                    • 「含风险披露内容」的判断是否正确（抽查 2–3 份文件）<br>
+                    • 文件名称是否识别正确（特别是含中文的文件名）
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-item">
+                <div class="step-dot">8</div>
+                <div class="step-body">
+                  <div class="step-title">如有问题，继续追问修正</div>
+                  <div class="step-desc">在 Cowork 或手机端的同一对话里追加指令，例如：</div>
+                  <div class="step-visual">
+                    <span class="ui-code">报告里文件5的类型分类好像不对，它是授权委托书，不是风险揭示书，请修正并重新保存。</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 典型场景表 -->
+        <div class="divider"></div>
+        <div class="subheading">合规 / 法务典型远程指令场景</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>你在哪里</th><th>你说什么</th><th>AI 在后台做什么</th></tr></thead>
+            <tbody>
+              <tr><td>客户会议室</td><td>「帮我核对今天三份 KYC 材料的姓名和证件号是否一致」</td><td>打开3份文件，提取姓名/证件字段，生成比对表</td></tr>
+              <tr><td>机场候机</td><td>「搜索今天 SFC 官网有没有新通知，有的话摘要发给我」</td><td>访问 SFC 官网，提取当日公告，生成中文摘要</td></tr>
+              <tr><td>晚上在家</td><td>「把本周所有项目签约状态汇总成一张表，明天早上我要用」</td><td>读取工作文件夹，提取各项目状态，生成汇总表格</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 人工复核清单 -->
+        <div class="divider"></div>
+        <div class="section-tag tag-check">✅ 使用远程指挥时的注意事项</div>
+        <div class="checklist">
+          <div class="check-item"><div class="check-box"></div><div>远程指令要写得<strong>足够具体</strong>——「整理文件」比不上「把"待处理"文件夹里的 .docx 文件按基金名称分类」</div></div>
+          <div class="check-item"><div class="check-box"></div><div>涉及客户敏感数据的任务（KYC、合同、证件），确认工作文件夹在本地，<strong>不要让 AI 把敏感内容发送到外部</strong></div></div>
+          <div class="check-item"><div class="check-box"></div><div>AI 执行完后，<strong>必须回到电脑人工确认一遍结果</strong>，不要直接把 AI 生成的文件发给外部</div></div>
+          <div class="check-item"><div class="check-box"></div><div>如果任务失败（超时或错误），查看 Cowork 的执行日志，通常是文件夹路径或权限问题</div></div>
+        </div>
+
+        <!-- 常见问题 -->
+        <div class="divider"></div>
+        <div class="section-tag tag-faq">❓ 常见问题</div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q">❓ 手机扫码后显示「连接失败」或「会话已过期」</div>
+            <div class="faq-a">连接码有效期通常为 10 分钟。重新在 Cowork 输入 /remote-control 生成新码，再扫描。确保手机和电脑在同一个网络环境下（同一个 WiFi）。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">❓ Cowork 在电脑后台执行时，可以关掉 Cowork 窗口吗？</div>
+            <div class="faq-a">Cowork 窗口可以最小化（不要完全关闭应用），任务会继续在后台运行。如果完全退出 Cowork，任务会中断。</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">❓ 没有 Cowork，只有 Claude 网页版，能做类似的事情吗？</div>
+            <div class="faq-a">可以用 claude.ai 手机版直接发起任务，但没有本地文件访问能力。适合做联网搜索、文字处理、写初稿类任务。需要操作本地文件的任务（整理文件夹、读取 docx 等），需要 Cowork 桌面端支持。</div>
+          </div>
+        </div>
+
+        <div class="alert alert-green">
+          <span class="alert-icon">📢</span>
+          <div><strong>说给受众</strong>：以前是「有空了才能做」，现在是「想到了说一声，回来看结果」。工作时间不再被「等我回到电脑前」这件事限制。</div>
+        </div>
+        <div class="alert alert-blue">
+          <span class="alert-icon">🎯</span>
+          <div><strong>四个 Demo 共同结论</strong>：AI 做的是搜索、提取、比对、生成格式化输出；人做的是判断 AI 标注的问题，决定怎么处理。省掉的是翻文件、手动对照、从零写草稿，以及「等我回到电脑前」的时间。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEXT -->
+    <section class="section" id="next">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="section-badge">→</div>
+          <div>
+            <h2>下一步去哪里</h2>
+            <p class="section-intro">看完这页之后，不要停在「我知道能做什么」。下一步应该是把思路迁移到你自己的岗位，再把高敏边界补齐。</p>
+          </div>
+        </div>
+        <span class="flag">看完就分流</span>
+      </div>
+      <div class="next-grid">
+        <div class="next-card">
+          <h3>进入案例库</h3>
+          <p>按部门找你的落地场景。通用办公、HR、法务合规、OpenClaw 自动化，以及风控 / 市场 / 财务 / 运营的举一反三，全部在案例库里。</p>
+          <a href="../../cases.html">打开案例库 →</a>
+        </div>
+        <div class="next-card">
+          <h3>补数据安全页</h3>
+          <p>如果你的任务涉及客户信息、KYC 材料、审计文件或其他高敏内容，不要直接照着 Demo 上云端操作，先去安全页判断边界。</p>
+          <a href="AI工具数据安全指南.html">打开数据安全指南 →</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">Noah AI 培训中心 · AI 工具实战总览（详细操作版）· 2026-03-17 · Kora</div>
+  </div>
+</main>
+
+<script>
+const sections = ["overview","demo1","demo2","demo3","demo4","next"];
+const links = {};
+sections.forEach((id) => {
+  const link = document.querySelector(`nav a[href="#${id}"]`);
+  if (link) links[id] = link;
+});
+window.addEventListener("scroll", () => {
+  let current = "overview";
+  sections.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  Object.values(links).forEach((link) => link.classList.remove("active"));
+  if (links[current]) links[current].classList.add("active");
+});
+window.dispatchEvent(new Event("scroll"));
+
+function copyPrompt(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+    btn.textContent = "✓ 已复制";
+    btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = "复制"; btn.classList.remove("copied"); }, 2000);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noah AI 培训中心</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --sidebar-w: 272px;
+  --bg: #f6f0e7;
+  --bg-soft: rgba(255, 250, 243, 0.84);
+  --panel: rgba(255, 252, 247, 0.9);
+  --panel-strong: #fffaf4;
+  --sidebar-bg: #1f252d;
+  --sidebar-border: rgba(255,255,255,0.1);
+  --text: #1f1a17;
+  --muted: #6f655e;
+  --border: rgba(76, 52, 34, 0.14);
+  --shadow: 0 18px 60px rgba(66, 45, 26, 0.12);
+  --shadow-soft: 0 12px 28px rgba(54, 39, 27, 0.08);
+  --accent: #c96d3b;
+  --accent-strong: #a34f24;
+  --accent-soft: rgba(201, 109, 59, 0.12);
+  --accent-alt: #1f6a67;
+  --accent-alt-soft: rgba(31, 106, 103, 0.12);
+  --sidebar-text: rgba(255,255,255,0.92);
+  --sidebar-muted: rgba(255,255,255,0.56);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(201, 109, 59, 0.18), transparent 28%),
+    radial-gradient(circle at 85% 12%, rgba(31, 106, 103, 0.12), transparent 24%),
+    linear-gradient(180deg, #f8f2e9 0%, #f4ede4 52%, #f8f4ee 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px);
+  background-size: 36px 36px;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  padding: 22px 18px 18px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.03), transparent 22%),
+    var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.sidebar-logo {
+  padding: 20px 18px 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  background: rgba(255,255,255,0.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.sidebar-logo .tag,
+.sidebar-footer-label {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--sidebar-muted);
+  text-transform: uppercase;
+}
+
+.sidebar-logo h2 {
+  margin-top: 12px;
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--sidebar-text);
+}
+
+.sidebar-logo .sub {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.72);
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 0;
+  flex: 1;
+}
+
+.nav-section {
+  padding: 14px 16px 4px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--sidebar-muted);
+  text-transform: uppercase;
+}
+
+nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  margin: 0 4px;
+  border-radius: 16px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+
+nav a:hover {
+  transform: translateX(4px);
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.08);
+}
+
+nav a.active {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(201,109,59,0.24), rgba(31,106,103,0.16));
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.nav-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+
+.nav-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.nav-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.nav-desc {
+  font-size: 11px;
+  color: var(--sidebar-muted);
+}
+
+.sidebar-footer {
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+}
+
+.sidebar-footer-text {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.74);
+}
+
+.main {
+  margin-left: var(--sidebar-w);
+  min-height: 100vh;
+  position: relative;
+}
+
+.content {
+  max-width: 1220px;
+  padding: 40px 40px 88px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.9fr);
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.hero-copy,
+.hero-panel {
+  border-radius: 30px;
+  border: 1px solid rgba(76, 52, 34, 0.1);
+  background: var(--bg-soft);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow);
+}
+
+.hero-copy {
+  padding: 38px 38px 34px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-copy::after {
+  content: "";
+  position: absolute;
+  right: -72px;
+  bottom: -88px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 109, 59, 0.22), rgba(201, 109, 59, 0));
+  pointer-events: none;
+}
+
+.eyebrow {
+  display: inline-flex;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.56);
+  color: var(--accent-strong);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin-top: 18px;
+  font-family: "Songti SC", "STSong", serif;
+  font-size: clamp(34px, 4.2vw, 54px);
+  line-height: 1.08;
+  font-weight: 700;
+  max-width: 12em;
+}
+
+.hero-lead {
+  margin-top: 16px;
+  max-width: 42em;
+  font-size: 16px;
+  line-height: 1.9;
+  color: var(--muted);
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.meta-pill {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(76, 52, 34, 0.08);
+  font-size: 13px;
+  color: #5b5048;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.hero-button,
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.hero-button:hover,
+.cta-button:hover {
+  transform: translateY(-2px);
+}
+
+.hero-button.primary,
+.cta-button.primary {
+  color: #fffaf4;
+  background: linear-gradient(135deg, #c96d3b 0%, #a34f24 100%);
+  box-shadow: 0 16px 30px rgba(163, 79, 36, 0.22);
+}
+
+.hero-button.secondary,
+.cta-button.secondary {
+  color: var(--accent-alt);
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(31, 106, 103, 0.15);
+}
+
+.hero-panel {
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  justify-content: space-between;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panel-kicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-alt);
+}
+
+.panel-badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--accent-alt-soft);
+  color: var(--accent-alt);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.journey {
+  display: grid;
+  gap: 12px;
+}
+
+.journey-step {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 14px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--panel-strong);
+  border: 1px solid rgba(76, 52, 34, 0.08);
+  box-shadow: var(--shadow-soft);
+}
+
+.journey-index {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(201, 109, 59, 0.16), rgba(31, 106, 103, 0.12));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.journey-step strong {
+  display: block;
+  font-size: 15px;
+}
+
+.journey-step span {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.panel-divider {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(76, 52, 34, 0.14), rgba(76, 52, 34, 0));
+}
+
+.panel-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.summary-tile {
+  padding: 14px;
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(201, 109, 59, 0.08), rgba(255,255,255,0.82) 48%),
+    rgba(255,255,255,0.74);
+  border: 1px solid rgba(76, 52, 34, 0.08);
+}
+
+.summary-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.summary-value {
+  margin-top: 8px;
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.summary-copy {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.role-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.role-pill {
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.78);
+  border: 1px solid rgba(76, 52, 34, 0.08);
+  font-size: 12px;
+  color: #4f4640;
+}
+
+.panel-tip {
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(31, 106, 103, 0.08);
+  border: 1px solid rgba(31, 106, 103, 0.14);
+  font-size: 13px;
+  line-height: 1.8;
+  color: #335a58;
+}
+
+.overview,
+.resources {
+  margin-top: 28px;
+}
+
+.section-headline {
+  margin-bottom: 18px;
+}
+
+.section-kicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+.section-headline h2 {
+  margin-top: 10px;
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 34px;
+  line-height: 1.15;
+}
+
+.section-intro {
+  margin-top: 10px;
+  max-width: 50em;
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--muted);
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.overview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 180px;
+  padding: 22px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 24px;
+  background: var(--panel);
+  border: 1px solid rgba(76, 52, 34, 0.08);
+  box-shadow: var(--shadow-soft);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.overview-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201, 109, 59, 0.22);
+  box-shadow: var(--shadow);
+}
+
+.overview-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: linear-gradient(135deg, rgba(201, 109, 59, 0.18), rgba(31, 106, 103, 0.12));
+}
+
+.overview-card h3 {
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+.overview-card p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.overview-hint {
+  margin-top: auto;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent-strong);
+  text-transform: uppercase;
+}
+
+.section-card {
+  position: relative;
+  padding: 28px;
+  border-radius: 28px;
+  background: var(--panel);
+  border: 1px solid rgba(76, 52, 34, 0.09);
+  box-shadow: var(--shadow-soft);
+  scroll-margin-top: 28px;
+  transition: box-shadow .18s ease, border-color .18s ease;
+}
+
+.section-card:target {
+  border-color: rgba(201, 109, 59, 0.45);
+  box-shadow: 0 22px 46px rgba(163, 79, 36, 0.18);
+}
+
+.section-card.featured {
+  background:
+    linear-gradient(140deg, rgba(201, 109, 59, 0.08), rgba(201, 109, 59, 0) 48%),
+    var(--panel);
+  border-color: rgba(201, 109, 59, 0.2);
+}
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.card-number {
+  width: 60px;
+  height: 60px;
+  border-radius: 20px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(201, 109, 59, 0.18), rgba(31, 106, 103, 0.12));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.card-top h3 {
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 28px;
+  line-height: 1.18;
+}
+
+.card-desc {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--muted);
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.chip {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #5a4c42;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(76, 52, 34, 0.08);
+}
+
+.detail-list {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.detail-list li {
+  padding-left: 18px;
+  position: relative;
+  font-size: 15px;
+  line-height: 1.85;
+  color: #4d433d;
+}
+
+.detail-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-alt));
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.card-note {
+  max-width: 32em;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.placeholder {
+  background:
+    linear-gradient(140deg, rgba(31, 106, 103, 0.08), rgba(31, 106, 103, 0) 42%),
+    var(--panel);
+}
+
+.practice-shell {
+  margin-top: 28px;
+}
+
+#demos,
+#cases,
+#extend,
+#closing {
+  background: var(--panel);
+  border: 1px solid rgba(76,52,34,0.09);
+  border-radius: 28px;
+  box-shadow: var(--shadow-soft);
+  padding: 28px;
+  margin-bottom: 24px;
+  scroll-margin-top: 24px;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.section-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(201,109,59,0.18), rgba(31,106,103,0.12));
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: "Songti SC", "STSong", serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.section-time {
+  font-size: 12px;
+  color: var(--accent-alt);
+  background: var(--accent-alt-soft);
+  padding: 6px 12px;
+  border-radius: 999px;
+  margin-left: auto;
+  font-weight: 700;
+}
+
+h2.sh {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 28px 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(76,52,34,0.12);
+}
+
+h3.sh {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-strong);
+  margin: 20px 0 10px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.card {
+  background: var(--panel-strong);
+  border: 1px solid rgba(76,52,34,0.08);
+  border-radius: 18px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+.card-blue { border-left: 4px solid #215cd8; }
+.card-green { border-left: 4px solid #0f8d6b; }
+.card-yellow { border-left: 4px solid #d18b1f; }
+.card-red { border-left: 4px solid #c45143; }
+.card-purple { border-left: 4px solid #6a5ce3; }
+
+.demo-link .badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.1);
+  font-size: 10px;
+  color: #fff;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.demo-card {
+  background: var(--panel-strong);
+  border: 1px solid rgba(76,52,34,0.08);
+  border-radius: 22px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.demo-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  background: linear-gradient(90deg, rgba(201,109,59,0.08), rgba(255,255,255,0.72));
+  border-bottom: 1px solid rgba(76,52,34,0.08);
+}
+
+.demo-num {
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(201,109,59,0.2), rgba(31,106,103,0.16));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.demo-title-group { flex: 1; }
+.demo-title { font-size: 17px; font-weight: 700; color: var(--text); }
+.demo-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.demo-time {
+  font-size: 11px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.demo-body { padding: 20px 22px; }
+
+.demo-context {
+  background: rgba(255,255,255,0.72);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  line-height: 1.8;
+  border: 1px solid rgba(76,52,34,0.06);
+}
+
+.demo-context strong { color: var(--text); }
+
+.prompt-box { position: relative; margin: 14px 0; }
+
+.prompt-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-strong);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.prompt-content {
+  background: #1b2028;
+  border-radius: 16px;
+  padding: 16px 20px;
+  font-family: 'SF Mono','Fira Code','Consolas',monospace;
+  font-size: 12.5px;
+  color: #dceeff;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(201,109,59,0.22);
+  border: 1px solid rgba(201,109,59,0.35);
+  color: #ffe8dc;
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: .15s;
+}
+
+.copy-btn:hover { background: rgba(201,109,59,0.4); }
+.copy-btn.copied { background: rgba(16,185,129,0.2); border-color: rgba(16,185,129,0.4); color: #6EE7B7; }
+
+.alert {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-size: 13px;
+  margin: 12px 0;
+  line-height: 1.7;
+  border: 1px solid transparent;
+}
+
+.alert-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.alert-blue { background: rgba(33,92,216,0.08); border-color: rgba(33,92,216,0.12); color: #1d4ed8; }
+.alert-green { background: rgba(15,141,107,0.08); border-color: rgba(15,141,107,0.12); color: #065f46; }
+.alert-yellow { background: rgba(209,139,31,0.1); border-color: rgba(209,139,31,0.14); color: #8a5a13; }
+.alert-red { background: rgba(196,81,67,0.1); border-color: rgba(196,81,67,0.12); color: #8b2d20; }
+
+.table-wrap { overflow-x: auto; margin: 14px 0; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: rgba(255,255,255,0.62);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+thead tr { background: rgba(255,255,255,0.9); }
+
+th {
+  padding: 12px 14px;
+  text-align: left;
+  font-weight: 700;
+  color: var(--text);
+  border-bottom: 1px solid rgba(76,52,34,0.12);
+  font-size: 12px;
+}
+
+td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(76,52,34,0.1);
+  color: var(--text);
+  vertical-align: top;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.84); }
+.badge-red { color: #DC2626; font-weight: 700; }
+.badge-green { color: #059669; font-weight: 700; }
+
+.flow-box {
+  background: #1b2028;
+  border-radius: 18px;
+  padding: 18px 22px;
+  font-family: 'SF Mono','Fira Code','Consolas',monospace;
+  font-size: 12px;
+  color: #E2E8F0;
+  line-height: 2;
+  margin: 14px 0;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.flow-box .c-green { color: #6EE7B7; }
+.flow-box .c-blue { color: #93C5FD; }
+.flow-box .c-yellow { color: #FCD34D; }
+.flow-box .c-red { color: #FCA5A5; }
+.flow-box .c-muted { color: #475569; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+.tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+
+.tool-card {
+  background: var(--panel-strong);
+  border: 1px solid rgba(76,52,34,0.08);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+.tool-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.tool-name span { font-size: 11px; font-weight: 500; color: #215cd8; margin-left: 6px; }
+.tool-who { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.tool-use { font-size: 12px; color: var(--text); }
+
+.selector-box {
+  background: rgba(15,141,107,0.08);
+  border: 1px solid rgba(15,141,107,0.16);
+  border-radius: 18px;
+  padding: 16px 20px;
+  margin: 14px 0;
+}
+
+.selector-box .sel-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #065F46;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.selector-row { display: flex; align-items: baseline; gap: 10px; font-size: 13px; margin-bottom: 8px; }
+.selector-row:last-child { margin-bottom: 0; }
+.sel-cond { color: var(--muted); flex: 1; }
+.sel-ans { font-weight: 700; color: #1D4ED8; }
+
+.scenario-section { margin-bottom: 28px; }
+.scenario-dept { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #fff; padding: 6px 14px; border-radius: 8px; margin-bottom: 12px; }
+.dept-risk { background: #7C3AED; }
+.dept-legal { background: #0369A1; }
+.dept-compliance { background: #0F766E; }
+.dept-hr { background: #BE185D; }
+
+.closing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+.closing-card { border-radius: 18px; padding: 18px; box-shadow: var(--shadow-soft); }
+.closing-card.yes { background: rgba(15,141,107,0.08); border: 1px solid rgba(15,141,107,0.16); }
+.closing-card.no { background: rgba(196,81,67,0.08); border: 1px solid rgba(196,81,67,0.14); }
+.closing-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+.closing-card.yes h4 { color: #065F46; }
+.closing-card.no h4 { color: #991B1B; }
+.closing-item { display: flex; align-items: baseline; gap: 8px; font-size: 13px; margin-bottom: 8px; }
+.closing-item:last-child { margin-bottom: 0; }
+
+.agenda {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0;
+  border: 1px solid rgba(76,52,34,0.1);
+  border-radius: 22px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  background: rgba(255,255,255,0.72);
+  box-shadow: var(--shadow-soft);
+}
+
+.agenda-row { display: contents; }
+.agenda-row > div { padding: 14px 16px; border-bottom: 1px solid rgba(76,52,34,0.1); font-size: 13px; }
+.agenda-row:last-child > div { border-bottom: none; }
+.agenda-row.header > div { background: rgba(255,255,255,0.92); font-weight: 700; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.a-num { color: var(--accent-strong); font-weight: 700; }
+.a-time { color: var(--muted); background: rgba(255,255,255,0.58); text-align: center; }
+
+.doc-footer {
+  margin-top: 34px;
+  padding: 18px 6px 0;
+  border-top: 1px solid rgba(76, 52, 34, 0.12);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+@media (max-width: 1080px) {
+  .hero,
+  .overview-grid,
+  .resources-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 880px) {
+  .sidebar {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 14px;
+  }
+
+  .main {
+    margin-left: 0;
+  }
+
+  .content {
+    padding-top: 24px;
+  }
+
+  nav {
+    padding-bottom: 0;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .content {
+    padding: 22px 18px 56px;
+  }
+
+  .hero-copy,
+  .hero-panel,
+  .section-card,
+  #demos,
+  #cases,
+  #extend,
+  #closing {
+    padding: 22px;
+    border-radius: 24px;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+  }
+
+  .section-headline h2,
+  .card-top h3 {
+    font-size: 25px;
+  }
+
+  .card-top {
+    flex-direction: column;
+  }
+
+  .card-number {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    font-size: 20px;
+  }
+
+  .hero-actions,
+  .card-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-button,
+  .cta-button {
+    width: 100%;
+  }
+
+  .two-col,
+  .tool-grid,
+  .closing-grid,
+  .panel-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .section-label {
+    align-items: flex-start;
+  }
+
+  .section-time {
+    margin-left: 0;
+  }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="tag">Noah AI Training</div>
+    <h2>AI 培训中心</h2>
+    <div class="sub">面向全体员工，从安装到实战，每个岗位都有可落地的上手路径。</div>
+  </div>
+
+  <nav>
+    <div class="nav-section">从这里开始</div>
+    <a href="#section-quickstart">
+      <span class="nav-icon">✨</span>
+      <span class="nav-copy">
+        <span class="nav-title">快速上手</span>
+        <span class="nav-desc">先建立路径认知</span>
+      </span>
+    </a>
+    <a href="#section-install">
+      <span class="nav-icon">🚀</span>
+      <span class="nav-copy">
+        <span class="nav-title">先装工具</span>
+        <span class="nav-desc">零基础也能跟着完成</span>
+      </span>
+    </a>
+    <a href="培训课件/网页版网页/AI工具培训_实战课件.html">
+      <span class="nav-icon">📗</span>
+      <span class="nav-copy">
+        <span class="nav-title">实战总览</span>
+        <span class="nav-desc">独立课件页</span>
+      </span>
+    </a>
+
+    <div class="nav-section">实战正文</div>
+    <a href="培训课件/网页版网页/AI工具培训_实战课件.html#demo1" class="demo-link"><span class="badge">1</span> 监管动态日报</a>
+    <a href="培训课件/网页版网页/AI工具培训_实战课件.html#demo2" class="demo-link"><span class="badge">2</span> 文件一致性核查</a>
+    <a href="培训课件/网页版网页/AI工具培训_实战课件.html#demo3" class="demo-link"><span class="badge">3</span> 风险揭示书初稿</a>
+    <a href="培训课件/网页版网页/AI工具培训_实战课件.html#demo4" class="demo-link"><span class="badge">4</span> 手机远程指挥</a>
+    <a href="cases.html#caseD">🏢 通用 · 所有岗位</a>
+    <a href="cases.html#caseA">👥 HR · JD 自动化</a>
+    <a href="cases.html#caseB">⚖️ 合规 · 文件审核</a>
+    <a href="cases.html#caseC">🤖 OpenClaw 助手</a>
+    <a href="cases.html#extend">💡 各部门场景</a>
+    <a href="cases.html#closing">✅ 写在最后</a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-footer-label">当前版本</div>
+    <div class="sidebar-footer-text">v4.1 · 2026-03-16 · Kora<br>全员适用，从安装到案例，找到你的第一个落地场景。</div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="content">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Training Hub</span>
+        <h1>Noah AI 全员培训，每个岗位都有你能用的那一块。</h1>
+        <p class="hero-lead">
+          不管你在法务、HR、财务、市场还是运营，AI 能帮上忙的地方比你想象中多。从工具安装开始，做完一个真实任务，再找到属于你岗位的案例——这页就是那条路径。
+        </p>
+        <div class="hero-meta">
+          <span class="meta-pill">首次浏览约 30–45 分钟</span>
+          <span class="meta-pill">适合所有岗位、零基础</span>
+          <span class="meta-pill">安装 → 实战 → 案例 → 独立安全页</span>
+        </div>
+        <div class="hero-actions">
+          <a class="hero-button primary" href="#section-install">先完成工具安装</a>
+          <a class="hero-button secondary" href="培训课件/网页版网页/AI工具培训_实战课件.html">打开实战总览</a>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <div class="panel-head">
+          <div class="panel-kicker">推荐路径</div>
+          <div class="panel-badge">新人优先</div>
+        </div>
+        <div class="journey">
+          <div class="journey-step">
+            <div class="journey-index">01</div>
+            <div>
+              <strong>先看快速上手</strong>
+              <span>先理解公司为什么统一推广 AI、哪些场景能用、哪些红线不能碰。</span>
+            </div>
+          </div>
+          <div class="journey-step">
+            <div class="journey-index">02</div>
+            <div>
+              <strong>完成工具安装</strong>
+              <span>跟着详细安装长文操作，解决本地工具、账号和环境准备问题。</span>
+            </div>
+          </div>
+          <div class="journey-step">
+            <div class="journey-index">03</div>
+            <div>
+              <strong>立刻做一个真实案例</strong>
+              <span>不要停在看文档。装完后马上进入实战，用一个真实任务建立正反馈。</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-divider"></div>
+
+        <div class="panel-summary">
+          <div class="summary-tile">
+            <div class="summary-label">覆盖范围</div>
+            <div class="summary-value">5 个核心模块</div>
+            <div class="summary-copy">快速上手、安装、实战、案例库、安全页已经全部拆清楚。</div>
+          </div>
+          <div class="summary-tile">
+            <div class="summary-label">适合谁看</div>
+            <div class="summary-value">全岗位可用</div>
+            <div class="summary-copy">不是只给技术同事。HR、法务、财务、市场、运营都能找到入口。</div>
+          </div>
+          <div class="summary-tile">
+            <div class="summary-label">推荐结果</div>
+            <div class="summary-value">当天完成首个落地任务</div>
+            <div class="summary-copy">目标不是看懂概念，而是装好工具后尽快做完一个真实工作样例。</div>
+          </div>
+          <div class="summary-tile">
+            <div class="summary-label">使用方式</div>
+            <div class="summary-value">安装 → 实战 → 案例</div>
+            <div class="summary-copy">最后去独立安全页建立判断框架，而不是把规则当附录略过。</div>
+          </div>
+        </div>
+
+        <div class="role-strip" aria-label="适用岗位">
+          <span class="role-pill">HR 招聘</span>
+          <span class="role-pill">法务合规</span>
+          <span class="role-pill">财务分析</span>
+          <span class="role-pill">市场 BD</span>
+          <span class="role-pill">运营协作</span>
+          <span class="role-pill">管理者复盘</span>
+        </div>
+
+        <div class="panel-tip">
+          如果你只想知道从哪开始：没装过就先装工具，装完立刻进实战总览，再去案例库找自己岗位的场景。
+        </div>
+      </div>
+    </section>
+
+    <section class="overview" id="toc">
+      <div class="section-headline">
+        <div class="section-kicker">Overview</div>
+        <h2>培训地图</h2>
+        <p class="section-intro">把原来的“目录”改成更像入口的卡片。体验者不该先读一坨标题，而应该先看到每个模块的用途与动作。</p>
+      </div>
+      <div class="overview-grid">
+        <a class="overview-card" href="#section-quickstart">
+          <span class="overview-icon">✨</span>
+          <h3>快速上手</h3>
+          <p>用 5 分钟先建立全局认知，知道培训路径、使用边界和最基本的预期。</p>
+          <span class="overview-hint">先读这个</span>
+        </a>
+        <a class="overview-card" href="#section-install">
+          <span class="overview-icon">🚀</span>
+          <h3>工具安装</h3>
+          <p>给第一次安装本地 AI 工具的同事准备的详细长文，适合边看边操作。</p>
+          <span class="overview-hint">立即进入</span>
+        </a>
+        <a class="overview-card" href="培训课件/网页版网页/AI工具培训_实战课件.html">
+          <span class="overview-icon">📗</span>
+          <h3>AI 工具实战</h3>
+          <p>按真实任务案例上手，理解提示词、输出示例和人工复核重点。</p>
+          <span class="overview-hint">最容易建立信心</span>
+        </a>
+        <a class="overview-card" href="cases.html">
+          <span class="overview-icon">🧩</span>
+          <h3>岗位案例库</h3>
+          <p>按部门找真实场景，不再只停留在统一示例，直接找和自己工作最像的那类。</p>
+          <span class="overview-hint">按岗位进入</span>
+        </a>
+        <a class="overview-card" href="培训课件/网页版网页/AI工具数据安全指南.html">
+          <span class="overview-icon">🛡️</span>
+          <h3>数据安全指南</h3>
+          <p>独立整理红线、脱敏方法和本地模型判断，正式使用前先把边界搞清楚。</p>
+          <span class="overview-hint">使用前必看</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="resources">
+      <div class="section-headline">
+        <div class="section-kicker">Resources</div>
+        <h2>核心模块</h2>
+        <p class="section-intro">无论你是哪个岗位，这里的五个模块都为你准备好了：安装 → 实战 Demo → 案例库（按部门找场景）→ 独立数据安全页。</p>
+      </div>
+
+      <div class="resources-grid">
+        <section class="section-card" id="section-quickstart">
+          <div class="card-top">
+            <div class="card-number">✨</div>
+            <div>
+              <h3>1. 快速上手（必读）</h3>
+              <p class="card-desc">这一部分帮助所有同事在 5 分钟内弄清楚三件事：为什么要统一推广 AI 工具、哪些场景可以大胆尝试，以及整套培训资源的整体路径。</p>
+            </div>
+          </div>
+          <div class="chip-row">
+            <span class="chip">建议时长 5 分钟</span>
+            <span class="chip">首次进入先读</span>
+            <span class="chip">建立全局认知</span>
+          </div>
+          <ul class="detail-list">
+            <li>公司为什么要统一推广 AI 工具，能为你解决什么问题。</li>
+            <li>哪些是可以大胆尝试的场景，哪些是必须遵守的红线。</li>
+            <li>安装 → 实战 → 案例 → FAQ 的整体路径应该怎么走。</li>
+          </ul>
+          <div class="card-footer">
+            <div class="card-note">建议第一次进入本页面时，从上往下完整浏览本节，再根据自己的需要跳到安装指南或实战课件。</div>
+          </div>
+        </section>
+
+        <section class="section-card featured" id="section-install">
+          <div class="card-top">
+            <div class="card-number">🚀</div>
+            <div>
+              <h3>2. 工具安装指南（详细长文）</h3>
+              <p class="card-desc">针对零基础用户的完整安装手册，覆盖 Codex、Claude、Gemini 以及国内 GLM 方案。这一块现在应该是整页最重要的主入口之一，所以我把它做成了显眼的行动卡片，而不是普通段落。</p>
+            </div>
+          </div>
+          <div class="chip-row">
+            <span class="chip">适合第一次安装</span>
+            <span class="chip">边看边操作</span>
+            <span class="chip">约 20–30 分钟</span>
+          </div>
+          <ul class="detail-list">
+            <li>帮助你一次性完成本地 AI 编程工具的安装与基础配置。</li>
+            <li>长文结构按步骤展开，适合新手从头跟着走，不需要自己猜下一步。</li>
+            <li>页面内部已经准备好左侧目录和逐步图文说明，适合打开后持续操作。</li>
+          </ul>
+          <div class="card-footer">
+            <a class="cta-button primary" id="start-install" href="培训课件/网页版网页/AI编程工具安装指南.html">打开《AI 编程工具安装指南》</a>
+            <div class="card-note">如果你还没装过任何本地 AI 工具，这里应该是你进入培训体系后的第一站。</div>
+          </div>
+        </section>
+
+        <section class="section-card" id="section-practice">
+          <div class="card-top">
+            <div class="card-number">📗</div>
+            <div>
+              <h3>3. AI 工具实战课件</h3>
+              <p class="card-desc">安装完成后，建议立刻进入实战部分。体验者最需要的不是继续读说明，而是尽快用一个真实任务感受到 AI 能帮上什么忙。</p>
+            </div>
+          </div>
+          <div class="chip-row">
+            <span class="chip">装完立刻进入</span>
+            <span class="chip">真实案例驱动</span>
+            <span class="chip">适合建立信心</span>
+          </div>
+          <ul class="detail-list">
+            <li>涵盖文案起草、代码改造、资料整理等典型业务场景。</li>
+            <li>每个案例都给出任务目标、提示词示例、AI 输出示例和人工复核要点。</li>
+            <li>目标是让你在最短时间内形成“看得懂、能复用、敢上手”的状态。</li>
+          </ul>
+          <div class="card-footer">
+            <a class="cta-button secondary" id="start-course" href="培训课件/网页版网页/AI工具培训_实战课件.html">打开实战总览</a>
+            <div class="card-note">实战课件现在恢复成独立页面，适合装完工具后直接进入完整演示与提示词示例。</div>
+          </div>
+        </section>
+
+        <section class="section-card featured" id="section-cases">
+          <div class="card-top">
+            <div class="card-number">🧩</div>
+            <div>
+              <h3>4. AI 案例库（独立页面）</h3>
+              <p class="card-desc">真正让培训落地的是案例。案例库按部门分类：通用办公（所有人都能用）、HR、专业业务、智能自动化，以及风控/市场/财务/运营的举一反三场景，并配有文件夹结构说明和可直接复制的提示词。</p>
+            </div>
+          </div>
+          <div class="chip-row">
+            <span class="chip" style="background:rgba(201,109,59,0.12);border-color:rgba(201,109,59,0.2);color:#a34f24">✦ 所有岗位均有对应场景</span>
+            <span class="chip">提示词可直接复制</span>
+            <span class="chip">文件夹结构可复用</span>
+          </div>
+          <ul class="detail-list">
+            <li>案例 D（新）：通用办公 — 会议纪要、邮件起草、周报、信息检索，所有人都能立刻用。</li>
+            <li>案例 A/B/C：HR 的 JD 自动化、法务合规的文件审核赋能、OpenClaw 24小时助手。</li>
+            <li>举一反三：风控、法务、合规、HR、市场BD、财务、运营，每个部门都有具体场景。</li>
+          </ul>
+          <div class="card-footer">
+            <a href="cases.html" style="display:inline-flex;align-items:center;gap:8px;padding:14px 20px;border-radius:14px;background:linear-gradient(135deg,#c96d3b,#a34f24);color:#fffaf4;text-decoration:none;font-size:14px;font-weight:700;box-shadow:0 12px 24px rgba(163,79,36,0.22)">打开案例库 →</a>
+            <div class="card-note">建议完成工具安装、看完实战 Demo 之后，直接进入案例库找自己岗位的落地场景。</div>
+          </div>
+        </section>
+
+        <section class="section-card" id="section-faq">
+          <div class="card-top">
+            <div class="card-number">❓</div>
+            <div>
+              <h3>5. AI 工具数据安全指南（独立页面）</h3>
+              <p class="card-desc">安全这块我单独拆成了一页，不再把长篇附录塞在首页底部。尤其在金融、法务和合规场景里，真正重要的是快速判断：哪些数据能给、哪些要脱敏、哪些根本不能外发。</p>
+            </div>
+          </div>
+          <div class="chip-row">
+            <span class="chip">数据安全总览</span>
+            <span class="chip">各工具注意事项</span>
+            <span class="chip">脱敏与本地模型</span>
+          </div>
+          <ul class="detail-list">
+            <li>单独整理了数据去向、工具红线、数据分级、批量脱敏提示词和本地模型说明。</li>
+            <li>重点不是记规则，而是建立“哪些内容能直接给 AI，哪些必须先脱敏，哪些根本不该外发”的判断框架。</li>
+            <li>适合正式开始用 AI 之前完整看一遍，后续作为检查清单反复回看。</li>
+          </ul>
+          <div class="card-footer">
+            <a class="cta-button secondary" href="培训课件/网页版网页/AI工具数据安全指南.html">打开数据安全指南</a>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <div class="doc-footer">Noah AI 培训中心 · v4.1 · 全员版 · 2026-03-16 · Kora</div>
+  </div>
+</main>
+
+<script>
+const sections = ['section-quickstart','section-install'];
+const links = {};
+sections.forEach((id) => {
+  const link = document.querySelector(`nav a[href="#${id}"]`);
+  if (link) links[id] = link;
+});
+
+window.addEventListener('scroll', () => {
+  let current = 'section-quickstart';
+  sections.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 100) current = id;
+  });
+  Object.values(links).forEach((link) => link.classList.remove('active'));
+  if (links[current]) links[current].classList.add('active');
+});
+window.dispatchEvent(new Event('scroll'));
+
+function copyPrompt(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+    btn.textContent = '✓ 已复制';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '复制';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+</script>
+
+</body>
+</html>

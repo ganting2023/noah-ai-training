@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 工具实战培训 · HR 风控 法务 合规</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --navy:#1A2447; --blue:#2563EB; --sky:#BAD4F5; --teal:#0EA5E9;
+  --green:#10B981; --yellow:#F59E0B; --red:#EF4444; --purple:#8B5CF6;
+  --bg:#F8FAFC; --card:#FFFFFF; --border:#E2E8F0;
+  --text:#1E293B; --muted:#64748B; --code-bg:#0F172A; --code-text:#A5F3FC;
+  --sidebar-w:240px;
+}
+body { font-family:'PingFang SC','Microsoft YaHei','Helvetica Neue',sans-serif; background:var(--bg); color:var(--text); line-height:1.7; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  position:fixed; left:0; top:0; bottom:0; width:var(--sidebar-w);
+  background:var(--navy); color:#fff; overflow-y:auto; z-index:100;
+  display:flex; flex-direction:column;
+}
+.sidebar-logo {
+  padding:20px 18px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.sidebar-logo .tag { font-size:10px; letter-spacing:.1em; color:#7DD3FC; margin-bottom:6px; }
+.sidebar-logo h2 { font-size:14px; font-weight:700; line-height:1.4; color:#fff; }
+.sidebar-logo .sub { font-size:11px; color:#94A3B8; margin-top:4px; }
+nav { padding:12px 0; flex:1; }
+nav a {
+  display:flex; align-items:center; gap:8px;
+  padding:9px 18px; font-size:12.5px; color:#94A3B8;
+  text-decoration:none; transition:.15s; border-left:3px solid transparent;
+}
+nav a:hover { color:#fff; background:rgba(255,255,255,0.05); }
+nav a.active { color:#BAD4F5; border-left-color:#2563EB; background:rgba(37,99,235,0.15); }
+nav .nav-section { padding:14px 18px 4px; font-size:10px; letter-spacing:.1em; color:#475569; text-transform:uppercase; }
+nav .demo-link { border-left:3px solid transparent; }
+nav .demo-link span.badge {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:18px; height:18px; border-radius:50%; background:#2563EB;
+  font-size:10px; color:#fff; font-weight:700; flex-shrink:0;
+}
+.sidebar-footer {
+  padding:14px 18px; border-top:1px solid rgba(255,255,255,0.08);
+  font-size:11px; color:#475569;
+}
+
+/* ── MAIN ── */
+.main { margin-left:var(--sidebar-w); min-height:100vh; }
+
+/* ── HERO ── */
+.hero {
+  background:linear-gradient(135deg, #1A2447 0%, #1e3a6e 50%, #1A2447 100%);
+  padding:52px 52px 44px; color:#fff; position:relative; overflow:hidden;
+}
+.hero::before {
+  content:''; position:absolute; inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232563EB' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-inner { position:relative; max-width:800px; }
+.hero-badge { display:inline-block; background:rgba(37,99,235,0.3); border:1px solid rgba(37,99,235,0.5); color:#93C5FD; font-size:11px; padding:3px 12px; border-radius:20px; margin-bottom:16px; letter-spacing:.08em; }
+.hero h1 { font-size:36px; font-weight:800; line-height:1.2; margin-bottom:10px; }
+.hero h1 span { background:linear-gradient(90deg,#fff,#BAD4F5); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.hero-sub { font-size:15px; color:#94A3B8; margin-bottom:28px; }
+.hero-chips { display:flex; gap:10px; flex-wrap:wrap; }
+.hero-chip { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:7px 14px; font-size:12px; color:#CBD5E1; }
+
+/* ── CONTENT ── */
+.content { max-width:900px; padding:44px 52px 80px; }
+
+/* ── SECTION TITLES ── */
+.section-label { display:flex; align-items:center; gap:12px; margin-bottom:24px; margin-top:8px; }
+.section-num { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:10px; background:var(--blue); color:#fff; font-size:15px; font-weight:800; flex-shrink:0; }
+.section-title { font-size:22px; font-weight:700; color:var(--navy); }
+.section-time { font-size:12px; color:var(--muted); background:#F1F5F9; padding:3px 10px; border-radius:20px; margin-left:auto; }
+
+h2.sh { font-size:16px; font-weight:700; color:var(--navy); margin:28px 0 14px; padding-bottom:8px; border-bottom:2px solid var(--border); }
+h3.sh { font-size:14px; font-weight:700; color:var(--muted); margin:20px 0 10px; text-transform:uppercase; letter-spacing:.05em; }
+
+/* ── CARDS ── */
+.card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px 24px; margin-bottom:16px; }
+.card-blue { border-left:4px solid var(--blue); }
+.card-green { border-left:4px solid var(--green); }
+.card-yellow { border-left:4px solid var(--yellow); }
+.card-red { border-left:4px solid var(--red); }
+.card-purple { border-left:4px solid var(--purple); }
+
+/* ── DEMO CARDS ── */
+.demo-card {
+  background:var(--card); border:1px solid var(--border); border-radius:14px;
+  margin-bottom:24px; overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+.demo-header {
+  display:flex; align-items:center; gap:14px;
+  padding:16px 22px; background:linear-gradient(90deg,#F8FAFC,#fff);
+  border-bottom:1px solid var(--border);
+}
+.demo-num {
+  width:36px; height:36px; border-radius:50%; background:var(--blue);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:800; color:#fff; flex-shrink:0;
+}
+.demo-title-group { flex:1; }
+.demo-title { font-size:16px; font-weight:700; color:var(--navy); }
+.demo-meta { font-size:12px; color:var(--muted); margin-top:2px; }
+.demo-time { font-size:11px; background:#EFF6FF; color:#2563EB; padding:3px 10px; border-radius:20px; font-weight:600; }
+.demo-body { padding:20px 22px; }
+.demo-context { background:#F8FAFC; border-radius:8px; padding:12px 16px; font-size:13px; color:var(--muted); margin-bottom:16px; line-height:1.7; }
+.demo-context strong { color:var(--text); }
+
+/* ── PROMPT BOX ── */
+.prompt-box { position:relative; margin:14px 0; }
+.prompt-label { font-size:11px; font-weight:600; color:var(--blue); letter-spacing:.05em; text-transform:uppercase; margin-bottom:6px; }
+.prompt-content {
+  background:var(--code-bg); border-radius:10px; padding:16px 20px;
+  font-family:'SF Mono','Fira Code','Consolas',monospace; font-size:12.5px;
+  color:var(--code-text); line-height:1.7; white-space:pre-wrap; word-break:break-word;
+  border:1px solid rgba(255,255,255,0.06);
+}
+.copy-btn {
+  position:absolute; top:10px; right:10px;
+  background:rgba(37,99,235,0.2); border:1px solid rgba(37,99,235,0.4);
+  color:#93C5FD; font-size:11px; padding:4px 10px; border-radius:6px;
+  cursor:pointer; font-family:inherit; transition:.15s;
+}
+.copy-btn:hover { background:rgba(37,99,235,0.4); }
+.copy-btn.copied { background:rgba(16,185,129,0.2); border-color:rgba(16,185,129,0.4); color:#6EE7B7; }
+
+/* ── ALERT BOXES ── */
+.alert { display:flex; gap:10px; padding:12px 16px; border-radius:8px; font-size:13px; margin:12px 0; line-height:1.6; }
+.alert-icon { font-size:15px; flex-shrink:0; margin-top:1px; }
+.alert-blue { background:#EFF6FF; border-left:3px solid #2563EB; color:#1D4ED8; }
+.alert-green { background:#F0FDF4; border-left:3px solid #10B981; color:#065F46; }
+.alert-yellow { background:#FFFBEB; border-left:3px solid #F59E0B; color:#92400E; }
+.alert-red { background:#FEF2F2; border-left:3px solid #EF4444; color:#991B1B; }
+
+/* ── TABLES ── */
+.table-wrap { overflow-x:auto; margin:14px 0; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+thead tr { background:#F1F5F9; }
+th { padding:10px 14px; text-align:left; font-weight:600; color:var(--navy); border-bottom:2px solid var(--border); font-size:12px; }
+td { padding:10px 14px; border-bottom:1px solid var(--border); color:var(--text); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:#F8FAFC; }
+.badge-red { color:#DC2626; font-weight:700; }
+.badge-green { color:#059669; font-weight:700; }
+
+/* ── CODE FLOW ── */
+.flow-box {
+  background:var(--code-bg); border-radius:10px; padding:18px 22px;
+  font-family:'SF Mono','Fira Code','Consolas',monospace; font-size:12px;
+  color:#E2E8F0; line-height:2; margin:14px 0;
+  border:1px solid rgba(255,255,255,0.06);
+}
+.flow-box .c-green { color:#6EE7B7; }
+.flow-box .c-blue { color:#93C5FD; }
+.flow-box .c-yellow { color:#FCD34D; }
+.flow-box .c-red { color:#FCA5A5; }
+.flow-box .c-muted { color:#475569; }
+
+/* ── TWO COL ── */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0; }
+
+/* ── TOOL COMPARE GRID ── */
+.tool-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0; }
+.tool-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px; }
+.tool-name { font-size:14px; font-weight:700; color:var(--navy); margin-bottom:4px; }
+.tool-name span { font-size:11px; font-weight:500; color:var(--blue); margin-left:6px; }
+.tool-who { font-size:12px; color:var(--muted); margin-bottom:6px; }
+.tool-use { font-size:12px; color:var(--text); }
+
+/* ── SELECTOR ── */
+.selector-box { background:#F0FDF4; border:1px solid #BBF7D0; border-radius:10px; padding:16px 20px; margin:14px 0; }
+.selector-box .sel-title { font-size:12px; font-weight:700; color:#065F46; margin-bottom:10px; text-transform:uppercase; letter-spacing:.05em; }
+.selector-row { display:flex; align-items:baseline; gap:10px; font-size:13px; margin-bottom:8px; }
+.selector-row:last-child { margin-bottom:0; }
+.sel-cond { color:var(--muted); flex:1; }
+.sel-ans { font-weight:700; color:#1D4ED8; }
+
+/* ── SCENARIO TABLE ── */
+.scenario-section { margin-bottom:28px; }
+.scenario-dept { display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; color:#fff; padding:6px 14px; border-radius:8px; margin-bottom:12px; }
+.dept-risk { background:#7C3AED; }
+.dept-legal { background:#0369A1; }
+.dept-compliance { background:#0F766E; }
+.dept-hr { background:#BE185D; }
+
+/* ── CLOSING ── */
+.closing-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:18px 0; }
+.closing-card { border-radius:10px; padding:18px; }
+.closing-card.yes { background:#F0FDF4; border:1px solid #BBF7D0; }
+.closing-card.no { background:#FEF2F2; border:1px solid #FECACA; }
+.closing-card h4 { font-size:13px; font-weight:700; margin-bottom:10px; }
+.closing-card.yes h4 { color:#065F46; }
+.closing-card.no h4 { color:#991B1B; }
+.closing-item { display:flex; align-items:baseline; gap:8px; font-size:13px; margin-bottom:8px; }
+.closing-item:last-child { margin-bottom:0; }
+
+/* ── PRE-TRAINING BANNER ── */
+.pre-banner {
+  background:linear-gradient(90deg,#1e3a6e,#1e2d5a);
+  border-radius:12px; padding:18px 22px; margin-bottom:32px;
+  display:flex; align-items:center; gap:16px; color:#fff;
+}
+.pre-banner-icon { font-size:28px; flex-shrink:0; }
+.pre-banner h3 { font-size:14px; font-weight:700; color:#BAD4F5; margin-bottom:4px; }
+.pre-banner p { font-size:12.5px; color:#94A3B8; line-height:1.6; }
+
+/* ── AGENDA TABLE ── */
+.agenda { display:grid; grid-template-columns:auto 1fr auto; gap:0; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:32px; }
+.agenda-row { display:contents; }
+.agenda-row > div { padding:12px 16px; border-bottom:1px solid var(--border); font-size:13px; }
+.agenda-row:last-child > div { border-bottom:none; }
+.agenda-row.header > div { background:#F1F5F9; font-weight:700; font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+.a-num { color:var(--blue); font-weight:700; }
+.a-time { color:var(--muted); background:#F8FAFC; text-align:center; }
+
+/* ── DIVIDER ── */
+hr { border:none; border-top:1px solid var(--border); margin:32px 0; }
+
+/* ── FOOTER ── */
+.doc-footer { padding:24px 52px 40px; font-size:12px; color:var(--muted); border-top:1px solid var(--border); margin-left:0; }
+
+/* ── SCROLL ── */
+html { scroll-behavior:smooth; }
+:target { scroll-margin-top:20px; }
+
+/* ── PRINT ── */
+@media print {
+  .sidebar { display:none; }
+  .main { margin-left:0; }
+  .content { padding:24px; }
+}
+@media (max-width:768px) {
+  .sidebar { display:none; }
+  .main { margin-left:0; }
+  .hero { padding:32px 24px; }
+  .content { padding:28px 24px; }
+  .two-col, .tool-grid, .closing-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="tag">INTERNAL TRAINING</div>
+    <h2>AI 工具实战培训</h2>
+    <div class="sub">HR · 风控 · 法务 · 合规</div>
+  </div>
+  <nav>
+    <div class="nav-section">培训概览</div>
+    <a href="#overview">📋 安装 & 议程</a>
+
+    <div class="nav-section">一 · 工具选择</div>
+    <a href="#tools">🔧 四个工具怎么选</a>
+
+    <div class="nav-section">二 · 现场 Demo</div>
+    <a href="#demo1" class="demo-link"><span class="badge">1</span> 监管动态日报</a>
+    <a href="#demo2" class="demo-link"><span class="badge">2</span> 文件一致性核查</a>
+    <a href="#demo3" class="demo-link"><span class="badge">3</span> 风险揭示书初稿</a>
+    <a href="#demo4" class="demo-link"><span class="badge">4</span> 手机远程指挥</a>
+
+    <div class="nav-section">三 · 深度案例</div>
+    <a href="#caseA">👥 HR · JD 自动化</a>
+    <a href="#caseB">⚖️ 合规 · 文件审核</a>
+    <a href="#caseC">🤖 OpenClaw 助手</a>
+
+    <div class="nav-section">四 · 举一反三</div>
+    <a href="#extend">📊 各部门场景</a>
+    <a href="#closing">✅ 结语</a>
+
+    <div class="nav-section">⚠️ 附录（必读）</div>
+    <a href="#security">🔒 数据安全总览</a>
+    <a href="#sec-tools">🛠 各工具注意事项</a>
+    <a href="#sec-classify">📂 数据分级原则</a>
+    <a href="#sec-desensitize">🎭 脱敏操作</a>
+    <a href="#sec-skills">📦 推荐 Skills & Ollama 原理</a>
+  </nav>
+  <div class="sidebar-footer">v3.1 · 2026-03-16 · Kora</div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- HERO -->
+<section class="hero" id="overview">
+  <div class="hero-inner">
+    <div class="hero-badge">INTERNAL TRAINING · 2026</div>
+    <h1><span>AI 工具实战培训</span></h1>
+    <div class="hero-sub">面向 HR · 风控 · 法务 · 合规团队 &nbsp;|&nbsp; 现场时长 30 分钟</div>
+    <div class="hero-chips">
+      <div class="hero-chip">🛠 4 个工具对比</div>
+      <div class="hero-chip">🎬 4 个现场 Demo</div>
+      <div class="hero-chip">📁 3 个深度案例</div>
+      <div class="hero-chip">⚡ 提示词可直接复制</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- PRE-TRAINING BANNER -->
+  <div class="pre-banner">
+    <div class="pre-banner-icon">📺</div>
+    <div>
+      <h3>培训前请先完成：工具安装视频（约 15 分钟）</h3>
+      <p>培训当天不讲安装，直接讲怎么用。请提前按视频完成 Node.js · Codex CLI · Claude Code · Cursor 的安装和验证。<br>
+      配套文件：<strong>【安装指南】AI工具安装步骤.pptx</strong> · <strong>【动画演示】AI工具安装步骤.html</strong></p>
+    </div>
+  </div>
+
+  <!-- AGENDA -->
+  <div class="agenda">
+    <div class="agenda-row header">
+      <div>#</div><div>模块</div><div>时长</div>
+    </div>
+    <div class="agenda-row">
+      <div class="a-num">一</div><div>工具是什么、怎么选</div><div class="a-time">5 min</div>
+    </div>
+    <div class="agenda-row">
+      <div class="a-num">二</div><div>现场 Demo × 4（边看边做）</div><div class="a-time">15 min</div>
+    </div>
+    <div class="agenda-row">
+      <div class="a-num">三</div><div>深度案例：HR / 合规 / OpenClaw</div><div class="a-time">7 min</div>
+    </div>
+    <div class="agenda-row">
+      <div class="a-num">四</div><div>举一反三：各部门还能怎么用</div><div class="a-time">3 min</div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 1: TOOLS ═══ -->
+  <section id="tools">
+    <div class="section-label">
+      <div class="section-num">一</div>
+      <div class="section-title">工具是什么、怎么选</div>
+      <div class="section-time">⏱ 5 分钟</div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:20px">
+      <div class="card card-blue">
+        <div style="font-size:13px;font-weight:700;color:#1D4ED8;margin-bottom:8px">💬 对话型 AI</div>
+        <div style="font-size:13px;color:#374151;line-height:1.7">网页版 Claude、ChatGPT<br>
+        你粘贴内容 → 它回答 → 你复制结果<br>
+        <span style="color:#6B7280">每次手动操作，适合一次性问答</span></div>
+      </div>
+      <div class="card card-purple">
+        <div style="font-size:13px;font-weight:700;color:#7C3AED;margin-bottom:8px">🤖 智能体型 Agent</div>
+        <div style="font-size:13px;color:#374151;line-height:1.7">Claude Code、OpenClaw<br>
+        进入文件夹 → 自己读文件 → 执行任务 → 直接输出成品<br>
+        <span style="color:#6B7280">适合重复性、批量、文档密集型工作</span></div>
+      </div>
+    </div>
+    <div class="alert alert-blue">
+      <span class="alert-icon">💡</span>
+      <div>比喻：对话型是<strong>"远程顾问"</strong>，智能体型是<strong>"住在你办公室里的助理"</strong>。</div>
+    </div>
+
+    <h2 class="sh">四个工具对比</h2>
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-name">Cursor <span>图形界面</span></div>
+        <div class="tool-who">适合：需要有界面、直接看着文件操作的人</div>
+        <div class="tool-use">文档对比、批量填充、合同修改</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">Codex CLI <span>命令行</span></div>
+        <div class="tool-who">适合：想让 AI 在后台跑任务、处理文件的人</div>
+        <div class="tool-use">批量文件处理、自动化入口</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">Gemini CLI <span>Google 生态</span></div>
+        <div class="tool-who">适合：多语言处理、与 Google 生态联动的人</div>
+        <div class="tool-use">快速摘要、中英文翻译</div>
+      </div>
+      <div class="tool-card" style="border-color:#2563EB;background:#EFF6FF;">
+        <div class="tool-name" style="color:#1D4ED8">Claude Code <span>推荐</span></div>
+        <div class="tool-who">适合：需要 AI 完成复杂多步骤流程的人</div>
+        <div class="tool-use" style="font-weight:600">文件工厂、审核自动化、Agent 大脑</div>
+      </div>
+    </div>
+
+    <div class="selector-box">
+      <div class="sel-title">非技术人员速选</div>
+      <div class="selector-row"><span class="sel-cond">我只想用 AI 写东西、改东西</span><span>→</span><span class="sel-ans">Cursor 或网页版 Claude</span></div>
+      <div class="selector-row"><span class="sel-cond">我想让 AI 帮我处理一堆文件、自动跑流程</span><span>→</span><span class="sel-ans">Claude Code</span></div>
+      <div class="selector-row"><span class="sel-cond">我想搭一个 24 小时自动帮我干活的系统</span><span>→</span><span class="sel-ans">OpenClaw</span></div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══ SECTION 2: DEMOS ═══ -->
+  <section id="demos">
+    <div class="section-label">
+      <div class="section-num">二</div>
+      <div class="section-title">现场 Demo × 4</div>
+      <div class="section-time">⏱ 15 分钟</div>
+    </div>
+    <div class="alert alert-blue" style="margin-bottom:24px">
+      <span class="alert-icon">📋</span>
+      <div>以下四个 Demo 全部在现场实时运行。完整提示词和素材见：<strong>【现场演示包】四个Demo提示词+素材.md</strong></div>
+    </div>
+
+    <!-- DEMO 1 -->
+    <div class="demo-card" id="demo1">
+      <div class="demo-header">
+        <div class="demo-num">1</div>
+        <div class="demo-title-group">
+          <div class="demo-title">监管动态日报自动生成</div>
+          <div class="demo-meta">工具：Claude（网页版）· 无需上传文件</div>
+        </div>
+        <div class="demo-time">⏱ 3 分钟</div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-context"><strong>背景</strong>：合规/风控每天需要跟进 SFC、MAS 等监管机构动态，传统方式是手动浏览官网，耗时半天整理。</div>
+        <div class="prompt-label">▶ 复制以下内容粘贴给 Claude</div>
+        <div class="prompt-box">
+          <pre class="prompt-content" id="p1">请帮我搜索香港证监会（SFC）和新加坡 MAS 最近3个月关于基金代销合规的最新监管动态，
+整理成一份中文简报，格式：监管机构 / 主要变化 / 生效时间 / 合规关注重点
+
+要求：
+1. 每个机构至少列出2条动态
+2. 如有咨询期截止日期请特别标注
+3. 最后用一句话总结本月最需要优先处理的合规事项</pre>
+          <button class="copy-btn" onclick="copyPrompt('p1',this)">复制</button>
+        </div>
+        <h3 class="sh">已验证输出</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>监管机构</th><th>主要变化</th><th>生效时间</th><th>合规关注重点</th></tr></thead>
+            <tbody>
+              <tr><td>香港 SFC</td><td>UT Code 修订咨询，引入 VaR 衡量衍生品风险</td><td>咨询截至 2026年1月21日</td><td>检视现有产品风险披露分类</td></tr>
+              <tr><td>香港 SFC</td><td>封闭式另类资产基金代销新规，明确适合性评估要求</td><td>2025年2月17日起</td><td>另类基金代销前须完成客户知识测试</td></tr>
+              <tr><td>香港 SFC</td><td>FASTrack 简捷授权通道上线，审批缩短至 15 工作日</td><td>2025年5月5日起</td><td>符合条件基金可申请快速授权</td></tr>
+              <tr><td>新加坡 MAS</td><td>AML/CFT 通知及指引修订版生效</td><td>2025年7月1日起</td><td>全面检视 KYC/AML 内部流程</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="alert alert-green">
+          <span class="alert-icon">📢</span>
+          <div><strong>说给受众</strong>：这份简报传统方式要半天手动整理，AI 30 秒完成。而且可以配置成每天早上自动生成，直接发到你邮箱或 Telegram，你不需要自己盯着官网。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO 2 -->
+    <div class="demo-card" id="demo2">
+      <div class="demo-header">
+        <div class="demo-num">2</div>
+        <div class="demo-title-group">
+          <div class="demo-title">文件一致性核查</div>
+          <div class="demo-meta">工具：Claude · 需上传文件：【Demo2演示文件】基金签约包文件清单.docx</div>
+        </div>
+        <div class="demo-time">⏱ 4 分钟</div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-context"><strong>背景</strong>：法务审核签约包时，基金名称、公司名称、版本号在不同文件里不一致——高频发生，容易漏，全靠人眼扫。</div>
+        <div class="alert alert-yellow">
+          <span class="alert-icon">📎</span>
+          <div><strong>第一步</strong>：先将 <code>【Demo2演示文件】基金签约包文件清单.docx</code> 上传到 Claude 对话中，再粘贴以下提示词。</div>
+        </div>
+        <div class="prompt-label" style="margin-top:14px">▶ 复制以下内容粘贴给 Claude</div>
+        <div class="prompt-box">
+          <pre class="prompt-content" id="p2">请根据文件中"项目主数据"表的信息（基金名称、管理人名称、版本号），
+逐一核查"文件清单"表中每行文件的：
+1. 基金全称是否与主数据一致
+2. 公司/管理人名称是否与主数据一致
+3. 版本号是否与主数据一致
+4. 是否有日期超期或其他明显异常
+
+输出格式：文件序号 / 核查项 / 主数据 / 文件内容 / 状态（✅/❌）/ 建议处理
+最后统计：共发现 X 处问题。</pre>
+          <button class="copy-btn" onclick="copyPrompt('p2',this)">复制</button>
+        </div>
+        <h3 class="sh">文件中预置的 5 处错误（AI 应全部找出）</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>文件</th><th>核查项</th><th>问题描述</th><th>状态</th></tr></thead>
+            <tbody>
+              <tr><td>文件 1</td><td>基金全称</td><td>写为"远景成长混合型基金"，缺"证券投资"</td><td class="badge-red">❌</td></tr>
+              <tr><td>文件 1</td><td>版本号</td><td>显示 v2.1，主数据为 v2.3</td><td class="badge-red">❌</td></tr>
+              <tr><td>文件 3</td><td>公司名称</td><td>写为"远景财富管理（香港）"，应为"远景资产管理"</td><td class="badge-red">❌</td></tr>
+              <tr><td>文件 4</td><td>基金全称</td><td>写为"远景成长混合型证券基金"，缺"投资"</td><td class="badge-red">❌</td></tr>
+              <tr><td>文件 6</td><td>有效期</td><td>授权委托书有效期 2023年12月31日，已过期</td><td class="badge-red">❌</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="alert alert-green">
+          <span class="alert-icon">📢</span>
+          <div><strong>说给受众</strong>：法务通常要逐份打开文件对照，几十份文件全靠人眼极易漏。AI 秒级完成，而且能处理几百份。<strong>关键：AI 找出问题，人来决定怎么处理。</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO 3 -->
+    <div class="demo-card" id="demo3">
+      <div class="demo-header">
+        <div class="demo-num">3</div>
+        <div class="demo-title-group">
+          <div class="demo-title">风险揭示书初稿自动生成</div>
+          <div class="demo-meta">工具：Claude · 素材已包含在提示词中，无需上传文件</div>
+        </div>
+        <div class="demo-time">⏱ 4 分钟</div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-context"><strong>背景</strong>：风险揭示书需从 PPM、DA 等底层文件提炼关键信息。传统做法法务手动摘录，约 30 分钟/份，质量高度依赖个人经验。</div>
+        <div class="prompt-label">▶ 复制以下完整内容粘贴给 Claude（含样本条款）</div>
+        <div class="prompt-box">
+          <pre class="prompt-content" id="p3">请基于以下底层文件信息，生成一份中文版风险揭示书初稿，格式要求：
+1. 产品基本要素表格（基金类型、货币、认购起点、费用、赎回限制）
+2. 主要风险列表，每条标注"必披露 / 策略特有 / 背景风险"三类
+3. 最后单独列出你不确定的地方，供法务重点核查【AI待确认】
+
+【PPM 关键条款摘录 — 远景成长混合型证券投资基金】
+§1.2 基金类型：混合型开放式证券投资基金，权益类60%-90%，固定收益类10%-40%
+§2.1 基础货币：美元（USD），可以港元认购，按前一日收盘价折算
+§4.1 认购限额：最低初始认购100,000美元；最低追加认购10,000美元
+§6.1 管理费1.5%/年（按月），托管费0.2%/年，绩效费超额收益20%（基准8%，高水位线）
+§9.1 赎回：每季度开放一次，须提前30个自然日申请
+§9.2 锁定期：首次认购后12个月强制锁定
+§11.3 集中投资：可将不超过25%资产投资于单一发行人
+
+【DA 关键条款摘录】
+§4.1 赎回限制补充：特殊市场情况下可暂停赎回，通知期不少于5个工作日
+     （注：DA §4.1 与 PPM §9.1 关于通知期表述略有差异，DA未明确是否适用季度赎回）
+§5.2 估值方式：非上市资产按第三方独立估值，滞后期最长T+5</pre>
+          <button class="copy-btn" onclick="copyPrompt('p3',this)">复制</button>
+        </div>
+        <h3 class="sh">预期输出结构</h3>
+        <div class="two-col">
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px">产品基本要素表（自动提取）</div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>项目</th><th>内容</th><th>来源</th></tr></thead>
+                <tbody>
+                  <tr><td>基金类型</td><td>混合型开放式</td><td>PPM §1.2</td></tr>
+                  <tr><td>认购起点</td><td>100,000 美元</td><td>PPM §4.1</td></tr>
+                  <tr><td>赎回限制</td><td>每季度开放一次</td><td>PPM §9.1</td></tr>
+                  <tr><td>锁定期</td><td>首次认购后 12 个月</td><td>PPM §9.2</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px">风险分类（约10条）</div>
+            <div style="font-size:12.5px;line-height:2">
+              <div><span style="color:#DC2626;font-weight:700">★★★ 必披露</span>：市场风险、流动性风险、汇率风险</div>
+              <div><span style="color:#D97706;font-weight:700">★★ 策略特有</span>：集中风险、管理人风险、绩效费机制</div>
+              <div><span style="color:#7C3AED;font-weight:700">★ 背景风险</span>：对手方风险、监管风险、估值风险</div>
+            </div>
+          </div>
+        </div>
+        <div class="alert alert-yellow" style="margin-top:12px">
+          <span class="alert-icon">🤖</span>
+          <div><strong>【AI待确认】自动标注</strong>：DA §4.1 与 PPM §9.1 通知期表述差异（5工作日 vs 30自然日），建议法务确认以哪份为准。</div>
+        </div>
+        <div class="alert alert-green">
+          <span class="alert-icon">📢</span>
+          <div><strong>说给受众</strong>：注意最后这个【AI待确认】栏。这才是真正有用的 AI：不给你一份看起来完美但暗藏漏洞的东西，而是把需要专业判断的点标出来，交给你处理。传统 30 分钟/份 → AI辅助后约 5-8 分钟，节省 75% 以上。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEMO 4 -->
+    <div class="demo-card" id="demo4">
+      <div class="demo-header">
+        <div class="demo-num" style="background:#7C3AED">4</div>
+        <div class="demo-title-group">
+          <div class="demo-title">手机远程指挥，电脑后台干活</div>
+          <div class="demo-meta">工具：Claude Code（电脑端）+ Claude 手机端 · 无需上传文件</div>
+        </div>
+        <div class="demo-time">⏱ 3 分钟</div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-context"><strong>背景</strong>：你正在开会，想让 Claude 在电脑上跑一个任务。以往要等散会，现在用手机下指令，Claude 在后台执行，散会回来看结果。</div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;margin:14px 0">
+          <div class="card" style="padding:14px 18px">
+            <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:6px">第 1 步 · 电脑端（提前 30 秒）</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:8px">在电脑的 Claude Code 会话中输入：</div>
+            <div class="prompt-box">
+              <pre class="prompt-content" id="p4a" style="min-height:auto;padding:10px 14px">/remote-control</pre>
+              <button class="copy-btn" onclick="copyPrompt('p4a',this)">复制</button>
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-top:6px">Claude 生成专属连接码或二维码，手机扫码即接入该会话。</div>
+          </div>
+          <div class="card" style="padding:14px 18px">
+            <div style="font-size:12px;font-weight:700;color:var(--purple);margin-bottom:6px">第 2 步 · 手机端（现场演示）</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:8px">扫码接入会话后，发送以下指令：</div>
+            <div class="prompt-box">
+              <pre class="prompt-content" id="p4b">帮我把"待处理"文件夹里所有基金文件按文件类型分类整理，
+生成清单，注明每份文件的名称、类型和是否含风险披露内容，
+完成后把清单保存为"文件分类报告.docx"</pre>
+              <button class="copy-btn" onclick="copyPrompt('p4b',this)">复制</button>
+            </div>
+          </div>
+          <div class="card card-green" style="padding:14px 18px;background:#F0FDF4">
+            <div style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:4px">第 3 步 · 把手机放进口袋，继续开会</div>
+            <div style="font-size:13px;color:#065F46">电脑端 Claude 开始在后台处理。约 2 分钟后手机收到完成通知，电脑已生成报告文件。</div>
+          </div>
+        </div>
+
+        <h3 class="sh">合规/法务典型远程指令场景</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>你在哪里</th><th>你说什么</th></tr></thead>
+            <tbody>
+              <tr><td>客户会议室</td><td>"帮我核对今天三份 KYC 材料的姓名和证件号是否一致"</td></tr>
+              <tr><td>机场候机</td><td>"搜索今天 SFC 官网有没有新通知，有的话摘要发给我"</td></tr>
+              <tr><td>晚上在家</td><td>"把本周所有项目签约状态汇总成一张表，明天早上我要用"</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="alert alert-green">
+          <span class="alert-icon">📢</span>
+          <div><strong>说给受众</strong>：你的 AI 助理不需要你坐在电脑前。以前是"有空了才能做"，现在是"想到了说一声，回来看结果"。工作时间不再被"我得坐到电脑前"这件事限制。</div>
+        </div>
+
+        <div class="alert alert-blue" style="margin-top:12px">
+          <span class="alert-icon">🎯</span>
+          <div><strong>四个 Demo 共同结论</strong>：AI 做的是搜索、提取、比对、生成格式化输出；人做的是判断 AI 标注的问题，决定怎么处理。省掉的是翻文件、手动对照、从零写草稿，以及"等我回到电脑前"的时间。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══ SECTION 3: CASES ═══ -->
+  <section id="cases">
+    <div class="section-label">
+      <div class="section-num">三</div>
+      <div class="section-title">深度案例</div>
+      <div class="section-time">⏱ 7 分钟</div>
+    </div>
+
+    <!-- Case A: HR -->
+    <div id="caseA">
+      <h2 class="sh">👥 案例 A：HR — AI 自动生成岗位 JD</h2>
+      <div class="demo-context" style="background:#FFF7ED;border-left:3px solid #F59E0B;padding:12px 16px;border-radius:8px;margin-bottom:16px">
+        <strong>问题</strong>：传统 JD 更新平均 1.5-2 小时/份，多部门协作时版本混乱，历史 JD 残留旧内容。
+      </div>
+      <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px">解决方案：三层文件夹 + 定时自动化</div>
+      <div class="flow-box">
+<span class="c-blue">01_原数据/</span>  ← 组织架构图 + 当年OKR + 历史JD参考
+    <span class="c-muted">↓  Claude Code 自动读取并生成</span>
+<span class="c-yellow">02_待审核/</span>  ← 草稿.md（附 REVIEW_PENDING 标记）
+    <span class="c-muted">↓  HR 只改一个字段：status: APPROVED</span>
+<span class="c-green">03_已审核/</span>  ← 正式版 .docx + .html 自动输出</div>
+      <p style="font-size:13px;margin:10px 0 16px;color:var(--muted)">HR 全程只做一件事：判断草稿内容是否准确，改一个状态字段，系统自动归档。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>场景</th><th>传统耗时</th><th>AI 之后</th></tr></thead>
+          <tbody>
+            <tr><td>批量更新 JD（架构调整）</td><td>数周</td><td class="badge-green">1-2 天</td></tr>
+            <tr><td>面试题库生成</td><td>2-3 小时/岗</td><td class="badge-green">15 分钟/岗</td></tr>
+            <tr><td>新员工入职材料打包</td><td>逐一整理</td><td class="badge-green">自动生成个性化版本</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <hr style="margin:24px 0">
+
+    <!-- Case B: Compliance -->
+    <div id="caseB">
+      <h2 class="sh">⚖️ 案例 B：合规/法务 — 基金文件审核 AI 赋能</h2>
+      <div class="two-col" style="margin-bottom:16px">
+        <div class="card card-red">
+          <div style="font-size:12px;font-weight:700;color:#991B1B;margin-bottom:6px">真实背景</div>
+          <div style="font-size:13px;color:#374151;line-height:1.8">
+            法务国际基金组 <strong>3 人</strong><br>
+            每周 <strong>7-10 个项目</strong><br>
+            单个香港通道项目法务净工时 <strong>3.7-5.8 小时/人</strong>
+          </div>
+        </div>
+        <div class="card card-yellow">
+          <div style="font-size:12px;font-weight:700;color:#92400E;margin-bottom:6px">团队反馈</div>
+          <div style="font-size:13px;color:#374151;font-style:italic;line-height:1.7">"AI 更像老师而不是同事，给意见但不干活，翻译、摘抄、校对等苦活还是法务在做。"</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card card-red" style="padding:16px">
+          <div style="font-size:12px;font-weight:700;color:#991B1B;margin-bottom:8px">❌ 现状（低效用法）</div>
+          <div class="flow-box" style="font-size:11px;padding:10px 14px;line-height:1.8">上传文件 → AI给建议 → <span class="c-red">法务看完</span> → <span class="c-red">法务自己去改</span> → <span class="c-red">法务排版定稿</span></div>
+          <div style="font-size:12px;color:#991B1B;margin-top:6px">AI 做了 30%，法务还做 70%</div>
+        </div>
+        <div class="card card-green" style="padding:16px">
+          <div style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:8px">✅ 目标（正确方向）</div>
+          <div class="flow-box" style="font-size:11px;padding:10px 14px;line-height:1.8">底层文件包+模板 → <span class="c-green">AI生成底稿+来源映射+遗漏清单</span> → <span class="c-yellow">法务审特殊安排+关键偏离+签发</span></div>
+          <div style="font-size:12px;color:#065F46;margin-top:6px">法务角色不是弱化，而是更清晰</div>
+        </div>
+      </div>
+
+      <div style="font-size:13px;font-weight:600;color:var(--navy);margin:18px 0 10px">以 2 号文件（Nominee 合同）为例</div>
+      <div class="flow-box">AI 读取 PPM/KTR → <span class="c-blue">强制提取关键字段</span> → <span class="c-yellow">自动填入合同模板</span>
+→ <span class="c-green">自动校验中英文一致性</span>
+→ 输出：<span class="c-green">① 合同草稿</span>  <span class="c-yellow">② 偏离点清单</span>  <span class="c-red">③ AI待确认项</span>
+→ 法务只处理：<span class="c-yellow">特殊安排判断 + 偏离审核 + 最终签发</span></div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>AI 负责（规则型）</th><th>法务负责（判断型）</th></tr></thead>
+          <tbody>
+            <tr><td>文件名/主体/版本号核查</td><td>特殊安排是否接受</td></tr>
+            <tr><td>PPM/DA 关键条款提取与填充</td><td>风险披露是否充分</td></tr>
+            <tr><td>中英文双语同步</td><td>DA 责任条款如何取舍</td></tr>
+            <tr><td>版本差异比对</td><td>跨区分销合规边界</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <hr style="margin:24px 0">
+
+    <!-- Case C: OpenClaw -->
+    <div id="caseC">
+      <h2 class="sh">🤖 案例 C：OpenClaw — 24 小时 AI 助手</h2>
+      <div class="card card-purple" style="margin-bottom:16px">
+        <div style="font-size:13px;line-height:1.8"><strong>OpenClaw</strong>（前身：Clawdbot / Moltbot）是近期开源社区热度最高的"本地优先" AI 智能体框架。以守护进程形式在你的设备上持续运行，可接入 Telegram/WhatsApp/Slack，读取本地文件，执行终端命令。<br>
+        <strong style="color:#7C3AED">简单理解：雇了一个不睡觉的助理，住在你电脑里，24 小时待命，你用手机下指令。</strong></div>
+      </div>
+      <div class="flow-box">
+手机 Telegram  ←→  OpenClaw（家里电脑，24小时在线）
+                    <span class="c-blue">├── Bot 1：早间新闻助手</span>     每天 7:30 自动执行
+                    <span class="c-yellow">├── Bot 2：公众号自动发布</span>   每天 12:00 自动执行
+                    <span class="c-green">└── Bot 3：股票盯盘助手</span>     实时监控，触发即通知</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin:16px 0">
+        <div class="card" style="padding:14px 18px">
+          <div style="font-size:13px;font-weight:700;color:#0369A1;margin-bottom:4px">🌅 Bot 1 · 早间新闻助手（7:30 自动推送）</div>
+          <div style="font-size:13px;color:var(--muted)">抓取财经/监管新闻 → AI 提炼 5 条中文简报 → Telegram 推送。<br>对风控/合规特别有用：设定关键词（如"监管""处罚""新规"），有相关内容立即推送。</div>
+        </div>
+        <div class="card" style="padding:14px 18px">
+          <div style="font-size:13px;font-weight:700;color:#0F766E;margin-bottom:4px">📝 Bot 2 · 公众号自动发布（12:00 自动执行）</div>
+          <div style="font-size:13px;color:var(--muted)">12:00 AI 生成文章 → 推送到草稿箱 → Telegram 通知"草稿就绪"。人工只做一件事：点确认。</div>
+        </div>
+        <div class="card" style="padding:14px 18px">
+          <div style="font-size:13px;font-weight:700;color:#7C3AED;margin-bottom:4px">📊 Bot 3 · 股票盯盘助手（实时监控）</div>
+          <div style="font-size:13px;color:var(--muted)">设定条件（如涨跌超 X%）立即推送，收盘后自动生成持仓简报，可用自然语言问"今天我的持仓怎么样"。</div>
+        </div>
+      </div>
+
+      <h3 class="sh">从零开始四步走</h3>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:12px;align-items:center;font-size:13px"><div style="width:24px;height:24px;background:#2563EB;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0">1</div> 安装 Claude Code（见安装视频）</div>
+        <div style="display:flex;gap:12px;align-items:center;font-size:13px"><div style="width:24px;height:24px;background:#2563EB;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0">2</div> 在 Telegram 创建自己的 Bot（@BotFather 引导，约 10 分钟）</div>
+        <div style="display:flex;gap:12px;align-items:center;font-size:13px"><div style="width:24px;height:24px;background:#2563EB;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0">3</div> 下载 OpenClaw，按向导配置（无需写代码）</div>
+        <div style="display:flex;gap:12px;align-items:center;font-size:13px"><div style="width:24px;height:24px;background:#2563EB;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0">4</div> 用中文描述任务，电脑长期开机，OpenClaw 自动运行</div>
+      </div>
+      <div class="alert alert-blue" style="margin-top:14px">
+        <span class="alert-icon">💡</span>
+        <div>建议从 <strong>Bot 1（新闻推送）</strong>开始，最简单，10 分钟搭好，成就感最强。</div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══ SECTION 4: EXTEND ═══ -->
+  <section id="extend">
+    <div class="section-label">
+      <div class="section-num">四</div>
+      <div class="section-title">举一反三：各部门还能怎么用</div>
+      <div class="section-time">⏱ 3 分钟</div>
+    </div>
+
+    <div class="scenario-section">
+      <div class="scenario-dept dept-risk">🛡 风控部门</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>场景</th><th>AI 能做什么</th><th>人工保留什么</th></tr></thead>
+          <tbody>
+            <tr><td>监管动态追踪</td><td>每日自动抓取、分类、推送摘要</td><td>政策解读和应对决策</td></tr>
+            <tr><td>KYC/AML 文件初审</td><td>自动核验格式完整性、标记疑点</td><td>最终合规判断</td></tr>
+            <tr><td>风险报告生成</td><td>数据汇总 + 报告框架 + 文字初稿</td><td>数据核实与最终审签</td></tr>
+            <tr><td>异常交易说明</td><td>自动归类相似案例、生成初稿</td><td>定性判断和责任认定</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="scenario-section">
+      <div class="scenario-dept dept-legal">⚖️ 法务部门</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>场景</th><th>AI 能做什么</th><th>人工保留什么</th></tr></thead>
+          <tbody>
+            <tr><td>合同新旧版本比对</td><td>自动标出所有改动，分类重大/轻微</td><td>条款取舍判断</td></tr>
+            <tr><td>多语言合同一致性</td><td>中英文逐段比对，标出差异</td><td>翻译争议处理</td></tr>
+            <tr><td>常见问题库</td><td>整理历史咨询，自动匹配相似问题</td><td>新问题的专业判断</td></tr>
+            <tr><td>监管函件起草</td><td>基于模板和事实生成初稿</td><td>事实核实和最终签发</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="scenario-section">
+      <div class="scenario-dept dept-compliance">✅ 合规部门</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>场景</th><th>AI 能做什么</th><th>人工保留什么</th></tr></thead>
+          <tbody>
+            <tr><td>合规检查清单自动化</td><td>逐项核查、生成状态报告</td><td>判断性条款的合规认定</td></tr>
+            <tr><td>内部政策变更摘要</td><td>新旧政策自动比对，生成变更摘要</td><td>内部适用性解释</td></tr>
+            <tr><td>培训材料更新</td><td>根据新规自动更新内容框架</td><td>内容审核与定稿</td></tr>
+            <tr><td>年度合规报告</td><td>数据汇总 + 文字初稿</td><td>管理层判断与签字</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="scenario-section">
+      <div class="scenario-dept dept-hr">👥 HR 部门</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>场景</th><th>AI 能做什么</th><th>人工保留什么</th></tr></thead>
+          <tbody>
+            <tr><td>简历初筛</td><td>按岗位要求自动评分并分类</td><td>最终录用判断</td></tr>
+            <tr><td>面试问题生成</td><td>根据岗位和候选人背景定制</td><td>面试现场判断</td></tr>
+            <tr><td>员工反馈分析</td><td>大量文本意见自动分主题汇总</td><td>管理决策</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- CLOSING -->
+  <section id="closing">
+    <h2 class="sh" style="font-size:18px;color:var(--navy);border-bottom:2px solid var(--blue);padding-bottom:8px">写在最后</h2>
+    <div class="closing-grid">
+      <div class="closing-card yes">
+        <h4>✅ 什么工作适合交给 AI？</h4>
+        <div class="closing-item"><span style="color:#059669;font-weight:700">高频重复的</span><span style="font-size:12px;color:var(--muted)">— 每周做好几次的事</span></div>
+        <div class="closing-item"><span style="color:#059669;font-weight:700">有规则可循的</span><span style="font-size:12px;color:var(--muted)">— 有标准格式、有对照依据</span></div>
+        <div class="closing-item"><span style="color:#059669;font-weight:700">文档密集的</span><span style="font-size:12px;color:var(--muted)">— 大量阅读、摘录、比对、翻译</span></div>
+      </div>
+      <div class="closing-card no">
+        <h4>❌ 什么工作不能完全交给 AI？</h4>
+        <div class="closing-item"><span style="color:#DC2626;font-weight:700">需要承担最终责任的决定</span></div>
+        <div class="closing-item"><span style="color:#DC2626;font-weight:700">涉及复杂利益关系的判断</span></div>
+        <div class="closing-item"><span style="color:#DC2626;font-weight:700">需要信任和关系的沟通</span></div>
+      </div>
+    </div>
+    <div class="alert alert-blue" style="margin-top:20px;font-size:14px;padding:16px 20px">
+      <span class="alert-icon" style="font-size:18px">💡</span>
+      <div><strong>一个马上可以行动的方法</strong>：今天下班前，在纸上写下你工作中最让你烦的一件重复性的事。明天试着把它描述给 AI，看看能不能帮你做掉 60% 的工作量。</div>
+    </div>
+  </section>
+
+</div><!-- /content -->
+
+  <hr>
+
+  <!-- ═══ APPENDIX: SECURITY ═══ -->
+  <section id="security">
+    <div style="background:linear-gradient(90deg,#FEF2F2,#FFF7ED);border:1px solid #FECACA;border-radius:12px;padding:20px 24px;margin-bottom:28px;display:flex;gap:14px;align-items:flex-start">
+      <span style="font-size:28px;flex-shrink:0">⚠️</span>
+      <div>
+        <div style="font-size:15px;font-weight:700;color:#991B1B;margin-bottom:6px">附录（必读）：工具使用经验 & 敏感数据保护</div>
+        <div style="font-size:13px;color:#7F1D1D;line-height:1.7">用错工具，不是效率问题，是合规风险问题。在金融/法务场景使用 AI，必须先搞清楚数据去了哪里。这部分内容建议在首次使用任何工具前完整阅读。</div>
+      </div>
+    </div>
+
+    <!-- Data destination table -->
+    <h2 class="sh" id="security">📡 你的内容发到哪里了？</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px">每次你粘贴文字或上传文件给 AI，内容都会被发送到对应公司的服务器处理。</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>工具</th><th>数据发送到</th><th>是否用于训练</th><th>建议</th></tr></thead>
+        <tbody>
+          <tr><td>网页版 Claude（免费/Pro）</td><td>Anthropic 服务器</td><td style="color:#D97706;font-weight:600">视设置而定</td><td>在设置中关闭"改进产品"选项</td></tr>
+          <tr><td><strong>Claude Code（API 调用）</strong></td><td>Anthropic API</td><td style="color:#059669;font-weight:600">默认不用于训练 ✅</td><td>法务合规首选</td></tr>
+          <tr><td>网页版 ChatGPT</td><td>OpenAI 服务器</td><td style="color:#DC2626;font-weight:600">需手动关闭</td><td>设置 → 数据控制 → 关闭</td></tr>
+          <tr><td><strong>Codex CLI（API 调用）</strong></td><td>OpenAI API</td><td style="color:#059669;font-weight:600">默认不用于训练 ✅</td><td>确认用企业账户</td></tr>
+          <tr><td>Cursor（AI 功能）</td><td>Cursor + AI 提供商</td><td style="color:#D97706;font-weight:600">视模式而定</td><td>开启 Privacy Mode</td></tr>
+          <tr><td>Gemini CLI（API 调用）</td><td>Google Cloud</td><td style="color:#059669;font-weight:600">企业 API 不用于训练 ✅</td><td>使用企业 Google 账户</td></tr>
+          <tr><td>OpenClaw（本地运行）</td><td>取决于底层 API</td><td colspan="2">与所调用的 API 一致</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="alert alert-blue" style="margin-top:12px">
+      <span class="alert-icon">💡</span>
+      <div><strong>关键结论</strong>：通过 <strong>API 调用</strong>（Claude Code、Codex CLI、Gemini CLI）的数据，默认<strong>不会被用于模型训练</strong>。法务/合规工作建议优先走 API 侧，而非网页对话框。</div>
+    </div>
+
+    <!-- Per-tool tips -->
+    <h2 class="sh" id="sec-tools" style="margin-top:28px">🛠 各工具实操注意事项</h2>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+
+      <!-- Cursor -->
+      <div class="card" style="border-left:4px solid #7C3AED">
+        <div style="font-size:14px;font-weight:700;color:#7C3AED;margin-bottom:10px">Cursor</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+          <div style="display:flex;gap:8px"><span style="color:#059669;font-weight:700;flex-shrink:0">✅</span><div>开启 <strong>Privacy Mode</strong>（Settings → Privacy → Enable Privacy Mode）：开启后 AI 提供商不会存储你的文本</div></div>
+          <div style="display:flex;gap:8px"><span style="color:#059669;font-weight:700;flex-shrink:0">✅</span><div>在项目根目录创建 <code>.cursorignore</code> 文件，列出不允许 AI 读取的敏感目录</div></div>
+          <div style="display:flex;gap:8px"><span style="color:#DC2626;font-weight:700;flex-shrink:0">❌</span><div>不要直接把含有真实客户姓名、证件号、账户信息的文件拖入 AI 对话</div></div>
+          <div style="display:flex;gap:8px"><span style="color:#D97706;font-weight:700;flex-shrink:0">⚠️</span><div>Cursor 的 Tab 自动补全会静默读取当前文件内容，注意当前打开的是哪个文件</div></div>
+        </div>
+        <div class="prompt-box" style="margin-top:12px">
+          <pre class="prompt-content" id="ig-cursor" style="padding:10px 14px;font-size:12px"># .cursorignore 示例
+/客户数据/
+/KYC文件/
+*.pem
+*.env
+/内部报告/未脱敏/</pre>
+          <button class="copy-btn" onclick="copyPrompt('ig-cursor',this)">复制</button>
+        </div>
+      </div>
+
+      <!-- Claude Code -->
+      <div class="card" style="border-left:4px solid #2563EB">
+        <div style="font-size:14px;font-weight:700;color:#2563EB;margin-bottom:10px">Claude Code</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+          <div style="display:flex;gap:8px"><span style="color:#059669;font-weight:700;flex-shrink:0">✅</span><div>首次运行会要求确认文件访问权限，<strong>每次授权前认真看清楚范围</strong></div></div>
+          <div style="display:flex;gap:8px"><span style="color:#059669;font-weight:700;flex-shrink:0">✅</span><div>创建 <code>.claudeignore</code>（语法同 .gitignore），阻止 Claude 读取特定目录</div></div>
+          <div style="display:flex;gap:8px"><span style="color:#059669;font-weight:700;flex-shrink:0">✅</span><div>使用 <code>/permissions</code> 命令随时查看和修改 Claude 的文件访问范围</div></div>
+          <div style="display:flex;gap:8px"><span style="color:#DC2626;font-weight:700;flex-shrink:0">❌</span><div>永远不要使用 <code>--dangerously-skip-permissions</code> 标志，这会绕过所有权限检查</div></div>
+          <div style="display:flex;gap:8px"><span style="color:#D97706;font-weight:700;flex-shrink:0">⚠️</span><div>Claude Code 会读取整个工作目录，启动前确认你在哪个文件夹</div></div>
+        </div>
+        <div class="prompt-box" style="margin-top:12px">
+          <pre class="prompt-content" id="ig-claude" style="padding:10px 14px;font-size:12px"># .claudeignore 示例
+/客户原始数据/
+**/*未脱敏*
+/内部账户信息/
+.env
+secrets/</pre>
+          <button class="copy-btn" onclick="copyPrompt('ig-claude',this)">复制</button>
+        </div>
+      </div>
+
+      <!-- Codex CLI -->
+      <div class="card" style="border-left:4px solid #0EA5E9">
+        <div style="font-size:14px;font-weight:700;color:#0369A1;margin-bottom:10px">Codex CLI</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+          <div style="display:flex;gap:8px"><span style="color:#059669;font-weight:700;flex-shrink:0">✅</span><div>默认沙盒模式（<code>--sandbox</code>）：AI 只能读文件，不能写和执行命令，先用这个模式测试</div></div>
+          <div style="display:flex;gap:8px"><span style="color:#059669;font-weight:700;flex-shrink:0">✅</span><div>敏感操作前用 <code>--dry-run</code> 预览 AI 打算做什么，确认后再执行</div></div>
+          <div style="display:flex;gap:8px"><span style="color:#DC2626;font-weight:700;flex-shrink:0">❌</span><div>不要在提示词里直接写 API Key、密码、证件号</div></div>
+          <div style="display:flex;gap:8px"><span style="color:#D97706;font-weight:700;flex-shrink:0">⚠️</span><div>法务/合规场景建议保持 <code>suggest</code> 模式（默认），而非 <code>auto</code> 全自动执行模式</div></div>
+        </div>
+      </div>
+
+      <!-- Gemini CLI -->
+      <div class="card" style="border-left:4px solid #10B981">
+        <div style="font-size:14px;font-weight:700;color:#065F46;margin-bottom:10px">Gemini CLI</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+          <div style="display:flex;gap:8px"><span style="color:#059669;font-weight:700;flex-shrink:0">✅</span><div>使用 Google Cloud <strong>企业账户</strong>而非个人账户，数据处理受企业合同约束</div></div>
+          <div style="display:flex;gap:8px"><span style="color:#DC2626;font-weight:700;flex-shrink:0">❌</span><div>免费层 Gemini 的数据可能被 Google 用于改善服务，企业 API 层不适用此政策</div></div>
+          <div style="display:flex;gap:8px"><span style="color:#059669;font-weight:700;flex-shrink:0">✅</span><div>启用 <code>--sandbox</code> 模式限制文件系统访问</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data classification -->
+    <h2 class="sh" id="sec-classify" style="margin-top:28px">📂 敏感数据分级使用原则</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>数据级别</th><th>例子</th><th>推荐做法</th></tr></thead>
+        <tbody>
+          <tr><td><span style="background:#D1FAE5;color:#065F46;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600">公开信息</span></td><td>监管官网内容、公开基金说明书</td><td>直接给任何 AI 工具处理</td></tr>
+          <tr><td><span style="background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600">内部一般信息</span></td><td>内部流程文档、非客户相关模板</td><td>API 调用工具 + 配置 .claudeignore</td></tr>
+          <tr><td><span style="background:#FEF3C7;color:#92400E;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600">客户敏感信息</span></td><td>真实姓名、证件号、账户余额</td><td><strong>必须先脱敏</strong>再提交，或使用本地模型</td></tr>
+          <tr><td><span style="background:#FEE2E2;color:#991B1B;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600">监管级机密</span></td><td>处罚调查文件、内部审计报告</td><td>本地模型（Ollama）或不用 AI</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Desensitization -->
+    <h2 class="sh" id="sec-desensitize" style="margin-top:28px">🎭 脱敏操作：两分钟学会</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px">在把文件提交给 AI 前，用占位符替换敏感字段：</p>
+    <div class="two-col">
+      <div>
+        <div style="font-size:12px;color:#DC2626;font-weight:600;margin-bottom:6px">❌ 原文（不能直接提交）</div>
+        <div class="flow-box" style="font-size:12px;padding:12px 14px;line-height:1.8"><span class="c-red">客户张三</span>，身份证 <span class="c-red">440301199001011234</span>，账户余额 <span class="c-red">1,200,000</span> 港元</div>
+      </div>
+      <div>
+        <div style="font-size:12px;color:#059669;font-weight:600;margin-bottom:6px">✅ 脱敏后（可以提交）</div>
+        <div class="flow-box" style="font-size:12px;padding:12px 14px;line-height:1.8">客户 <span class="c-green">[客户A]</span>，身份证 <span class="c-green">[已核验]</span>，账户余额 <span class="c-green">[X金额]</span> 港元</div>
+      </div>
+    </div>
+    <div style="font-size:13px;font-weight:600;color:var(--navy);margin:14px 0 8px">让 Claude Code 帮你自动批量脱敏：</div>
+    <div class="prompt-box">
+      <pre class="prompt-content" id="p-desensitize">请扫描当前目录中的所有 .docx 和 .pdf 文件，
+识别并替换以下敏感字段（不删除，用占位符替换）：
+- 真实人名 → [姓名已脱敏]
+- 身份证/护照号 → [证件号已脱敏]
+- 银行账号 → [账号已脱敏]
+- 手机号 → [联系方式已脱敏]
+生成一份脱敏报告，说明每份文件替换了哪些字段及数量。</pre>
+      <button class="copy-btn" onclick="copyPrompt('p-desensitize',this)">复制</button>
+    </div>
+
+    <!-- Skills & Local Models -->
+    <h2 class="sh" id="sec-skills" style="margin-top:28px">📦 可安装的数据保护 Skills & 本地模型</h2>
+
+    <!-- Ollama principle explanation -->
+    <div style="background:linear-gradient(135deg,#0F172A,#1e2d5a);border-radius:14px;padding:24px 28px;margin-bottom:20px;color:#E2E8F0">
+      <div style="font-size:15px;font-weight:700;color:#BAD4F5;margin-bottom:16px">🖥 Ollama 本地模型原理</div>
+
+      <!-- Cloud vs Local diagram -->
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin-bottom:20px;align-items:stretch">
+        <!-- Cloud side -->
+        <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:16px">
+          <div style="font-size:11px;font-weight:700;color:#FCA5A5;letter-spacing:.08em;margin-bottom:10px">☁️ 云端模式（Claude / ChatGPT）</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#CBD5E1">
+            <div style="display:flex;align-items:center;gap:6px"><span style="background:#1e3a5a;border-radius:4px;padding:2px 8px;font-size:11px">你输入文字</span></div>
+            <div style="color:#475569;font-size:11px;padding-left:4px">↓ 加密发送到互联网</div>
+            <div style="display:flex;align-items:center;gap:6px"><span style="background:#3b1a1a;border:1px solid #EF4444;border-radius:4px;padding:2px 8px;font-size:11px;color:#FCA5A5">Anthropic / OpenAI 服务器 GPU 运算</span></div>
+            <div style="color:#475569;font-size:11px;padding-left:4px">↓ 结果返回</div>
+            <div style="display:flex;align-items:center;gap:6px"><span style="background:#1e3a5a;border-radius:4px;padding:2px 8px;font-size:11px">结果显示</span></div>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:#FCA5A5;background:rgba(239,68,68,0.1);border-radius:6px;padding:6px 10px">⚠️ 数据离开本机，经过第三方服务器</div>
+        </div>
+        <!-- Arrow -->
+        <div style="display:flex;align-items:center;justify-content:center;padding:0 14px;font-size:20px;color:#475569">VS</div>
+        <!-- Local side -->
+        <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:16px">
+          <div style="font-size:11px;font-weight:700;color:#6EE7B7;letter-spacing:.08em;margin-bottom:10px">🖥 Ollama 本地模式</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#CBD5E1">
+            <div style="display:flex;align-items:center;gap:6px"><span style="background:#1e3a5a;border-radius:4px;padding:2px 8px;font-size:11px">你输入文字</span></div>
+            <div style="color:#475569;font-size:11px;padding-left:4px">↓ 本机处理，不经过网络</div>
+            <div style="display:flex;align-items:center;gap:6px"><span style="background:#0d2a1a;border:1px solid #10B981;border-radius:4px;padding:2px 8px;font-size:11px;color:#6EE7B7">你的 CPU / GPU 运算</span></div>
+            <div style="color:#475569;font-size:11px;padding-left:4px">↓ 结果直接显示</div>
+            <div style="display:flex;align-items:center;gap:6px"><span style="background:#1e3a5a;border-radius:4px;padding:2px 8px;font-size:11px">结果显示</span></div>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:#6EE7B7;background:rgba(16,185,129,0.1);border-radius:6px;padding:6px 10px">✅ 数据全程不离开本机</div>
+        </div>
+      </div>
+
+      <!-- What Ollama does -->
+      <div style="font-size:13px;color:#94A3B8;line-height:1.8;margin-bottom:16px">
+        <strong style="color:#BAD4F5">Ollama 做了什么？</strong><br>
+        开源大模型（Llama、Qwen、Mistral 等）本来是几 GB 到几十 GB 的权重文件，普通人没法直接用。Ollama 把它们打包成一行命令就能下载运行的格式，并在本地起一个 API 服务监听 <code style="color:#A5F3FC">localhost:11434</code>，让 Claude Code 等工具像调用云端 API 一样调用它——只是请求发到本机而不是互联网。
+      </div>
+
+      <!-- Performance table -->
+      <div style="font-size:12px;font-weight:600;color:#7DD3FC;margin-bottom:8px">📊 本地模型能力参考（按电脑配置）</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead>
+            <tr style="background:rgba(255,255,255,0.05)">
+              <th style="padding:8px 12px;text-align:left;color:#94A3B8;border-bottom:1px solid rgba(255,255,255,0.08)">电脑配置</th>
+              <th style="padding:8px 12px;text-align:left;color:#94A3B8;border-bottom:1px solid rgba(255,255,255,0.08)">推荐模型</th>
+              <th style="padding:8px 12px;text-align:left;color:#94A3B8;border-bottom:1px solid rgba(255,255,255,0.08)">能力水平</th>
+              <th style="padding:8px 12px;text-align:left;color:#94A3B8;border-bottom:1px solid rgba(255,255,255,0.08)">适合场景</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
+              <td style="padding:8px 12px;color:#CBD5E1">普通笔记本（8GB 内存）</td>
+              <td style="padding:8px 12px;color:#A5F3FC;font-family:monospace">qwen2.5:3b<br>llama3.2:3b</td>
+              <td style="padding:8px 12px;color:#FCD34D">基础水平</td>
+              <td style="padding:8px 12px;color:#94A3B8">文档核查、关键词提取</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(37,99,235,0.05)">
+              <td style="padding:8px 12px;color:#CBD5E1">16GB 内存 / 独显</td>
+              <td style="padding:8px 12px;color:#A5F3FC;font-family:monospace">qwen2.5:14b<br>llama3.1:8b</td>
+              <td style="padding:8px 12px;color:#6EE7B7;font-weight:600">★ 推荐</td>
+              <td style="padding:8px 12px;color:#94A3B8">接近 GPT-3.5，可处理大多数法务文档任务</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 12px;color:#CBD5E1">32GB 内存 / 高端显卡</td>
+              <td style="padding:8px 12px;color:#A5F3FC;font-family:monospace">qwen2.5:32b<br>llama3.3:70b</td>
+              <td style="padding:8px 12px;color:#6EE7B7">接近 GPT-4</td>
+              <td style="padding:8px 12px;color:#94A3B8">复杂文件分析、长文档处理</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tradeoff -->
+      <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="background:rgba(16,185,129,0.08);border-radius:8px;padding:12px 14px">
+          <div style="font-size:11px;font-weight:700;color:#6EE7B7;margin-bottom:6px">✅ 本地模型的优势</div>
+          <div style="font-size:12px;color:#94A3B8;line-height:1.8">数据零出境，合规风险最低<br>无 API 费用，高频使用更划算<br>网络断开也能用<br>可深度定制（微调）</div>
+        </div>
+        <div style="background:rgba(245,158,11,0.08);border-radius:8px;padding:12px 14px">
+          <div style="font-size:11px;font-weight:700;color:#FCD34D;margin-bottom:6px">⚠️ 本地模型的局限</div>
+          <div style="font-size:12px;color:#94A3B8;line-height:1.8">能力天花板低于 Claude Sonnet/GPT-4<br>速度比云端慢（取决于硬件）<br>需要占用本地磁盘（9-40GB）<br>复杂推理任务效果较弱</div>
+        </div>
+      </div>
+
+      <!-- Practical recommendation -->
+      <div style="margin-top:14px;background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.3);border-radius:8px;padding:12px 14px;font-size:12px;color:#93C5FD;line-height:1.8">
+        💡 <strong>实际工作中的最佳搭配</strong>：敏感数据先用 Ollama 做初步处理和脱敏 → 脱敏后的内容再交给 Claude Code（云端 API）做深度分析。安全与能力两者兼顾。
+      </div>
+    </div>
+
+    <!-- Install commands -->
+    <div class="two-col" style="margin-bottom:14px">
+      <div class="card card-blue">
+        <div style="font-size:13px;font-weight:700;color:#1D4ED8;margin-bottom:10px">推荐 Skills（Claude Code 内安装）</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+          <div><strong>数据脱敏 Skill</strong> — 自动识别并替换 PII，支持批量处理</div>
+          <div><strong>审计日志 Skill</strong> — 记录每次 AI 操作了哪些文件、做了什么变更</div>
+          <div><strong>文件权限检查 Skill</strong> — 在 Claude 读取文件前先检查权限标签</div>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--muted)">在 Claude Code 中输入 <code>/install-skill</code> 搜索安装</div>
+      </div>
+      <div class="card card-green">
+        <div style="font-size:13px;font-weight:700;color:#065F46;margin-bottom:10px">Ollama 安装命令（一次性）</div>
+        <div class="prompt-box" style="margin-top:4px">
+          <pre class="prompt-content" id="ig-ollama" style="padding:10px 14px;font-size:12px;line-height:1.8"># 1. 安装 Ollama（官网下载安装包）
+# https://ollama.com
+
+# 2. 下载中文优化模型（推荐）
+ollama pull qwen2.5:14b   # 约9GB，推荐
+
+# 3. 启动并测试
+ollama run qwen2.5:14b
+# 输入：你好，请介绍一下自己</pre>
+          <button class="copy-btn" onclick="copyPrompt('ig-ollama',this)">复制</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decision tree -->
+    <h2 class="sh" style="margin-top:24px">🗺 用 AI 前的决策树</h2>
+    <div class="flow-box" style="line-height:2.2;font-size:13px">
+<span class="c-blue">这份数据要给 AI 处理？</span>
+    ↓
+<span class="c-yellow">包含真实客户 PII（姓名/证件/账户）？</span>
+├── <span class="c-red">是</span> → 先脱敏，或改用 Ollama 本地模型
+└── <span class="c-green">否</span> →
+        <span class="c-yellow">属于监管级机密（调查/审计报告）？</span>
+        ├── <span class="c-red">是</span> → 用 Ollama 本地模型，或不用 AI
+        └── <span class="c-green">否</span> →
+                走 API 模式（Claude Code / Codex CLI）
+                ↓
+                确认 .claudeignore 已设置
+                ↓
+                确认用企业账户 / 已签 DPA
+                ↓
+                <span class="c-green">✅ 可以操作</span>
+    </div>
+
+  </section>
+
+</div><!-- /content -->
+
+<div class="doc-footer">
+  文档版本：v3.1 &nbsp;|&nbsp; 日期：2026-03-16 &nbsp;|&nbsp; 联系：Kora &nbsp;|&nbsp; 仅供内部培训使用
+</div>
+
+</main>
+
+<script>
+// Active nav link on scroll
+const sections = ['overview','tools','demo1','demo2','demo3','demo4','caseA','caseB','caseC','extend','closing'];
+const links = {};
+sections.forEach(id => {
+  const a = document.querySelector(`nav a[href="#${id}"]`);
+  if (a) links[id] = a;
+});
+window.addEventListener('scroll', () => {
+  let current = 'overview';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 80) current = id;
+  });
+  Object.values(links).forEach(a => a.classList.remove('active'));
+  if (links[current]) links[current].classList.add('active');
+});
+
+// Copy prompt
+function copyPrompt(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+    btn.textContent = '✓ 已复制';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
