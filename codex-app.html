@@ -229,6 +229,18 @@ td code { font-family:"SF Mono","Consolas","Monaco",monospace; font-size:11.5px;
         </div>
       </div>
 
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>使用方式</th><th>适合谁</th><th>理解方式</th></tr></thead>
+          <tbody>
+            <tr><td>macOS 桌面应用</td><td>非技术同事优先</td><td>像打开微信或飞书一样直接使用</td></tr>
+            <tr><td>网页版</td><td>不想安装本地软件的人</td><td>打开浏览器就能用</td></tr>
+            <tr><td>CLI</td><td>有一定技术基础的同事</td><td>更像命令行工作台</td></tr>
+            <tr><td>IDE 扩展</td><td>开发同事</td><td>直接集成在代码编辑器里</td></tr>
+          </tbody>
+        </table>
+      </div>
+
       <div class="alert alert-blue">
         <span class="alert-icon">💡</span>
         <div><strong>一句话理解</strong>：ChatGPT 更像一个会回答问题的顾问；Codex App 更像一个能进入工作区、按步骤帮你把任务做出来的助理。</div>
@@ -273,6 +285,7 @@ td code { font-family:"SF Mono","Consolas","Monaco",monospace; font-size:11.5px;
           <div class="card-kicker">Tip 5</div>
           <h3>重复任务交给 Automations</h3>
           <p>适合每周周报、每天邮件摘要、定期文件检查、月度财务整理这类时间驱动的工作。它做完后会进入审查队列，还是你拍板。</p>
+          <div class="method-row"><span class="method-pill">周报初稿</span><span class="method-pill">邮件摘要</span><span class="method-pill">文件巡检</span></div>
         </div>
         <div class="card">
           <div class="card-kicker">Tip 6</div>
@@ -334,6 +347,34 @@ td code { font-family:"SF Mono","Consolas","Monaco",monospace; font-size:11.5px;
           </tbody>
         </table>
       </div>
+
+      <div class="alert alert-purple">
+        <span class="alert-icon">📝</span>
+        <div><strong>提示词公式</strong>：目标（做什么） + 受众（给谁看） + 风格（什么语气） + 长度（多少字） + 特殊要求（格式、重点等）。大部分办公场景都适用。</div>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">🪜</span>
+        <div><strong>模式选择小技巧</strong>：如果任务简单到你能一句话说清楚，直接用 Fast Mode；如果需要两句话以上才能描述清楚，优先切到 Plan Mode。</div>
+      </div>
+
+      <div class="intro-grid">
+        <div class="card">
+          <div class="card-kicker">Automations 的类比</div>
+          <h3>像给助理设闹钟</h3>
+          <p>你把时间和任务先设好，到点它自动去做，做完把结果放进 Review Queue 等你审。你不满意可以退回，满意了再批准。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Threads 的类比</div>
+          <h3>像多个聊天窗口</h3>
+          <p>每个线程只关注当前任务，互不打扰。这样做的好处是上下文不会混掉，后面也更容易找回历史过程。</p>
+        </div>
+      </div>
+
+      <div class="alert alert-yellow">
+        <span class="alert-icon">⚠</span>
+        <div><strong>重要提醒</strong>：AI 是强大的助手，但不是最终裁决者。尤其在法务、合规、财务、风控等专业场景，把它当“第一稿提供者”，不要当“最终拍板人”。</div>
+      </div>
     </div>
 
     <div class="section-block" id="control">
@@ -364,24 +405,41 @@ td code { font-family:"SF Mono","Consolas","Monaco",monospace; font-size:11.5px;
 
       <div class="table-wrap">
         <table>
-          <thead><tr><th>工作模式</th><th>说明</th><th>适合谁</th></tr></thead>
+          <thead><tr><th>工作模式</th><th>说明</th><th>类比</th><th>适合谁</th></tr></thead>
           <tbody>
-            <tr><td>Local</td><td>直接在当前文件夹工作，速度快，但改动会直接影响原文件。</td><td>熟悉工具后的小范围改动</td></tr>
-            <tr><td>Worktree</td><td>在隔离副本中工作，不碰原始文件。</td><td>新手默认推荐</td></tr>
-            <tr><td>Cloud</td><td>在云端环境运行，不占本机资源。</td><td>大任务、长任务、远程执行</td></tr>
+            <tr><td>Local</td><td>直接在当前文件夹工作，速度快，但改动会直接影响原文件。</td><td>助理直接在你办公桌上处理文件</td><td>熟悉工具后的小范围改动</td></tr>
+            <tr><td>Worktree</td><td>在隔离副本中工作，不碰原始文件。</td><td>先在草稿纸上写好，再给你确认</td><td>新手默认推荐</td></tr>
+            <tr><td>Cloud</td><td>在云端环境运行，不占本机资源。</td><td>助理在另一间办公室远程帮你做</td><td>大任务、长任务、远程执行</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="table-wrap">
         <table>
-          <thead><tr><th>沙箱级别</th><th>说明</th><th>推荐场景</th></tr></thead>
+          <thead><tr><th>沙箱级别</th><th>说明</th><th>类比</th><th>推荐场景</th></tr></thead>
           <tbody>
-            <tr><td><code>read-only</code></td><td>只能看，不能改，不能跑命令。</td><td>初次尝试、只查阅资料</td></tr>
-            <tr><td><code>workspace-write</code></td><td>可以在指定工作区读写和运行常规命令。</td><td>日常推荐默认值</td></tr>
-            <tr><td><code>danger-full-access</code></td><td>几乎无限制，风险最高。</td><td>只在完全信任场景下用</td></tr>
+            <tr><td><code>read-only</code></td><td>只能看，不能改，不能跑命令。</td><td>助理只能看你桌上的文件，不能动</td><td>初次尝试、只查阅资料</td></tr>
+            <tr><td><code>workspace-write</code></td><td>可以在指定工作区读写和运行常规命令。</td><td>助理可以在指定区域内自由工作</td><td>日常推荐默认值</td></tr>
+            <tr><td><code>danger-full-access</code></td><td>几乎无限制，风险最高。</td><td>给助理配了全部钥匙</td><td>只在完全信任场景下用</td></tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="card">
+        <div class="card-kicker">审批机制</div>
+        <h4>你始终是最终决策者</h4>
+        <p>当 Codex 需要执行超出沙箱范围的操作时，会暂停并请求你批准。你会看到三种常见选项：</p>
+        <ul>
+          <li>批准一次：只允许这一次操作</li>
+          <li>本次会话批准：本轮对话都允许类似操作</li>
+          <li>拒绝：不允许执行</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-kicker">内置终端</div>
+        <h4>不用学命令行也能用</h4>
+        <p>Codex App 内置终端，可以用 <code>Cmd+J</code> 打开。你不需要自己敲命令，Codex 会先解释它要执行什么、为什么执行，再等你批准。</p>
       </div>
 
       <div class="scenario-grid">
@@ -410,6 +468,11 @@ td code { font-family:"SF Mono","Consolas","Monaco",monospace; font-size:11.5px;
       <div class="alert alert-yellow">
         <span class="alert-icon">⚠</span>
         <div><strong>给非技术同事的安全建议</strong>：首次使用优先选 Worktree 模式，保持默认的 <code>workspace-write</code> 权限；看到审批提示先读清楚它要做什么，不确定就拒绝；重要文件先备份再让它处理。</div>
+      </div>
+
+      <div class="alert alert-green">
+        <span class="alert-icon">🛡</span>
+        <div><strong>进一步的安全使用要点</strong>：不确定时选最小权限范围；先选“批准一次”，只有确定安全且频繁需要时再放宽；长任务时可以开启“保持电脑唤醒”，避免电脑休眠中断任务。</div>
       </div>
     </div>
 
@@ -455,10 +518,40 @@ td code { font-family:"SF Mono","Consolas","Monaco",monospace; font-size:11.5px;
         </table>
       </div>
 
+      <div class="intro-grid">
+        <div class="card">
+          <div class="card-kicker">类比理解</div>
+          <h4>像项目经理分工</h4>
+          <p>你不会一个人做完所有事，而是把法务、财务、研究这些子任务分给不同成员并行推进。多 Agent 协同就是这个逻辑。</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">角色分工</div>
+          <h4>像公司里的不同岗位</h4>
+          <p>给不同 Agent 明确分工，相当于给每个岗位写清 JD。这样每个 Agent 都是某个环节的“专人负责”。</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-kicker">自定义 Agent</div>
+        <h4>打造你的专属团队</h4>
+        <p>除了内置角色，你还可以为不同工作场景创建专属 Agent，比如合同审查专家、HR 招聘助手、合规检查 Agent、风控预警 Agent。这样每个 Agent 都会带着固定背景和专业规则来工作。</p>
+      </div>
+
       <div class="card">
         <div class="card-kicker">批量处理</div>
         <h4>CSV 驱动的多 Agent</h4>
         <p>如果你把一批待办事项整理成 CSV，系统可以按行分配 Agent 同时处理。适合 100 份简历初筛、50 份合同初筛、200 条预警批量分析这类高重复任务。</p>
+      </div>
+
+      <div class="card">
+        <div class="card-kicker">日常管理</div>
+        <h4>如何管理多个 Agent</h4>
+        <ul>
+          <li>查看状态：运行中、暂停、已完成</li>
+          <li>引导或停止：中途追加说明，或直接停止某个 Agent</li>
+          <li>审查结果：所有输出都会进入 Review Queue 等你审阅</li>
+          <li>通过 <code>/agent</code> 快速切换到指定线程</li>
+        </ul>
       </div>
 
       <div class="alert alert-purple">
@@ -519,11 +612,21 @@ td code { font-family:"SF Mono","Consolas","Monaco",monospace; font-size:11.5px;
           <p>覆盖从入门到高级功能的长文指南，适合深挖。</p>
           <div class="cta-row"><a class="cta-button secondary" href="https://kingy.ai/ai/the-codex-app-super-guide-2026-from-hello-world-to-worktrees-skills-mcp-ci-and-enterprise-governance/" target="_blank">打开长文</a></div>
         </div>
+        <div class="card">
+          <h4>OpenAI 社区 Tips and Tricks</h4>
+          <p>社区用户会持续分享新技巧和真实场景做法，适合找灵感。</p>
+          <div class="cta-row"><a class="cta-button secondary" href="https://community.openai.com/t/tips-and-tricks-for-using-codex/1373143" target="_blank">打开社区</a></div>
+        </div>
       </div>
 
       <div class="alert alert-blue">
         <span class="alert-icon">📚</span>
         <div><strong>建议阅读顺序</strong>：先看这页建立操作感，再进实战总览；遇到具体按钮、权限、模式问题时，再回头查官方文档。</div>
+      </div>
+
+      <div class="alert alert-green">
+        <span class="alert-icon">🚀</span>
+        <div><strong>最后的建议</strong>：不要等完全掌握所有功能再开始。今天就挑一个小任务交给 Codex App 去做，比如改一段通知、整理一份表格、起草一封邮件，体感会比看再多说明都更快建立起来。</div>
       </div>
     </div>
 
