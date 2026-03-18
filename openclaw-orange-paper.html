@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenClaw 橙皮书 · 网页导读版</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --sidebar-w: 272px;
+  --bg-soft: rgba(255,250,243,0.84);
+  --panel: rgba(255,252,247,0.9);
+  --panel-strong: #fffaf4;
+  --sidebar-bg: #1f252d;
+  --sidebar-border: rgba(255,255,255,0.1);
+  --text: #1f1a17;
+  --muted: #6f655e;
+  --border: rgba(76,52,34,0.14);
+  --shadow: 0 18px 60px rgba(66,45,26,0.12);
+  --shadow-soft: 0 12px 28px rgba(54,39,27,0.08);
+  --accent: #c96d3b;
+  --accent-strong: #a34f24;
+  --accent-soft: rgba(201,109,59,0.12);
+  --accent-alt: #1f6a67;
+  --accent-alt-soft: rgba(31,106,103,0.12);
+  --sidebar-text: rgba(255,255,255,0.92);
+  --sidebar-muted: rgba(255,255,255,0.56);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(201,109,59,0.18), transparent 28%),
+    radial-gradient(circle at 85% 12%, rgba(31,106,103,0.12), transparent 24%),
+    linear-gradient(180deg, #f8f2e9 0%, #f4ede4 52%, #f8f4ee 100%);
+}
+body::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px);
+  background-size: 36px 36px;
+  opacity:.25;
+  pointer-events:none;
+}
+
+.sidebar {
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:var(--sidebar-w);
+  padding:22px 18px 18px;
+  background: linear-gradient(180deg,rgba(255,255,255,0.03),transparent 22%), var(--sidebar-bg);
+  border-right:1px solid var(--sidebar-border);
+  display:flex;
+  flex-direction:column;
+  z-index:10;
+  overflow-y:auto;
+}
+.sidebar-logo {
+  padding:18px 16px 16px;
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:20px;
+  background:rgba(255,255,255,0.03);
+}
+.sidebar-logo .tag {
+  font-size:11px;
+  letter-spacing:0.16em;
+  color:var(--sidebar-muted);
+  text-transform:uppercase;
+}
+.sidebar-logo h2 {
+  margin-top:10px;
+  font-family:"Songti SC","STSong",serif;
+  font-size:22px;
+  font-weight:700;
+  color:var(--sidebar-text);
+}
+.sidebar-logo .sub {
+  margin-top:6px;
+  font-size:12px;
+  line-height:1.7;
+  color:rgba(255,255,255,0.56);
+}
+.back-link {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:14px 4px 0;
+  padding:10px 14px;
+  border-radius:12px;
+  color:rgba(255,255,255,0.6);
+  font-size:13px;
+  text-decoration:none;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.03);
+  transition:background .18s, color .18s;
+}
+.back-link:hover {
+  background:rgba(255,255,255,0.07);
+  color:var(--sidebar-text);
+}
+nav {
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  padding:14px 0;
+  flex:1;
+}
+.nav-section {
+  padding:12px 16px 4px;
+  font-size:11px;
+  letter-spacing:0.16em;
+  color:var(--sidebar-muted);
+  text-transform:uppercase;
+}
+nav a {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 14px;
+  margin:0 2px;
+  border-radius:14px;
+  color:var(--sidebar-text);
+  text-decoration:none;
+  border:1px solid transparent;
+  font-size:13.5px;
+  transition:transform .18s, background .18s, border-color .18s;
+}
+nav a:hover {
+  transform:translateX(3px);
+  background:rgba(255,255,255,0.06);
+  border-color:rgba(255,255,255,0.08);
+}
+.sidebar-footer {
+  padding:14px 16px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.04);
+  font-size:11.5px;
+  color:rgba(255,255,255,0.55);
+  line-height:1.7;
+}
+
+.main { margin-left:var(--sidebar-w); min-height:100vh; }
+.content { max-width:1180px; padding:40px 40px 88px; }
+
+.hero {
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(310px,0.8fr);
+  gap:22px;
+  margin-bottom:28px;
+}
+.hero-copy,
+.hero-panel,
+.section-block,
+.part-card,
+.quote-card,
+.takeaway-card,
+.appendix-card,
+.viewer-shell {
+  border-radius:28px;
+  border:1px solid rgba(76,52,34,0.1);
+  background:var(--bg-soft);
+  backdrop-filter:blur(16px);
+  box-shadow:var(--shadow-soft);
+}
+.hero-copy,
+.hero-panel,
+.section-block,
+.viewer-shell {
+  overflow:hidden;
+}
+.hero-copy {
+  padding:38px 40px 34px;
+  position:relative;
+}
+.hero-copy::after {
+  content:"";
+  position:absolute;
+  right:-72px;
+  bottom:-88px;
+  width:240px;
+  height:240px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(201,109,59,0.22), rgba(201,109,59,0));
+  pointer-events:none;
+}
+.eyebrow {
+  display:inline-flex;
+  padding:7px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.56);
+  color:var(--accent-strong);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+}
+.hero-copy h1 {
+  margin-top:16px;
+  font-family:"Songti SC","STSong",serif;
+  font-size:clamp(30px,3.8vw,50px);
+  line-height:1.08;
+  font-weight:700;
+}
+.hero-lead {
+  margin-top:16px;
+  font-size:15px;
+  line-height:1.95;
+  color:var(--muted);
+  max-width:52em;
+}
+.pill-row,
+.chip-row,
+.inline-list,
+.cta-row,
+.stat-grid,
+.part-grid,
+.takeaway-grid,
+.appendix-grid {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.pill {
+  padding:8px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.68);
+  border:1px solid rgba(76,52,34,0.08);
+  font-size:12.5px;
+  color:#5b5048;
+}
+.pill-row { margin-top:20px; }
+.cta-row { margin-top:22px; }
+.cta-button {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:14px 20px;
+  border-radius:16px;
+  font-size:15px;
+  font-weight:700;
+  text-decoration:none;
+  transition:transform .18s, box-shadow .18s;
+}
+.cta-button:hover { transform:translateY(-2px); }
+.cta-button.primary {
+  color:#fffaf4;
+  background:linear-gradient(135deg,#c96d3b,#a34f24);
+  box-shadow:0 16px 30px rgba(163,79,36,0.22);
+}
+.cta-button.secondary {
+  color:var(--accent-alt);
+  background:rgba(255,255,255,0.68);
+  border:1px solid rgba(31,106,103,0.15);
+}
+
+.hero-panel {
+  padding:26px 24px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.panel-kicker {
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--accent-strong);
+}
+.panel-title {
+  font-size:18px;
+  font-weight:700;
+  font-family:"Songti SC","STSong",serif;
+}
+.stat-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.stat-card {
+  padding:16px 16px 14px;
+  border-radius:18px;
+  background:rgba(255,252,247,0.88);
+  border:1px solid rgba(76,52,34,0.08);
+}
+.stat-label {
+  font-size:11px;
+  color:var(--muted);
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+.stat-value {
+  margin-top:8px;
+  font-size:24px;
+  font-weight:800;
+  color:#2e241d;
+}
+.stat-copy {
+  margin-top:6px;
+  font-size:12px;
+  line-height:1.7;
+  color:var(--muted);
+}
+.timeline-list {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.timeline-item {
+  padding:14px 14px 14px 16px;
+  border-radius:16px;
+  background:rgba(255,252,247,0.88);
+  border:1px solid rgba(76,52,34,0.08);
+}
+.timeline-time {
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--accent-strong);
+}
+.timeline-copy {
+  margin-top:6px;
+  font-size:13px;
+  line-height:1.75;
+  color:var(--muted);
+}
+
+.section-block {
+  padding:34px 36px;
+  margin-bottom:28px;
+  background:rgba(255,252,247,0.88);
+}
+.section-head {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:20px;
+}
+.section-num {
+  width:40px;
+  height:40px;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--accent-soft),var(--accent-alt-soft));
+  font-size:16px;
+  font-weight:800;
+}
+.section-title {
+  font-size:22px;
+  font-weight:700;
+  font-family:"Songti SC","STSong",serif;
+}
+.section-intro {
+  font-size:14px;
+  line-height:1.9;
+  color:var(--muted);
+}
+.summary-grid {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:14px;
+  margin-top:18px;
+}
+.summary-card,
+.quote-card,
+.takeaway-card,
+.appendix-card,
+.part-card {
+  padding:20px 22px;
+  background:rgba(255,252,247,0.9);
+}
+.summary-card h3,
+.quote-card h3,
+.takeaway-card h3,
+.appendix-card h3,
+.part-card h3 {
+  font-size:15px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+.summary-card p,
+.quote-card p,
+.takeaway-card p,
+.appendix-card p,
+.part-card p,
+.part-card li,
+.check-list li,
+.mini-table td,
+.mini-table th {
+  font-size:13px;
+  line-height:1.78;
+  color:var(--muted);
+}
+.summary-card .kicker,
+.part-kicker,
+.appendix-kicker {
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--accent-strong);
+  margin-bottom:8px;
+}
+
+.mini-table-wrap {
+  overflow-x:auto;
+  border-radius:16px;
+  border:1px solid var(--border);
+  margin-top:18px;
+}
+.mini-table {
+  width:100%;
+  border-collapse:collapse;
+}
+.mini-table th {
+  padding:12px 14px;
+  background:rgba(255,255,255,0.56);
+  text-align:left;
+  font-size:12px;
+  color:var(--muted);
+}
+.mini-table td {
+  padding:12px 14px;
+  border-top:1px solid rgba(76,52,34,0.08);
+  vertical-align:top;
+}
+.mini-table tr:hover td { background:rgba(255,255,255,0.34); }
+code {
+  font-family:"SF Mono","Consolas","Monaco",monospace;
+  font-size:11.5px;
+  background:rgba(76,52,34,0.07);
+  padding:1px 5px;
+  border-radius:4px;
+}
+
+.part-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:20px;
+}
+.part-card ul {
+  margin-top:12px;
+  padding-left:18px;
+}
+.part-card li + li { margin-top:6px; }
+
+.quote-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:18px;
+}
+.quote-card {
+  background:linear-gradient(145deg, rgba(201,109,59,0.08), rgba(255,255,255,0.88) 42%);
+}
+.quote-line {
+  font-family:"Songti SC","STSong",serif;
+  font-size:20px;
+  line-height:1.65;
+  color:#2e241d;
+}
+.quote-note {
+  margin-top:10px;
+  font-size:12px;
+  line-height:1.75;
+  color:var(--muted);
+}
+
+.takeaway-grid,
+.appendix-grid {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:14px;
+  margin-top:18px;
+}
+.check-list {
+  margin-top:16px;
+  padding-left:18px;
+}
+.check-list li + li { margin-top:8px; }
+
+.viewer-shell {
+  background:rgba(255,252,247,0.92);
+}
+.viewer-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:18px 22px;
+  border-bottom:1px solid rgba(76,52,34,0.08);
+  background:rgba(255,255,255,0.46);
+}
+.viewer-title {
+  font-size:15px;
+  font-weight:700;
+}
+.viewer-copy {
+  margin-top:4px;
+  font-size:12.5px;
+  color:var(--muted);
+}
+.viewer-frame {
+  width:100%;
+  height:900px;
+  border:0;
+  background:#fff;
+}
+
+.doc-footer {
+  margin-top:40px;
+  padding:20px 0;
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+  border-top:1px solid rgba(76,52,34,0.1);
+}
+
+@media (max-width: 1024px) {
+  .hero,
+  .part-grid,
+  .quote-grid,
+  .takeaway-grid,
+  .appendix-grid,
+  .summary-grid {
+    grid-template-columns:1fr;
+  }
+  .stat-grid {
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+  .sidebar { display:none; }
+  .content { padding:24px 20px 60px; }
+  .hero { grid-template-columns:1fr; }
+  .viewer-frame { height:680px; }
+}
+
+@media (max-width: 640px) {
+  .section-block,
+  .hero-copy,
+  .hero-panel { padding:24px 20px; }
+  .stat-grid { grid-template-columns:1fr; }
+  .viewer-top { flex-direction:column; align-items:flex-start; }
+  .viewer-frame { height:560px; }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="tag">OpenClaw Orange Paper</div>
+    <h2>橙皮书导读</h2>
+    <div class="sub">把 98 页 PDF 变成网页化入口，先速览，再直接在线读原文。</div>
+  </div>
+
+  <a class="back-link" href="index.html">← 返回培训首页</a>
+
+  <nav>
+    <div class="nav-section">先看这里</div>
+    <a href="#overview">🦞 全书速览</a>
+    <a href="#parts">🗂️ 章节地图</a>
+    <a href="#highlights">⭐ 核心结论</a>
+
+    <div class="nav-section">重点主题</div>
+    <a href="#architecture">🏗️ 架构与哲学</a>
+    <a href="#deploy">🚀 部署与接入</a>
+    <a href="#skills-models">📦 Skills 与模型</a>
+    <a href="#security">🛡️ 安全与成本</a>
+    <a href="#compare">⚔️ 与 Claude Code 对比</a>
+
+    <div class="nav-section">原文阅读</div>
+    <a href="#appendix">📎 附录与命令</a>
+    <a href="#pdf-viewer">📄 内嵌 PDF</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    PDF 标题：OpenClaw 橙皮书：从入门到精通<br>
+    PDF 页数：98 页<br>
+    文档版本：v1.0 · 适用版本：v2026.3.7
+  </div>
+</aside>
+
+<main class="main">
+  <div class="content">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Web Edition</span>
+        <h1>OpenClaw 橙皮书，已经接进网页里了。</h1>
+        <p class="hero-lead">
+          这页不是简单把 PDF 丢进一个窗口，而是先把核心信息拆成适合网页浏览的导读层：你可以先用 5 分钟看懂它讲什么、值不值得读、哪些章节和你最相关；再往下直接在线浏览原始 PDF，不用来回跳文件。
+        </p>
+        <div class="pill-row">
+          <span class="pill">98 页原文在线浏览</span>
+          <span class="pill">覆盖架构、部署、渠道、Skills、模型、安全与成本</span>
+          <span class="pill">适用版本 v2026.3.7</span>
+        </div>
+        <div class="cta-row">
+          <a class="cta-button primary" href="#pdf-viewer">直接阅读原 PDF</a>
+          <a class="cta-button secondary" href="OpenClaw橙皮书-从入门到精通.pdf" download>下载 PDF 原文件</a>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <div>
+          <div class="panel-kicker">一眼看懂</div>
+          <div class="panel-title">为什么值得看这本橙皮书</div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">定位</div>
+            <div class="stat-value">Life OS</div>
+            <div class="stat-copy">它想把 AI 从“聊天窗口”推进到“可持续在线执行任务的数字员工”。</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">生态规模</div>
+            <div class="stat-value">13,729</div>
+            <div class="stat-copy">ClawHub Skills 数量非常大，但也伴随明显的质量和安全分层。</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">渠道能力</div>
+            <div class="stat-value">20+</div>
+            <div class="stat-copy">可接 Telegram、QQ、飞书、钉钉、Discord、WhatsApp 等消息渠道。</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">阅读建议</div>
+            <div class="stat-value">先导读</div>
+            <div class="stat-copy">如果你不是开发者，先看这页导览，再决定是否深入读部署和配置细节。</div>
+          </div>
+        </div>
+
+        <div class="timeline-list">
+          <div class="timeline-item">
+            <div class="timeline-time">2025-11</div>
+            <div class="timeline-copy">项目以 ClawdBot 形式出现，最初是开发者的周末项目。</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">2026-01</div>
+            <div class="timeline-copy">72 小时内爆发增长，随后因商标问题更名 Moltbot，再改名 OpenClaw。</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">2026-02 ~ 03</div>
+            <div class="timeline-copy">安全事件、封号风波、创始人加入 OpenAI、项目登顶 GitHub，热度和争议同时到顶。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block" id="overview">
+      <div class="section-head">
+        <div class="section-num">🦞</div>
+        <div class="section-title">全书速览</div>
+      </div>
+      <p class="section-intro">
+        PDF 开篇给出的定位很明确：OpenClaw 是一个开源、自托管、多消息渠道接入的 AI Agent 系统。橙皮书本身不是官方手册原文，而是一份把官方文档、GitHub 仓库和社区调研整合后的中文参考书，适合做“理解全貌”的总入口。
+      </p>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="kicker">What</div>
+          <h3>它是什么</h3>
+          <p>不是只会回答问题的聊天机器人，而是接入即时通讯和工作工具后，可长期在线执行任务的 Agent 平台。</p>
+        </div>
+        <div class="summary-card">
+          <div class="kicker">How</div>
+          <h3>它怎么工作</h3>
+          <p>通过 Gateway、工作区、记忆系统、Skills 和模型配置，把命令行、文件系统和外部渠道整合成一个可编排的运行环境。</p>
+        </div>
+        <div class="summary-card">
+          <div class="kicker">Risk</div>
+          <h3>为什么要警惕</h3>
+          <p>书里多次提醒：OpenClaw 的能力很强，但公开暴露、恶意 Skills、API 成本失控都是真实问题，不是理论风险。</p>
+        </div>
+      </div>
+
+      <div class="mini-table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>维度</th>
+              <th>橙皮书中的描述</th>
+              <th>对培训场景的意义</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>产品定位</td>
+              <td>开源、自托管、可接 20+ 渠道的 Agent Gateway</td>
+              <td>适合作为“企业内部 AI 助手底座”的参考案例，不只是个人聊天工具。</td>
+            </tr>
+            <tr>
+              <td>生态亮点</td>
+              <td>多渠道接入、Skills 市场、多模型切换、本地模型支持</td>
+              <td>能帮助非技术同事理解为什么 Agent 平台和单点 AI 工具有本质差异。</td>
+            </tr>
+            <tr>
+              <td>主要门槛</td>
+              <td>部署、认证、模型配置、渠道对接、安全治理</td>
+              <td>如果只是试用，读概览即可；如果真要落地，要重点看安全、成本和接入复杂度。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-block" id="parts">
+      <div class="section-head">
+        <div class="section-num">🗂️</div>
+        <div class="section-title">章节地图</div>
+      </div>
+      <p class="section-intro">
+        这本书按“认识产品 → 理解架构 → 看部署 → 接渠道 → 配 Skills → 配模型 → 控风险 → 看生态”的顺序展开。下面是网页化后的章节导航。
+      </p>
+
+      <div class="part-grid">
+        <div class="part-card">
+          <div class="part-kicker">Part 1</div>
+          <h3>认识 OpenClaw</h3>
+          <p>解释它和 ChatGPT 的差异，补齐发展史、创始人故事以及为什么它会在极短时间爆火。</p>
+          <ul>
+            <li>01 OpenClaw 是什么</li>
+            <li>02 发展简史</li>
+            <li>03 创始人故事</li>
+            <li>04 为什么这么火</li>
+          </ul>
+        </div>
+        <div class="part-card" id="architecture">
+          <div class="part-kicker">Part 2</div>
+          <h3>技术架构</h3>
+          <p>介绍整体架构、记忆系统、Agent 工作区、Session 机制和“CLI 优先”的设计哲学。</p>
+          <ul>
+            <li>05 整体架构</li>
+            <li>06 记忆系统</li>
+            <li>07 Agent 工作区</li>
+            <li>08 Session 与用户识别</li>
+            <li>09 设计哲学</li>
+          </ul>
+        </div>
+        <div class="part-card" id="deploy">
+          <div class="part-kicker">Part 3</div>
+          <h3>部署方案</h3>
+          <p>从本地安装、Docker，到国内云厂商的一键镜像部署，再到首次配置，覆盖了典型落地路径。</p>
+          <ul>
+            <li>10 部署方式总览</li>
+            <li>11 本地安装</li>
+            <li>12 Docker 部署</li>
+            <li>13 国内云厂商一键部署</li>
+            <li>14 首次配置</li>
+          </ul>
+        </div>
+        <div class="part-card">
+          <div class="part-kicker">Part 4</div>
+          <h3>渠道接入</h3>
+          <p>梳理国际和国内消息平台的接入难度、耗时、推荐顺序和远程访问方式。</p>
+          <ul>
+            <li>15 渠道概览</li>
+            <li>16 国际平台接入</li>
+            <li>17 国内平台接入</li>
+            <li>18 远程访问</li>
+          </ul>
+        </div>
+        <div class="part-card" id="skills-models">
+          <div class="part-kicker">Part 5</div>
+          <h3>Skills 系统</h3>
+          <p>讲 Skills 的工作原理、ClawHub 市场、热门 Skills 推荐、自建 Skill 和 Skill 安全问题。</p>
+          <ul>
+            <li>19 Skills 工作原理</li>
+            <li>20 ClawHub 技能市场</li>
+            <li>21 热门 Skills 推荐</li>
+            <li>22 自建 Skill 指南</li>
+            <li>23 Skills 安全</li>
+          </ul>
+        </div>
+        <div class="part-card">
+          <div class="part-kicker">Part 6</div>
+          <h3>模型配置</h3>
+          <p>覆盖国际模型、国产模型、本地模型和推荐方案，重点在多模型切换和成本优化。</p>
+          <ul>
+            <li>24 模型提供商总览</li>
+            <li>25 国际模型配置</li>
+            <li>26 国产模型配置</li>
+            <li>27 本地模型与推荐方案</li>
+          </ul>
+        </div>
+        <div class="part-card" id="security">
+          <div class="part-kicker">Part 7</div>
+          <h3>安全与成本</h3>
+          <p>这是企业用户最该重点看的部分，涉及安全模型、已知事件、预算上限和三层 fallback 省钱策略。</p>
+          <ul>
+            <li>28 安全模型</li>
+            <li>29 已知安全事件</li>
+            <li>30 成本控制</li>
+          </ul>
+        </div>
+        <div class="part-card" id="compare">
+          <div class="part-kicker">Part 8</div>
+          <h3>生态与社区</h3>
+          <p>包括龙虾文化、替代品、与 Claude Code 对比、以及国内生态发展情况。</p>
+          <ul>
+            <li>31 养虾文化</li>
+            <li>32 平替产品</li>
+            <li>33 vs Claude Code</li>
+            <li>34 国内生态</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block" id="highlights">
+      <div class="section-head">
+        <div class="section-num">⭐</div>
+        <div class="section-title">核心结论</div>
+      </div>
+      <p class="section-intro">
+        如果你不准备逐页通读，至少记住下面这些结论。它们基本构成了这本橙皮书真正想传达的判断框架。
+      </p>
+
+      <div class="quote-grid">
+        <div class="quote-card">
+          <h3>产品判断</h3>
+          <div class="quote-line">“ChatGPT 是顾问，OpenClaw 是员工。”</div>
+          <div class="quote-note">这句话来自书中对产品定位的总结，核心不是比模型强弱，而是比能不能长期接工具、接渠道、接任务。</div>
+        </div>
+        <div class="quote-card">
+          <h3>架构判断</h3>
+          <div class="quote-line">“CLI 才是智能体连接世界的终极接口。”</div>
+          <div class="quote-note">书里明确强调了对 Unix 小工具哲学的继承，这解释了为什么 OpenClaw 更像一个 Gateway + Workspace，而不是重量级 GUI 平台。</div>
+        </div>
+      </div>
+
+      <div class="takeaway-grid">
+        <div class="takeaway-card">
+          <h3>1. 真正的优势不是模型，而是接入层</h3>
+          <p>多模型并不是稀缺能力，真正让 OpenClaw 和普通聊天产品拉开差距的是多消息渠道接入、常在线和可执行任务链路。</p>
+        </div>
+        <div class="takeaway-card">
+          <h3>2. 真正的风险也不在模型，而在外部暴露</h3>
+          <p>书中反复出现的风险点是未认证 Gateway、恶意 Skills、暴露公网实例、以及 agent 循环调用带来的成本失控。</p>
+        </div>
+        <div class="takeaway-card">
+          <h3>3. 读这本书要带着“落地问题”读</h3>
+          <p>如果你关心安装，就看部署；关心企业接入，就看渠道；关心 ROI，就看国产模型和成本控制；关心安全，就重点看第 7 部分。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <div class="section-num">🏗️</div>
+        <div class="section-title">架构与哲学</div>
+      </div>
+      <p class="section-intro">
+        橙皮书把 OpenClaw 定义为一个“以文件系统为底座、以 CLI 为总线、以文本为主要载体”的 Agent 运行环境。它的架构观念非常鲜明。
+      </p>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="kicker">Workspace</div>
+          <h3>每个 Agent 都有独立工作区</h3>
+          <p>书中展示了典型目录结构，包括 <code>AGENTS.md</code>、<code>SOUL.md</code>、<code>USER.md</code>、<code>MEMORY.md</code>、<code>HEARTBEAT.md</code>、<code>skills/</code> 和 <code>sessions.json</code>。</p>
+        </div>
+        <div class="summary-card">
+          <div class="kicker">Memory</div>
+          <h3>强调长短期记忆协同</h3>
+          <p>OpenClaw 不是一次性会话工具。它试图通过工作区文件、长期记忆和 session 识别，把代理行为从单轮回答提升到持续协作。</p>
+        </div>
+        <div class="summary-card">
+          <div class="kicker">Unix</div>
+          <h3>坚持小工具 + 文本流</h3>
+          <p>书里直接点出其极简工具哲学：核心只保留读取、写入、编辑和命令执行，把复杂能力交给命令行和外部工具生态。</p>
+        </div>
+      </div>
+
+      <ul class="check-list">
+        <li>如果你是非技术读者，这一部分最重要的收获不是记住目录，而是理解 OpenClaw 为什么天然适合“自动化助手”而不只是“聊天助手”。</li>
+        <li>如果你是技术读者，这一部分决定了你后面要不要把它当作可 fork、可定制、可内嵌到自己流程里的基础设施。</li>
+      </ul>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <div class="section-num">🚀</div>
+        <div class="section-title">部署与接入</div>
+      </div>
+      <p class="section-intro">
+        橙皮书对部署写得很务实，从本地、Docker 到国内云镜像，都在降低第一次上手门槛。但部署完不等于能用，首次配置和认证才是分水岭。
+      </p>
+
+      <div class="mini-table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>主题</th>
+              <th>书中重点</th>
+              <th>实际意义</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>本地安装</td>
+              <td>macOS 需要 Xcode Command Line Tools，Windows 推荐 WSL2</td>
+              <td>说明官方预期环境仍偏向类 Unix，Windows 原生兼容不是优先路径。</td>
+            </tr>
+            <tr>
+              <td>守护进程</td>
+              <td>支持 <code>launchd</code> / <code>systemd</code>，Gateway 常驻在 <code>ws://127.0.0.1:18789</code></td>
+              <td>常在线能力是它区别于单次命令型工具的关键。</td>
+            </tr>
+            <tr>
+              <td>首次配置</td>
+              <td>v2026.3.7 起必须显式设置 <code>gateway.auth.mode</code></td>
+              <td>这其实是安全补丁后的硬性要求，不配认证就别谈上线。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="summary-grid" style="margin-top:18px;">
+        <div class="summary-card">
+          <div class="kicker">国内接入</div>
+          <h3>QQ 和飞书是国内优先入口</h3>
+          <p>书中明确写到 QQ 扫码即可接入，飞书自 2026.2 起原生内置支持，这两条线路最适合企业试点。</p>
+        </div>
+        <div class="summary-card">
+          <div class="kicker">接入顺序</div>
+          <h3>Telegram 最简单，微信个人号最不稳</h3>
+          <p>它给出了清晰的难度梯队，这比单纯罗列支持平台更有用，因为能指导第一步该从哪条链路试。</p>
+        </div>
+        <div class="summary-card">
+          <div class="kicker">管理入口</div>
+          <h3>浏览器可直接访问 Dashboard</h3>
+          <p>默认可通过 <code>http://127.0.0.1:18789</code> 打开 Web UI，但前提依然是认证配置必须正确。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <div class="section-num">📦</div>
+        <div class="section-title">Skills 与模型配置</div>
+      </div>
+      <p class="section-intro">
+        从培训角度看，这两部分最能帮助非技术同事建立“OpenClaw 不是单模型单能力产品”的理解。Skills 解决工具接入，模型配置解决性能和成本。
+      </p>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="kicker">Top Skills</div>
+          <h3>最常见的是 Gmail、Browser、GitHub、Web Search</h3>
+          <p>热门 Skills 的榜单很实用，它让你快速看出社区真实使用重心集中在哪些高频能力上。</p>
+        </div>
+        <div class="summary-card">
+          <div class="kicker">Provider</div>
+          <h3>模型自由切换是核心卖点之一</h3>
+          <p>书里强调可同时接 Claude、GPT、DeepSeek、Gemini 和本地 Ollama，这对成本和可用性很关键。</p>
+        </div>
+        <div class="summary-card">
+          <div class="kicker">China Stack</div>
+          <h3>国产模型被定义为“省钱主武器”</h3>
+          <p>DeepSeek 被重点强调，Coding Plan 等国内套餐也被拿来与按量付费 API 做了直接对比。</p>
+        </div>
+      </div>
+
+      <ul class="check-list">
+        <li>如果你的目标是试点落地，而不是技术研究，先看热门 Skills 和国产模型章节，回报比最高。</li>
+        <li>如果你的目标是构建企业内部服务，要把“模型主力 + fallback + 本地模型兜底”当成整体策略来看，而不是单点选型。</li>
+      </ul>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <div class="section-num">🛡️</div>
+        <div class="section-title">安全与成本</div>
+      </div>
+      <p class="section-intro">
+        这是全书最不该跳过的部分。OpenClaw 的价值越大，风险面也越大。橙皮书没有回避这个问题，反而把它讲得很直白。
+      </p>
+
+      <div class="takeaway-grid">
+        <div class="takeaway-card">
+          <h3>认证不是可选项</h3>
+          <p>书里明确提到，v2026.3.7 之后 Gateway 认证必须显式开启。这说明过去未认证暴露已经造成了足够严重的真实事故。</p>
+        </div>
+        <div class="takeaway-card">
+          <h3>Skills 市场不是天然可信</h3>
+          <p>ClawHub 规模很大，但书中同时提醒存在垃圾、重复、低质量和恶意 Skills。能力越开放，供应链治理越重要。</p>
+        </div>
+        <div class="takeaway-card">
+          <h3>预算上限必须配</h3>
+          <p>书里建议直接设置每日 token 和费用上限，并给出三层 fallback 降低 80-95% 成本的策略，这对长期在线 Agent 尤其关键。</p>
+        </div>
+      </div>
+
+      <div class="mini-table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>策略</th>
+              <th>书中的建议</th>
+              <th>结果</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>模型链路</td>
+              <td>主力 Sonnet，后接 Haiku，再接 DeepSeek</td>
+              <td>多数简单任务自动走低价模型，复杂任务再走高价模型。</td>
+            </tr>
+            <tr>
+              <td>预算配置</td>
+              <td><code>maxTokensPerDay</code> + <code>maxCostPerDay</code></td>
+              <td>防止 agent 循环推理或异常调用直接刷爆账单。</td>
+            </tr>
+            <tr>
+              <td>本地模型</td>
+              <td>Ollama / LM Studio 作为零 API 成本方案</td>
+              <td>能解决一部分隐私和费用问题，但代价是本地算力与效果上限。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <div class="section-num">⚔️</div>
+        <div class="section-title">与 Claude Code 的关系</div>
+      </div>
+      <p class="section-intro">
+        橙皮书第 33 节给出的态度很克制：OpenClaw 和 Claude Code 不是替代关系，而是分工不同。一个偏生活与渠道协同，一个偏专业编程。
+      </p>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="kicker">OpenClaw</div>
+          <h3>更像长期在线的通用助手</h3>
+          <p>多渠道接入、长期记忆、自托管、技能市场、日常自动化强，这是它的主战场。</p>
+        </div>
+        <div class="summary-card">
+          <div class="kicker">Claude Code</div>
+          <h3>更像专业编程 Agent</h3>
+          <p>终端、代码库、工程化流程和精细权限控制，是它在编程场景里的核心优势。</p>
+        </div>
+        <div class="summary-card">
+          <div class="kicker">培训视角</div>
+          <h3>不要把两者讲成“谁替代谁”</h3>
+          <p>更准确的表达是：OpenClaw 适合当渠道化、常在线代理；Claude Code 适合当深度工程执行器。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block" id="appendix">
+      <div class="section-head">
+        <div class="section-num">📎</div>
+        <div class="section-title">附录与命令速查</div>
+      </div>
+      <p class="section-intro">
+        PDF 最后的附录部分适合需要真正上手的人。网页版这里先把你最可能用到的几类内容摘出来，完整内容仍建议去看原 PDF。
+      </p>
+
+      <div class="appendix-grid">
+        <div class="appendix-card">
+          <div class="appendix-kicker">安装</div>
+          <h3>基础命令</h3>
+          <p><code>npm install -g openclaw@latest</code><br><code>openclaw onboard --install-daemon</code><br><code>openclaw doctor</code></p>
+        </div>
+        <div class="appendix-card">
+          <div class="appendix-kicker">运行</div>
+          <h3>日常操作</h3>
+          <p><code>openclaw gateway --port 18789 --verbose</code><br><code>openclaw gateway restart</code><br><code>openclaw agent --message "xxx"</code></p>
+        </div>
+        <div class="appendix-card">
+          <div class="appendix-kicker">模型</div>
+          <h3>配置检查</h3>
+          <p><code>openclaw models list</code><br><code>openclaw models status --probe</code><br><code>openclaw config set agents.defaults.model.primary provider/model</code></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="viewer-shell" id="pdf-viewer">
+      <div class="viewer-top">
+        <div>
+          <div class="viewer-title">内嵌 PDF 原文</div>
+          <div class="viewer-copy">浏览器支持时可直接在本页滚动阅读；如果当前环境不支持，使用右侧按钮下载或单独打开。</div>
+        </div>
+        <div class="cta-row" style="margin-top:0;">
+          <a class="cta-button secondary" href="OpenClaw橙皮书-从入门到精通.pdf" target="_blank" rel="noopener noreferrer">新窗口打开 PDF</a>
+        </div>
+      </div>
+      <iframe
+        class="viewer-frame"
+        src="OpenClaw橙皮书-从入门到精通.pdf#page=1"
+        title="OpenClaw 橙皮书 PDF 在线阅读"
+      ></iframe>
+    </section>
+
+    <div class="doc-footer">OpenClaw 橙皮书 · 网页导读版 · 由 PDF 融合进培训站点 · 2026-03-19</div>
+  </div>
+</main>
+
+</body>
+</html>
