@@ -115,6 +115,49 @@ nav a.active { color:#fff; background:linear-gradient(135deg,rgba(201,109,59,0.2
 .badge-all     { background:rgba(99,102,241,0.12); color:#3730A3; }
 .badge-cowork  { background:rgba(201,109,59,0.15); color:#a34f24; border:1px solid rgba(201,109,59,0.2); }
 
+.skill-structure {
+  margin:0 0 18px;
+  padding:18px 18px 16px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.6);
+  border:1px solid rgba(76,52,34,0.08);
+}
+.skill-structure-head {
+  display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.skill-structure-title { font-size:15px; font-weight:700; }
+.skill-structure-sub { font-size:12.5px; line-height:1.7; color:var(--muted); margin-top:4px; }
+.skill-structure-grid { display:grid; grid-template-columns:0.9fr 1.1fr; gap:12px; }
+.skill-tree, .skill-structure-list {
+  padding:14px; border-radius:14px;
+  background:rgba(255,252,247,0.86);
+  border:1px solid rgba(76,52,34,0.08);
+}
+.skill-tree h4, .skill-structure-list h4 { font-size:13px; font-weight:700; margin-bottom:8px; }
+.skill-tree pre {
+  margin-top:0; padding:12px; border-radius:12px; overflow:auto;
+  background:#1f252d; color:#e2e8f0; font-size:12px; line-height:1.7;
+  font-family:"SF Mono","Consolas","Monaco",monospace;
+}
+.skill-structure-list {
+  display:grid; grid-template-columns:1fr 1fr; gap:10px;
+}
+.structure-item {
+  padding:12px; border-radius:12px; background:rgba(255,255,255,0.72);
+  border:1px solid rgba(76,52,34,0.07);
+}
+.structure-item .label {
+  display:inline-flex; align-items:center; gap:6px; margin-bottom:8px;
+  padding:3px 8px; border-radius:999px; font-size:11px; font-weight:700;
+}
+.structure-item .label.must { background:rgba(201,109,59,0.12); color:#a34f24; }
+.structure-item .label.opt { background:rgba(31,106,103,0.12); color:#1f6a67; }
+.structure-item p { font-size:12.5px; line-height:1.75; color:var(--muted); }
+.structure-note {
+  margin-top:12px; font-size:12.5px; line-height:1.75; color:var(--muted);
+}
+
 .example-skill {
   margin-top:18px; padding:22px 24px; border-radius:20px;
   background:linear-gradient(145deg, rgba(201,109,59,0.08), rgba(255,255,255,0.88) 42%);
@@ -271,6 +314,7 @@ h2.sh { font-size:16px; font-weight:700; margin:20px 0 12px; padding-bottom:8px;
   .sidebar { display:none; }
   .content { padding:24px 20px 60px; }
   .concept-grid, .why-grid, .skill-cards, .trigger-methods, .resource-cards, .example-grid { grid-template-columns:1fr; }
+  .skill-structure-grid, .skill-structure-list { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -288,6 +332,7 @@ h2.sh { font-size:16px; font-weight:700; margin:20px 0 12px; padding-bottom:8px;
   <nav>
     <div class="nav-section">了解 Skills</div>
     <a href="#what">🧩 什么是 Skills？</a>
+    <a href="#skill-structure">🏗️ Skill 怎么组成？</a>
     <a href="#why">💡 为什么要用？</a>
     <a href="#how-trigger">▶ 怎么触发？</a>
     <a href="#how-install">📥 怎么开启？</a>
@@ -349,7 +394,7 @@ h2.sh { font-size:16px; font-weight:700; margin:20px 0 12px; padding-bottom:8px;
         <div class="concept-card">
           <div class="concept-icon">🧱</div>
           <h3>它里面有什么</h3>
-          <p>一个 Skill 背后通常是一组预先写好的规则：核心说明文件 <code style="background:rgba(76,52,34,0.08);padding:1px 5px;border-radius:4px;font-size:12px">SKILL.md</code> 定义名称、适用场景、工作流程和输出要求；有时还会带脚本、模板或参考资料。</p>
+          <p>一个 Skill 背后通常是一组预先写好的规则。最核心的是 <code style="background:rgba(76,52,34,0.08);padding:1px 5px;border-radius:4px;font-size:12px">SKILL.md</code>，它定义名称、适用场景、工作流程和输出要求；有时还会带脚本、模板或参考资料。</p>
           <div class="tool-badges" style="margin-top:8px">
             <span class="tool-badge badge-all">开放标准</span>
             <span class="tool-badge badge-cowork">Claude Cowork 官方</span>
@@ -359,6 +404,49 @@ h2.sh { font-size:16px; font-weight:700; margin:20px 0 12px; padding-bottom:8px;
           <div class="concept-icon">▶</div>
           <h3>它怎么被用起来</h3>
           <p>你不用研究代码，也不用理解 Skill 文件。平时只需要说出任务，比如“帮我审查这份合同”或“把这份会议录音整理成纪要”，AI 会自动调用合适的 Skill；需要精确指定时，再用 <code style="background:rgba(76,52,34,0.08);padding:1px 5px;border-radius:4px;font-size:12px">$skill名称</code>。</p>
+        </div>
+      </div>
+
+      <div class="skill-structure" id="skill-structure">
+        <div class="skill-structure-head">
+          <div>
+            <div class="skill-structure-title">Skill 的结构说明：一个 Skill 通常就是一个文件夹</div>
+            <div class="skill-structure-sub">你可以把它理解成“一个任务场景 + 一份说明书 + 一些可选辅助材料”。其中 <code style="background:rgba(76,52,34,0.08);padding:1px 5px;border-radius:4px;font-size:12px">SKILL.md</code> 是必须的，其它目录按需存在。</div>
+          </div>
+          <span class="tool-badge badge-all">文件夹式打包</span>
+        </div>
+
+        <div class="skill-structure-grid">
+          <div class="skill-tree">
+            <h4>目录结构示意</h4>
+            <pre>contract-review-assistant/
+├── SKILL.md
+├── scripts/
+├── references/
+└── assets/</pre>
+          </div>
+          <div class="skill-structure-list">
+            <div class="structure-item">
+              <div class="label must">必须项</div>
+              <p><strong>SKILL.md</strong>：Skill 的核心说明文件。它告诉 AI 这个 Skill 叫什么、什么时候用、怎么做、最终要输出什么格式。</p>
+            </div>
+            <div class="structure-item">
+              <div class="label opt">可选项</div>
+              <p><strong>scripts/</strong>：可执行脚本。适合做重复、机械、规则明确的动作，比如格式转换、批量检查、数据清洗。</p>
+            </div>
+            <div class="structure-item">
+              <div class="label opt">可选项</div>
+              <p><strong>references/</strong>：参考资料。可以放制度、模板、示例、口径说明，让 AI 按统一标准处理任务。</p>
+            </div>
+            <div class="structure-item">
+              <div class="label opt">可选项</div>
+              <p><strong>assets/</strong>：资源文件。常见是图片、图标、样式、附件等，用来补充 Skill 的展示或生成结果。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="structure-note">
+          <strong>一句话理解：</strong>Skill 不是一段临时提示词，而是一个“可复用的工作包”。AI 先读 <code style="background:rgba(76,52,34,0.08);padding:1px 5px;border-radius:4px;font-size:12px">SKILL.md</code> 知道该怎么做，再按需调用脚本和参考资料，最后把结果整理成固定格式。
         </div>
       </div>
 
